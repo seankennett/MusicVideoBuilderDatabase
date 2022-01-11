@@ -56,7 +56,16 @@
     <Folder Include="Properties" />
   </ItemGroup>
   <ItemGroup>
-    <Build Include="Users.sql" />
+    <Build Include="User.sql" />
+    <Build Include="Layer.sql" />
+    <Build Include="LayerType.sql" />
+    <Build Include="UserLayers.sql" />
+    <Build Include="UserLayerStatus.sql" />
+    <Build Include="Clip.sql" />
+    <Build Include="UserLayersClips.sql" />
+    <Build Include="Format.sql" />
+    <Build Include="Video.sql" />
+    <Build Include="VideoClips.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="VideoDatabase.refactorlog" />
