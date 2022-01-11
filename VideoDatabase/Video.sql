@@ -1,0 +1,8 @@
+﻿CREATE TABLE [dbo].[Video]
+(
+	[VideoId] INT IDENTITY NOT NULL PRIMARY KEY,
+	[Name] NVARCHAR(50) NOT NULL,
+	[BPM] TINYINT NOT NULL,
+	[FormatId] TINYINT NOT NULL,
+	CONSTRAINT FK_Video_Format FOREIGN KEY ([FormatId]) REFERENCES [dbo].[Format] ([FormatId])
+)
