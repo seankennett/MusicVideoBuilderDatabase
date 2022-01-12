@@ -1,5 +1,5 @@
 ﻿CREATE TABLE [dbo].[LayerType]
 (
-	[LayerTypeId] TINYINT IDENTITY NOT NULL PRIMARY KEY,
+	[LayerTypeId] TINYINT NOT NULL PRIMARY KEY,
 	[LayerTypeName] VARCHAR(20)
 )

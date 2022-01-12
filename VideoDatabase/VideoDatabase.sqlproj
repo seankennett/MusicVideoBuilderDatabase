@@ -54,20 +54,29 @@
   <Import Condition="'$(SQLDBExtensionsRefPath)' == ''" Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
   <ItemGroup>
     <Folder Include="Properties" />
+    <Folder Include="Tables" />
   </ItemGroup>
   <ItemGroup>
-    <Build Include="User.sql" />
-    <Build Include="Layer.sql" />
-    <Build Include="LayerType.sql" />
-    <Build Include="UserLayers.sql" />
-    <Build Include="UserLayerStatus.sql" />
-    <Build Include="Clip.sql" />
-    <Build Include="UserLayersClips.sql" />
-    <Build Include="Format.sql" />
-    <Build Include="Video.sql" />
-    <Build Include="VideoClips.sql" />
+    <Build Include="Tables\VideoClips.sql" />
+    <Build Include="Tables\Clip.sql" />
+    <Build Include="Tables\Format.sql" />
+    <Build Include="Tables\Layer.sql" />
+    <Build Include="Tables\LayerType.sql" />
+    <Build Include="Tables\User.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="VideoDatabase.refactorlog" />
+  </ItemGroup>
+  <ItemGroup>
+    <PostDeploy Include="Script.PostDeployment.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="VideoDatabaseLocal.publish.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="Tables\UserLayers.sql" />
+    <Build Include="Tables\UserLayersClips.sql" />
+    <Build Include="Tables\UserLayerStatus.sql" />
+    <Build Include="Tables\Video.sql" />
   </ItemGroup>
 </Project>
