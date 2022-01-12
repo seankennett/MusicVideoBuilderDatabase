@@ -1,5 +1,7 @@
 ﻿CREATE TABLE [dbo].[Clip]
 (
 	[ClipId] INT IDENTITY NOT NULL PRIMARY KEY,
-	[ClipName] NVARCHAR(50) NULL
+	[ClipName] NVARCHAR(50) NULL,
+	[DateCreated] DATETIME2 NOT NULL,
+	[DateUpdated] DATETIME2 NOT NULL,
 )
