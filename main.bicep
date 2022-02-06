@@ -207,6 +207,7 @@ resource storageAccountPublic 'Microsoft.Storage/storageAccounts@2021-06-01' = {
   }
 }
 
+
 resource storageAccountPrivate'Microsoft.Storage/storageAccounts@2021-06-01' = {
   name: storageAccountNamePrivate
   location: location
