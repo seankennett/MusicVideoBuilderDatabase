@@ -6,7 +6,7 @@ param sqlAdministratorLogin string
 param sqlAdministratorPassword string
 
 @description('Which Pricing tier our App Service Plan to')
-param webAppSkuName string = 'F1'
+param webAppSkuName string = 'B1'
 
 @description('How many instances of our app service will be scaled out to')
 param webAppSkuCapacity int = 1
