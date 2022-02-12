@@ -6,7 +6,7 @@ name: Deploy Bicep files
 variables:
   vmImageName: 'ubuntu-latest'
 
-  azureServiceConnection: 'Dev'
+  azureServiceConnection: 'Dev(285ec89b-c6b0-46a6-9758-a0bce37bd2da)'
   resourceGroupName: 'music-video-builder'
   location: 'West Europe'
   templateFile: './main.bicep'
