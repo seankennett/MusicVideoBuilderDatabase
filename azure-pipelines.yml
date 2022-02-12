@@ -16,7 +16,4 @@ steps:
     scriptType: 'ps'
     scriptLocation: 'inlineScript'
     inlineScript: |
-      az deployment group create \
-        --resource-group music-video-builder \
-        --template-file main.bicep \
-        --parameters sqlAdministratorLogin=${env:SQLADMINISTRATORLOGIN} sqlAdministratorPassword=${env:SQLADMINISTRATORPASSWORD}
+      az deployment group create --resource-group music-video-builder --template-file main.bicep --parameters sqlAdministratorLogin=${env:SQLADMINISTRATORLOGIN} sqlAdministratorPassword=${env:SQLADMINISTRATORPASSWORD}
