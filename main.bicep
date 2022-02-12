@@ -2,11 +2,10 @@
 param sqlAdministratorLogin string
 
 @description('Specifies sql admin password')
-@secure()
 param sqlAdministratorPassword string
 
 @description('Which Pricing tier our App Service Plan to')
-param webAppSkuName string = 'B1'
+param webAppSkuName string = 'F1'
 
 @description('How many instances of our app service will be scaled out to')
 param webAppSkuCapacity int = 1
