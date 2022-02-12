@@ -2,6 +2,7 @@
 param sqlAdministratorLogin string
 
 @description('Specifies sql admin password')
+@secure()
 param sqlAdministratorPassword string
 
 @description('Which Pricing tier our App Service Plan to')
