@@ -175,6 +175,7 @@ module storagePublic 'storageAccount.bicep' = {
     location: location
     storageAccountName: storageAccountNamePublic
     storageAccountType: storageAccountType
+    secretName: 'PublicStorageConnectionString'
     keyvaultName: keyvaultName
   }
 }
@@ -186,6 +187,7 @@ module storagePrivate 'storageAccount.bicep' = {
     location: location
     storageAccountName: storageAccountNamePrivate
     storageAccountType: storageAccountType
+    secretName: 'PrivateStorageConnectionString'
     keyvaultName: keyvaultName
   }
 }

@@ -1,6 +1,9 @@
 @description('Storage account name')
 param storageAccountName string
 
+@description('Secret name')
+param secretName string
+
 @description('Location for all resources.')
 param location string
 
@@ -38,7 +41,7 @@ resource keyvault 'Microsoft.KeyVault/vaults@2019-09-01' existing = {
 }
 
 resource secret 'Microsoft.KeyVault/vaults/secrets@2021-06-01-preview' = {
-  name: '${storageAccountName}ConnectionString'
+  name: secretName
   parent: keyvault
   properties: {
     value: 'DefaultEndpointsProtocol=https;AccountName=${storageAccount.name};AccountKey=${listKeys(storageAccount.id, storageAccount.apiVersion).keys[0].value};EndpointSuffix=${environment().suffixes.storage}'
