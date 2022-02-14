@@ -1,10 +1,3 @@
-@description('Specifies sql admin login')
-param sqlAdministratorLogin string
-
-@description('Specifies sql admin password')
-@secure()
-param sqlAdministratorPassword string
-
 @description('Which Pricing tier our App Service Plan to')
 param webAppSkuName string = 'F1'
 
@@ -39,13 +32,18 @@ param resourceName string = 'musicvideobuilder'
 ])
 param storageAccountType string = 'Standard_LRS'
 
-var databaseName = resourceName
+var keyvaultName = resourceName
 var appServicePlanName = resourceName
 var webSiteName = resourceName
 var appInsightName = resourceName
 var logAnalyticsName = resourceName
 var storageAccountNamePublic = '${resourceName}public'
 var storageAccountNamePrivate = '${resourceName}private'
+
+resource keyvault 'Microsoft.KeyVault/vaults@2019-09-01' existing = {
+  name: keyvaultName
+  scope: resourceGroup()
+}
 
 resource appServicePlan 'Microsoft.Web/serverfarms@2020-06-01' = {
   name: appServicePlanName
@@ -87,9 +85,6 @@ resource appServiceLogging 'Microsoft.Web/sites/config@2020-06-01' = {
   name: 'appsettings'
   properties: {
     APPINSIGHTS_INSTRUMENTATIONKEY: appInsights.properties.InstrumentationKey
-    SqlConnectionString: 'Data Source=tcp:${sqlserver.properties.fullyQualifiedDomainName},1433;Initial Catalog=${sqlserver::database.name};User Id=${sqlserver.properties.administratorLogin}@${sqlserver.properties.fullyQualifiedDomainName};Password=${sqlAdministratorPassword};'
-    PublicStorageAccountConnectionString: 'DefaultEndpointsProtocol=https;AccountName=${storageAccountPublic.name};AccountKey=${listKeys(storageAccountPublic.id, storageAccountPublic.apiVersion).keys[0].value};EndpointSuffix=${environment().suffixes.storage}'
-    PrivateStorageAccountConnectionString: 'DefaultEndpointsProtocol=https;AccountName=${storageAccountPrivate.name};AccountKey=${listKeys(storageAccountPrivate.id, storageAccountPrivate.apiVersion).keys[0].value};EndpointSuffix=${environment().suffixes.storage}'
   }
   dependsOn: [
     appServiceAppSettings
@@ -160,64 +155,37 @@ resource logAnalyticsWorkspace 'Microsoft.OperationalInsights/workspaces@2020-08
   }
 }
 
-resource sqlserver 'Microsoft.Sql/servers@2020-11-01-preview' = {
-  name: resourceName
-  location: location
-  properties: {
-    administratorLogin: sqlAdministratorLogin
-    administratorLoginPassword: sqlAdministratorPassword
-    version: '12.0'
-  }
-
-  resource database 'databases@2020-08-01-preview' = {
-    name: databaseName
+module sql 'sqlServerModule.bicep' = {
+  name: 'deploySQL'
+  params: {
+    sqlAdministratorLogin: keyvault.getSecret('SqlAdministratorLogin')
+    sqlAdministratorPassword: keyvault.getSecret('SqlAdministratorPassword')
+    databaseCapacity: databaseCapacity
+    databaseSku: databaseSku
+    databaseTier: databaseTier
     location: location
-    sku: {
-      name: databaseSku
-      tier: databaseTier
-      capacity: databaseCapacity
-    }
-    properties: {
-      collation: 'SQL_Latin1_General_CP1_CI_AS'
-      maxSizeBytes: 268435456000
-    }
-  }
-
-  resource firewallRule 'firewallRules@2020-11-01-preview' = {
-    name: 'AllowAllWindowsAzureIps'
-    properties: {
-      endIpAddress: '0.0.0.0'
-      startIpAddress: '0.0.0.0'
-    }
+    resourceName: resourceName
   }
 }
 
-// nothing for setting up static website - manual
-resource storageAccountPublic 'Microsoft.Storage/storageAccounts@2021-06-01' = {
-  name: storageAccountNamePublic
-  location: location
-  sku: {
-    name: storageAccountType
-  }
-  kind: 'StorageV2'
-  properties: {
+module storagePublic 'storageAccount.bicep' = {
+  name: 'deployStoragePublic'
+  params: {
     accessTier: 'Hot'
-    allowBlobPublicAccess: true
-    
+    location: location
+    storageAccountName: storageAccountNamePublic
+    storageAccountType: storageAccountType
+    keyvaultName: keyvaultName
   }
 }
 
-
-resource storageAccountPrivate'Microsoft.Storage/storageAccounts@2021-06-01' = {
-  name: storageAccountNamePrivate
-  location: location
-  sku: {
-    name: storageAccountType
-  }
-  kind: 'StorageV2'
-  properties: {
+module storagePrivate 'storageAccount.bicep' = {
+  name: 'deployStoragePrivate'
+  params: {
     accessTier: 'Cool'
-    allowBlobPublicAccess: true
-    publicNetworkAccess:'Enabled'
+    location: location
+    storageAccountName: storageAccountNamePrivate
+    storageAccountType: storageAccountType
+    keyvaultName: keyvaultName
   }
 }
