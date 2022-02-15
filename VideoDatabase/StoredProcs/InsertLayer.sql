@@ -30,5 +30,3 @@ BEGIN CATCH
         DECLARE @ErrorState INT = ERROR_STATE()
     RAISERROR (@ErrorMessage, @ErrorSeverity, @ErrorState);
 END CATCH
-
-RETURN 1
