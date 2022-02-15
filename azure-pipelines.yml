@@ -50,7 +50,7 @@ steps:
   displayName: Execute Azure SQL Dacpac
   inputs:
     azureSubscription: $(azureServiceConnection)
-    ServerName: musicvideobuilder
+    ServerName: musicvideobuilder.database.windows.net
     DatabaseName: musicvideobuilder
     SqlUsername: $(SqlAdministratorLogin)
     SqlPassword: $(SqlAdministratorPassword)
