@@ -55,6 +55,8 @@
   <ItemGroup>
     <Folder Include="Properties" />
     <Folder Include="Tables" />
+    <Folder Include="StoredProcs" />
+    <Folder Include="Types" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\VideoClips.sql" />
@@ -64,6 +66,9 @@
     <Build Include="Tables\LayerType.sql" />
     <Build Include="Tables\Tag.sql" />
     <Build Include="Tables\LayerTags.sql" />
+    <Build Include="StoredProcs\InsertLayer.sql" />
+    <Build Include="Types\TagsType.sql" />
+    <Build Include="ApplicationUser.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="VideoDatabase.refactorlog" />
