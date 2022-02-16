@@ -1,5 +1,5 @@
 ﻿CREATE USER [MusicVideoBuilderApplication]
-	WITH PASSWORD = '$guqq}opgxfzOlgnKxrfzDr.msFT7_&#$!~<vtfumtflecgm'
+	WITH PASSWORD = N'$(sqlLoginMusicVideoBuilderApplicationPassword)'
 
 GO
 

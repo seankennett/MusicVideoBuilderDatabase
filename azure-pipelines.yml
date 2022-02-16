@@ -22,12 +22,9 @@ steps:
   inputs:
     azureSubscription: $(azureServiceConnection)
     KeyVaultName: musicvideobuilder
-    SecretsFilter: 'SqlAdministratorLogin,SqlAdministratorPassword'
+    SecretsFilter: 'SqlAdministratorLogin,SqlAdministratorPassword,SqlLoginMusicVideoBuilderApplicationPassword'
     RunAsPreJob: false
 
-# Doing a Visual Studio build of your solution will trigger the dacpac file to be created
-# if you have more projects in your solution (which you probably will) you may get an error here
-# as we haven&#39;t restored any nuget packages etc. For just a SQL DB project, this should work
 - task: VSBuild@1
   displayName: Build solution
   inputs:
@@ -35,16 +32,6 @@ steps:
     platform: $(platform)
     configuration: $(configuration)
     clean: true
-
-# When the dacpac is built it will be in the projects bin/configuation folder 
-# to get into an artifact (probably with some other things you want to publish like an Azure function)
-# we need to move it somewhere else. This will move it to a folder called drop
-# - task: CopyFiles@2
-#   displayName: Copy DACPAC
-#   inputs:
-#     SourceFolder: "$(Build.SourcesDirectory)/VideoDatabase/bin/$(configuration)"
-#     Contents: "VideoDatabase.dacpac"
-#     TargetFolder: "$(Build.ArtifactStagingDirectory)/drop"
 
 - task: SqlAzureDacpacDeployment@1
   displayName: Execute Azure SQL Dacpac
@@ -55,3 +42,6 @@ steps:
     SqlUsername: $(SqlAdministratorLogin)
     SqlPassword: $(SqlAdministratorPassword)
     DacpacFile: '$(Build.SourcesDirectory)/VideoDatabase/bin/$(configuration)/VideoDatabase.dacpac'
+    AdditionalArguments: >-
+      /v:sqlLoginMusicVideoBuilderApplicationPassword="$($SqlLoginMusicVideoBuilderApplicationPassword)"
+      
