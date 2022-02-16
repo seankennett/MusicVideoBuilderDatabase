@@ -30,11 +30,11 @@ BEGIN
     INSERT INTO [dbo].[UserLayerStatus] ([UserLayerStatusId], [UserLayerStatusName]) VALUES (3, 'Saved') 
 END
 
---IF NOT EXISTS (SELECT [name] FROM sys.database_principals WHERE [name] = 'MusicVideoBuilderApplication')
---BEGIN
---CREATE USER [MusicVideoBuilderApplication] WITH PASSWORD = N'$(sqlLoginMusicVideoBuilderApplicationPassword)'
+IF NOT EXISTS (SELECT [name] FROM sys.database_principals WHERE [name] = 'MusicVideoBuilderApplication')
+BEGIN
+CREATE USER [MusicVideoBuilderApplication] WITH PASSWORD = N'$(sqlLoginMusicVideoBuilderApplicationPassword)'
 
---GRANT CONNECT TO [MusicVideoBuilderApplication]
+GRANT CONNECT TO [MusicVideoBuilderApplication]
 
---GRANT EXECUTE TO [MusicVideoBuilderApplication]
---END
+GRANT EXECUTE TO [MusicVideoBuilderApplication]
+END
