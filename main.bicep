@@ -160,6 +160,7 @@ module sql 'sqlServerModule.bicep' = {
   params: {
     sqlAdministratorLogin: keyvault.getSecret('SqlAdministratorLogin')
     sqlAdministratorPassword: keyvault.getSecret('SqlAdministratorPassword')
+    sqlLoginMusicVideoBuilderApplicationPassword: keyvault.getSecret('SqlLoginMusicVideoBuilderApplicationPassword')
     databaseCapacity: databaseCapacity
     databaseSku: databaseSku
     databaseTier: databaseTier
