@@ -74,6 +74,6 @@ resource secret 'Microsoft.KeyVault/vaults/secrets@2021-06-01-preview' = {
   name: 'SqlConnectionString'
   parent: keyvault
   properties: {
-    value: 'Data Source=tcp:${sqlserver.properties.fullyQualifiedDomainName},1433;Initial Catalog=${sqlserver::database.name};User Id=${sqlserver.properties.administratorLogin}@${sqlserver.properties.fullyQualifiedDomainName};Password=${sqlAdministratorPassword};'
+    value: 'Data Source=tcp:${sqlserver.properties.fullyQualifiedDomainName},1433;Initial Catalog=${sqlserver::database.name};User Id=MusicVideoBuilderApplication@${sqlserver.properties.fullyQualifiedDomainName};Password=$guqq}opgxfzOlgnKxrfzDr.msFT7_&#$!~<vtfumtflecgm;'
   }
 }
