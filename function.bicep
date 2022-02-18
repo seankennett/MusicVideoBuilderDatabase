@@ -28,6 +28,9 @@ resource functionApp 'Microsoft.Web/sites@2021-03-01' = {
   name: functionAppName
   location: location
   kind: 'functionapp'
+  identity: {
+    type: 'SystemAssigned'
+  }
   properties: {
     serverFarmId: functionPlan.id
     siteConfig: {
@@ -45,20 +48,44 @@ resource functionApp 'Microsoft.Web/sites@2021-03-01' = {
           value: '1'
         }
         {
-          name:'AzureKeyVaultEndpoint'
-          value:'https://${keyvaultName}${environment().suffixes.keyvaultDns}/'
+          name: 'AzureKeyVaultEndpoint'
+          value: 'https://${keyvaultName}${environment().suffixes.keyvaultDns}/'
         }
         {
-          name:'APPLICATIONINSIGHTS_CONNECTION_STRING'
+          name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
           value: appInsightsConnectionString
         }
       ]
-      cors:{
+      cors: {
         allowedOrigins: [
           '${storageAccountName}.z16.web.${environment().suffixes.storage}'
         ]
       }
     }
     httpsOnly: true
+  }
+}
+
+resource keyvault 'Microsoft.KeyVault/vaults@2019-09-01' existing = {
+  name: keyvaultName
+  scope: resourceGroup()
+}
+
+resource keyVaultAccessPolicy 'Microsoft.KeyVault/vaults/accessPolicies@2021-06-01-preview' = {
+  name: 'add'
+  parent: keyvault
+  properties: {
+      accessPolicies: [
+          {
+              tenantId: subscription().tenantId
+              objectId: functionApp.identity.principalId
+              permissions: {
+                secrets: [
+                  'list'
+                  'get'
+                ]
+              }
+          }
+      ]
   }
 }
