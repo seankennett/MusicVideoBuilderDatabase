@@ -7,6 +7,9 @@ param location string
 @description('App insights connection string')
 param appInsightsConnectionString string
 
+@description('Storage account to allow CORS to')
+param storageAccountName string
+
 var functionAppServicePlanName = '${resourceName}function'
 var functionAppName = '${resourceName}function'
 var keyvaultName = resourceName
@@ -43,7 +46,7 @@ resource functionApp 'Microsoft.Web/sites@2021-03-01' = {
         }
         {
           name:'AzureKeyVaultEndpoint'
-          value:'https://${keyvaultName}.vault.azure.net/'
+          value:'https://${keyvaultName}${environment().suffixes.keyvaultDns}/'
         }
         {
           name:'APPLICATIONINSIGHTS_CONNECTION_STRING'
@@ -52,35 +55,10 @@ resource functionApp 'Microsoft.Web/sites@2021-03-01' = {
       ]
       cors:{
         allowedOrigins: [
-          '*'//CHANGE THIS
+          '${storageAccountName}.z16.web.${environment().suffixes.storage}'
         ]
       }
     }
     httpsOnly: true
   }
 }
-
-// resource function 'Microsoft.Web/sites/functions@2020-12-01' = {
-//   name: '${functionApp.name}/ImageUploaderFunction'
-//   properties: {
-//     config: {
-//       disabled: false
-//       bindings: [
-//         {
-//           name: 'req'
-//           type: 'httpTrigger'
-//           direction: 'in'
-//           authLevel: 'function'
-//           methods: [
-//             'post'
-//           ]
-//         }
-//         {
-//           name: '$return'
-//           type: 'http'
-//           direction: 'out'
-//         }
-//       ]
-//     }
-//   }
-// }
