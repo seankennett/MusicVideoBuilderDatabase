@@ -35,8 +35,6 @@ param storageAccountType string = 'Standard_LRS'
 var keyvaultName = resourceName
 var appServicePlanName = resourceName
 var webSiteName = resourceName
-var appInsightName = resourceName
-var logAnalyticsName = resourceName
 var storageAccountNamePublic = '${resourceName}public'
 var storageAccountNamePrivate = '${resourceName}private'
 
@@ -69,7 +67,7 @@ resource appService 'Microsoft.Web/sites@2020-06-01' = {
     ProjectName: resourceName
   }
   dependsOn: [
-    logAnalyticsWorkspace
+    appInsights
   ]
   properties: {
     serverFarmId: appServicePlan.id
@@ -78,17 +76,6 @@ resource appService 'Microsoft.Web/sites@2020-06-01' = {
       minTlsVersion: '1.2'
     }
   }
-}
-
-resource appServiceLogging 'Microsoft.Web/sites/config@2020-06-01' = {
-  parent: appService
-  name: 'appsettings'
-  properties: {
-    APPINSIGHTS_INSTRUMENTATIONKEY: appInsights.properties.InstrumentationKey
-  }
-  dependsOn: [
-    appServiceAppSettings
-  ]
 }
 
 resource appServiceAppSettings 'Microsoft.Web/sites/siteextensions@2020-06-01' = {
@@ -123,36 +110,23 @@ resource appServiceSiteExtension 'Microsoft.Web/sites/config@2020-06-01' = {
   }
 }
 
-resource appInsights 'Microsoft.Insights/components@2020-02-02' = {
-  name: appInsightName
-  location: location
-  kind: 'string'
-  tags: {
-    displayName: 'AppInsight'
-    ProjectName: resourceName
-  }
-  properties: {
-    Application_Type: 'web'
-    WorkspaceResourceId: logAnalyticsWorkspace.id
+module appInsights 'appInsights.bicep' = {
+  name: 'deployAppInsights'
+  params: {
+    location: location
+    resourceName: resourceName
   }
 }
 
-resource logAnalyticsWorkspace 'Microsoft.OperationalInsights/workspaces@2020-08-01' = {
-  name: logAnalyticsName
-  location: location
-  tags: {
-    displayName: 'Log Analytics'
-    ProjectName: resourceName
+module imageUploaderFunction 'function.bicep' = {
+  name: 'deployImageUploaderFunction'
+  params: {
+    location: location
+    resourceName: resourceName
   }
-  properties: {
-    sku: {
-      name: 'PerGB2018'
-    }
-    retentionInDays: 30
-    features: {
-      enableLogAccessUsingOnlyResourcePermissions: true
-    }
-  }
+  dependsOn: [
+    appInsights
+  ]
 }
 
 module sql 'sqlServerModule.bicep' = {
@@ -178,6 +152,7 @@ module storagePublic 'storageAccount.bicep' = {
     storageAccountType: storageAccountType
     secretName: 'PublicStorageConnectionString'
     keyvaultName: keyvaultName
+    setFunctionAppSettings: true
   }
 }
 

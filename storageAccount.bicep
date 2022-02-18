@@ -20,6 +20,8 @@ param accessTier string
 @description('Key vault name')
 param keyvaultName string
 
+param setFunctionAppSettings bool = false
+
 // nothing for setting up static website - manual
 resource storageAccount 'Microsoft.Storage/storageAccounts@2021-06-01' = {
   name: storageAccountName
@@ -40,10 +42,27 @@ resource keyvault 'Microsoft.KeyVault/vaults@2019-09-01' existing = {
   scope: resourceGroup()
 }
 
+var connectionString = 'DefaultEndpointsProtocol=https;AccountName=${storageAccount.name};AccountKey=${listKeys(storageAccount.id, storageAccount.apiVersion).keys[0].value};EndpointSuffix=${environment().suffixes.storage}'
 resource secret 'Microsoft.KeyVault/vaults/secrets@2021-06-01-preview' = {
   name: secretName
   parent: keyvault
   properties: {
-    value: 'DefaultEndpointsProtocol=https;AccountName=${storageAccount.name};AccountKey=${listKeys(storageAccount.id, storageAccount.apiVersion).keys[0].value};EndpointSuffix=${environment().suffixes.storage}'
+    value: connectionString
   }
 }
+
+resource secretAzureWebJobsStorage 'Microsoft.KeyVault/vaults/secrets@2021-06-01-preview' = if (setFunctionAppSettings) {
+  name: 'AzureWebJobsStorage'
+  parent: keyvault
+  properties: {
+    value: connectionString
+  }
+}
+
+// resource secretWEBSITE_CONTENTAZUREFILECONNECTIONSTRING 'Microsoft.KeyVault/vaults/secrets@2021-06-01-preview' = if (setFunctionAppSettings) {
+//   name: 'WEBSITE_CONTENTAZUREFILECONNECTIONSTRING'
+//   parent: keyvault
+//   properties: {
+//     value: connectionString
+//   }
+// }
