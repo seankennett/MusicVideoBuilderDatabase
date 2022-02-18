@@ -37,10 +37,4 @@ resource keyvault 'Microsoft.KeyVault/vaults@2019-09-01' existing = {
   scope: resourceGroup()
 }
 
-resource secret 'Microsoft.KeyVault/vaults/secrets@2021-06-01-preview' = {
-  name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
-  parent: keyvault
-  properties: {
-    value: 'InstrumentationKey=${appInsights.properties.InstrumentationKey}'
-  }
-}
+output appInsightsConnectionString string = 'InstrumentationKey=${appInsights.properties.InstrumentationKey}'

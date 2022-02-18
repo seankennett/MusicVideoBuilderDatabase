@@ -4,6 +4,9 @@ param resourceName string
 @description('Location for all resources.')
 param location string
 
+@description('App insights connection string')
+param appInsightsConnectionString string
+
 var functionAppServicePlanName = '${resourceName}function'
 var functionAppName = '${resourceName}function'
 var keyvaultName = resourceName
@@ -41,6 +44,10 @@ resource functionApp 'Microsoft.Web/sites@2021-03-01' = {
         {
           name:'AzureKeyVaultEndpoint'
           value:'https://${keyvaultName}.vault.azure.net/'
+        }
+        {
+          name:'APPLICATIONINSIGHTS_CONNECTION_STRING'
+          value: appInsightsConnectionString
         }
       ]
       cors:{

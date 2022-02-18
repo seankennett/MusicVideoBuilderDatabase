@@ -78,6 +78,17 @@ resource appService 'Microsoft.Web/sites@2020-06-01' = {
   }
 }
 
+resource appServiceLogging 'Microsoft.Web/sites/config@2020-06-01' = {
+  parent: appService
+  name: 'appsettings'
+  properties: {
+    APPLICATIONINSIGHTS_CONNECTION_STRING: appInsights.outputs.appInsightsConnectionString
+  }
+  dependsOn: [
+    appServiceAppSettings
+  ]
+}
+
 resource appServiceAppSettings 'Microsoft.Web/sites/siteextensions@2020-06-01' = {
   parent: appService
   name: 'Microsoft.ApplicationInsights.AzureWebSites'
@@ -123,10 +134,8 @@ module imageUploaderFunction 'function.bicep' = {
   params: {
     location: location
     resourceName: resourceName
+    appInsightsConnectionString: appInsights.outputs.appInsightsConnectionString
   }
-  dependsOn: [
-    appInsights
-  ]
 }
 
 module sql 'sqlServerModule.bicep' = {

@@ -58,11 +58,3 @@ resource secretAzureWebJobsStorage 'Microsoft.KeyVault/vaults/secrets@2021-06-01
     value: connectionString
   }
 }
-
-// resource secretWEBSITE_CONTENTAZUREFILECONNECTIONSTRING 'Microsoft.KeyVault/vaults/secrets@2021-06-01-preview' = if (setFunctionAppSettings) {
-//   name: 'WEBSITE_CONTENTAZUREFILECONNECTIONSTRING'
-//   parent: keyvault
-//   properties: {
-//     value: connectionString
-//   }
-// }
