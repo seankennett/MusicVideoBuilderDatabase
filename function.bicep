@@ -48,6 +48,10 @@ resource functionApp 'Microsoft.Web/sites@2021-03-01' = {
           value: '1'
         }
         {
+          name: 'WEBSITE_ENABLE_SYNC_UPDATE_SITE'
+          value: 'true'
+        }
+        {
           name: 'AzureKeyVaultEndpoint'
           value: 'https://${keyvaultName}${environment().suffixes.keyvaultDns}/'
         }
@@ -75,17 +79,17 @@ resource keyVaultAccessPolicy 'Microsoft.KeyVault/vaults/accessPolicies@2021-06-
   name: 'add'
   parent: keyvault
   properties: {
-      accessPolicies: [
-          {
-              tenantId: subscription().tenantId
-              objectId: functionApp.identity.principalId
-              permissions: {
-                secrets: [
-                  'list'
-                  'get'
-                ]
-              }
-          }
-      ]
+    accessPolicies: [
+      {
+        tenantId: subscription().tenantId
+        objectId: functionApp.identity.principalId
+        permissions: {
+          secrets: [
+            'list'
+            'get'
+          ]
+        }
+      }
+    ]
   }
 }
