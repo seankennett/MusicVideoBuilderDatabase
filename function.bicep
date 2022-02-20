@@ -60,8 +60,8 @@ resource functionApp 'Microsoft.Web/sites@2021-03-01' = {
           value: appInsightsConnectionString
         }
         {
-          name: 'AzureWebJobsSecretStorageType'
-          value: 'files'
+          name:'AzureWebJobsStorage'
+          value:'@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${storageAccountName})'
         }
       ]
       cors: {
