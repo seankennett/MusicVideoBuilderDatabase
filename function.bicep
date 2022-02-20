@@ -10,6 +10,9 @@ param appInsightsConnectionString string
 @description('Storage account to allow CORS to')
 param storageAccountName string
 
+@description('Storage account secret name')
+param storageSecretName string
+
 var functionAppServicePlanName = '${resourceName}function'
 var functionAppName = '${resourceName}function'
 var keyvaultName = resourceName
@@ -61,7 +64,7 @@ resource functionApp 'Microsoft.Web/sites@2021-03-01' = {
         }
         {
           name:'AzureWebJobsStorage'
-          value:'@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${storageAccountName})'
+          value:'@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${storageSecretName})'
         }
       ]
       cors: {

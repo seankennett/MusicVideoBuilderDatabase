@@ -37,6 +37,7 @@ var appServicePlanName = resourceName
 var webSiteName = resourceName
 var storageAccountNamePublic = '${resourceName}public'
 var storageAccountNamePrivate = '${resourceName}private'
+var publicStorageSecretName = 'PublicStorageConnectionString'
 
 resource keyvault 'Microsoft.KeyVault/vaults@2019-09-01' existing = {
   name: keyvaultName
@@ -136,7 +137,11 @@ module imageUploaderFunction 'function.bicep' = {
     resourceName: resourceName
     appInsightsConnectionString: appInsights.outputs.appInsightsConnectionString
     storageAccountName: storageAccountNamePublic
+    storageSecretName: publicStorageSecretName
   }
+  dependsOn:[
+    storagePublic
+  ]
 }
 
 module sql 'sqlServerModule.bicep' = {
@@ -160,7 +165,7 @@ module storagePublic 'storageAccount.bicep' = {
     location: location
     storageAccountName: storageAccountNamePublic
     storageAccountType: storageAccountType
-    secretName: 'PublicStorageConnectionString'
+    secretName: publicStorageSecretName
     keyvaultName: keyvaultName
   }
 }
