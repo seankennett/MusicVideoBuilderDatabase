@@ -37,4 +37,4 @@ resource keyvault 'Microsoft.KeyVault/vaults@2019-09-01' existing = {
   scope: resourceGroup()
 }
 
-output appInsightsConnectionString string = 'InstrumentationKey=${appInsights.properties.InstrumentationKey}'
+output appInsightsConnectionString string = appInsights.properties.ConnectionString

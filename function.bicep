@@ -41,7 +41,7 @@ resource functionApp 'Microsoft.Web/sites@2021-03-01' = {
         }
         {
           name: 'FUNCTIONS_EXTENSION_VERSION'
-          value: '~3'
+          value: '~4'
         }
         {
           name: 'WEBSITE_RUN_FROM_PACKAGE'
@@ -58,6 +58,10 @@ resource functionApp 'Microsoft.Web/sites@2021-03-01' = {
         {
           name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
           value: appInsightsConnectionString
+        }
+        {
+          name: 'AzureWebJobsSecretStorageType'
+          value: 'files'
         }
       ]
       cors: {

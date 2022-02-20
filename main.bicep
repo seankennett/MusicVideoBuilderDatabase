@@ -162,7 +162,6 @@ module storagePublic 'storageAccount.bicep' = {
     storageAccountType: storageAccountType
     secretName: 'PublicStorageConnectionString'
     keyvaultName: keyvaultName
-    setFunctionAppSettings: true
   }
 }
 
