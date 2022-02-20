@@ -16,6 +16,7 @@ param storageSecretName string
 var functionAppServicePlanName = '${resourceName}function'
 var functionAppName = '${resourceName}function'
 var keyvaultName = resourceName
+var secretReference = '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${storageSecretName})'
 
 resource functionPlan 'Microsoft.Web/serverfarms@2020-12-01' = {
   name: functionAppServicePlanName
@@ -63,8 +64,12 @@ resource functionApp 'Microsoft.Web/sites@2021-03-01' = {
           value: appInsightsConnectionString
         }
         {
-          name:'AzureWebJobsStorage'
-          value:'@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${storageSecretName})'
+          name: 'AzureWebJobsStorage'
+          value: secretReference
+        }
+        {
+          name: 'WEBSITE_CONTENTAZUREFILECONNECTIONSTRING'
+          value: secretReference
         }
       ]
       cors: {
