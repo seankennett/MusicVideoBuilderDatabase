@@ -69,7 +69,7 @@ resource functionApp 'Microsoft.Web/sites@2021-03-01' = {
       ]
       cors: {
         allowedOrigins: [
-          '${storageAccountName}.z16.web.${environment().suffixes.storage}'
+          'https://${storageAccountName}.z16.web.${environment().suffixes.storage}'
         ]
       }
     }
