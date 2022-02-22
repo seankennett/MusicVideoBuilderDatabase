@@ -79,11 +79,35 @@ resource appService 'Microsoft.Web/sites@2020-06-01' = {
   }
 }
 
+resource keyVaultAccessPolicy 'Microsoft.KeyVault/vaults/accessPolicies@2021-06-01-preview' = {
+  name: 'add'
+  parent: keyvault
+  properties: {
+    accessPolicies: [
+      {
+        tenantId: subscription().tenantId
+        objectId: appService.identity.principalId
+        permissions: {
+          secrets: [
+            'list'
+            'get'
+          ]
+        }
+      }
+    ]
+  }
+}
+
 resource appServiceLogging 'Microsoft.Web/sites/config@2020-06-01' = {
   parent: appService
   name: 'appsettings'
   properties: {
     APPLICATIONINSIGHTS_CONNECTION_STRING: appInsights.outputs.appInsightsConnectionString
+    AzureB2C__Instance: 'https://musicvideobuilder.b2clogin.com'
+    AzureB2C__Domain: 'musicvideobuilder.onmicrosoft.com'
+    AzureB2C__ClientId: '36b06244-f6ad-46c3-95e0-9b1baecbd025'
+    AzureB2C__SignUpSignInPolicyId: 'B2C_1_signupsignin'
+    AzureB2C__TenantId: subscription().tenantId    
   }
   dependsOn: [
     appServiceAppSettings
