@@ -76,11 +76,6 @@ resource functionApp 'Microsoft.Web/sites@2021-03-01' = {
           value: toLower(functionAppName)
         }
       ]
-      cors: {
-        allowedOrigins: [
-          'https://${storageAccountName}.z16.web.${environment().suffixes.storage}'
-        ]
-      }
     }
     httpsOnly: true
   }
