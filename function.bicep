@@ -77,11 +77,6 @@ resource functionApp 'Microsoft.Web/sites@2021-03-01' = {
     httpsOnly: true
   }  
 }
-resource imageUploaderFunction 'Microsoft.Web/sites/functions@2021-03-01'= {
-  name: 'ImageUploaderFunction'
-  parent: functionApp
-  properties:{}
-}
 
 resource keyvault 'Microsoft.KeyVault/vaults@2019-09-01' existing = {
   name: keyvaultName
@@ -111,6 +106,6 @@ resource secret 'Microsoft.KeyVault/vaults/secrets@2021-06-01-preview' = {
   name: 'ImageUploaderFunctionUri'
   parent: keyvault
   properties: {
-    value: listSecrets(imageUploaderFunction.id, '2021-03-01').trigger_url
+    value: listkeys('${functionApp.id}/host/default', '2016-08-01').functionKeys.default
   }
 }
