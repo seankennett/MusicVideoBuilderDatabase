@@ -106,6 +106,6 @@ resource secret 'Microsoft.KeyVault/vaults/secrets@2021-06-01-preview' = {
   name: 'ImageUploaderFunctionUri'
   parent: keyvault
   properties: {
-    value: '${functionApp.properties.defaultHostName}/api/ImageUploaderFunction?code=${listkeys('${functionApp.id}/host/default', '2016-08-01').functionKeys.default}'
+    value: 'https://${functionApp.properties.defaultHostName}/api/ImageUploaderFunction?code=${listkeys('${functionApp.id}/host/default', '2016-08-01').functionKeys.default}'
   }
 }
