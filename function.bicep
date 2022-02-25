@@ -7,11 +7,11 @@ param location string
 @description('App insights connection string')
 param appInsightsConnectionString string
 
-@description('Storage account to allow CORS to')
-param storageAccountName string
-
 @description('Storage account secret name')
 param storageSecretName string
+
+@description('Function URL secret name')
+param functionUrlSecretName string
 
 var functionAppServicePlanName = '${resourceName}function'
 var functionAppName = '${resourceName}function'
@@ -78,7 +78,11 @@ resource functionApp 'Microsoft.Web/sites@2021-03-01' = {
       ]
     }
     httpsOnly: true
-  }
+  }  
+}
+resource imageUploaderFunction 'Microsoft.Web/sites/functions@2021-03-01'= {
+  name: 'ImageUploaderFunction'
+  parent: functionApp
 }
 
 resource keyvault 'Microsoft.KeyVault/vaults@2019-09-01' existing = {
@@ -102,5 +106,13 @@ resource keyVaultAccessPolicy 'Microsoft.KeyVault/vaults/accessPolicies@2021-06-
         }
       }
     ]
+  }
+}
+
+resource secret 'Microsoft.KeyVault/vaults/secrets@2021-06-01-preview' = {
+  name: functionUrlSecretName
+  parent: keyvault
+  properties: {
+    value: listSecrets(imageUploaderFunction.id, '2021-03-01').trigger_url
   }
 }
