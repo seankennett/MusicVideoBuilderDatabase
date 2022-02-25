@@ -80,6 +80,7 @@ resource functionApp 'Microsoft.Web/sites@2021-03-01' = {
 resource imageUploaderFunction 'Microsoft.Web/sites/functions@2021-03-01'= {
   name: 'ImageUploaderFunction'
   parent: functionApp
+  properties:{}
 }
 
 resource keyvault 'Microsoft.KeyVault/vaults@2019-09-01' existing = {
