@@ -163,7 +163,6 @@ module imageUploaderFunction 'function.bicep' = {
     location: location
     resourceName: resourceName
     appInsightsConnectionString: appInsights.outputs.appInsightsConnectionString
-    storageAccountName: storageAccountNamePublic
     storageSecretName: publicStorageSecretName
   }
   dependsOn:[

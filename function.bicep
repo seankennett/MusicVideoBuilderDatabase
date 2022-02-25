@@ -10,9 +10,6 @@ param appInsightsConnectionString string
 @description('Storage account secret name')
 param storageSecretName string
 
-@description('Function URL secret name')
-param functionUrlSecretName string
-
 var functionAppServicePlanName = '${resourceName}function'
 var functionAppName = '${resourceName}function'
 var keyvaultName = resourceName
@@ -110,7 +107,7 @@ resource keyVaultAccessPolicy 'Microsoft.KeyVault/vaults/accessPolicies@2021-06-
 }
 
 resource secret 'Microsoft.KeyVault/vaults/secrets@2021-06-01-preview' = {
-  name: functionUrlSecretName
+  name: 'ImageUploaderFunctionUri'
   parent: keyvault
   properties: {
     value: listSecrets(imageUploaderFunction.id, '2021-03-01').trigger_url
