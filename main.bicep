@@ -38,6 +38,7 @@ var webSiteName = resourceName
 var storageAccountNamePublic = '${resourceName}public'
 var storageAccountNamePrivate = '${resourceName}private'
 var publicStorageSecretName = 'PublicStorageConnectionString'
+var imageUploaderFunctionSecret = 'ImageUploaderFunctionUri'
 
 resource keyvault 'Microsoft.KeyVault/vaults@2019-09-01' existing = {
   name: keyvaultName
@@ -114,7 +115,7 @@ resource appServiceLogging 'Microsoft.Web/sites/config@2020-06-01' = {
     ReverseProxy__Routes__route1__ClusterId: 'cluster1'
     ReverseProxy__Routes__route1__Match__Path: '/Upload'
     ReverseProxy__Routes__route1__Transforms__0__PathRemovePrefix: '/Upload'
-    ReverseProxy__Clusters__cluster1__Destinations__destination1__Address: 'https://musicvideobuilderfunction.azurewebsites.net/api/ImageUploaderFunction?code=bV2tz2DK%2FPEnaIdK76lbaCmPtGMJUOkrflw5bwO0iQS6E4ODsNqXfQ%3D%3D'
+    ReverseProxy__Clusters__cluster1__Destinations__destination1__Address: '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${imageUploaderFunctionSecret})'
   }
   dependsOn: [
     appServiceAppSettings
@@ -168,6 +169,7 @@ module imageUploaderFunction 'function.bicep' = {
     resourceName: resourceName
     appInsightsConnectionString: appInsights.outputs.appInsightsConnectionString
     storageSecretName: publicStorageSecretName
+    functionSecretName: imageUploaderFunctionSecret
   }
   dependsOn:[
     storagePublic
