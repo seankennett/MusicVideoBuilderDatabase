@@ -109,7 +109,6 @@ resource appServiceLogging 'Microsoft.Web/sites/config@2020-06-01' = {
     AzureB2C__ClientId: '36b06244-f6ad-46c3-95e0-9b1baecbd025'
     AzureB2C__SignUpSignInPolicyId: 'B2C_1_signupsignin'
     AzureB2C__TenantId: subscription().tenantId
-    AzureB2C__ClientSecret: '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=ClientSecret)'
     AzureKeyVaultEndpoint: 'https://${keyvaultName}${environment().suffixes.keyvaultDns}/'
     WEBSITE_RUN_FROM_PACKAGE: '1'
     WEBSITE_ENABLE_SYNC_UPDATE_SITE: 'true'
