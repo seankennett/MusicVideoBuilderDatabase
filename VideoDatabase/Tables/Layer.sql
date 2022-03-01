@@ -5,5 +5,6 @@
 	[LayerName] NVARCHAR(50) NOT NULL,
 	[DateCreated] DATETIME2 NOT NULL,
 	[DateUpdated] DATETIME2 NOT NULL,
-	CONSTRAINT FK_Layer_LayerType FOREIGN KEY ([LayerTypeId]) REFERENCES [dbo].[LayerType]([LayerTypeId])
+	[AuthorObjectId] UNIQUEIDENTIFIER NOT NULL DEFAULT CAST('69d12eed-18c7-4763-8df2-ad828af710df' AS UNIQUEIDENTIFIER), 
+    CONSTRAINT FK_Layer_LayerType FOREIGN KEY ([LayerTypeId]) REFERENCES [dbo].[LayerType]([LayerTypeId])
 )

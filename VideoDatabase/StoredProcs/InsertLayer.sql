@@ -2,12 +2,13 @@
 	@LayerId UNIQUEIDENTIFIER,
 	@LayerName NVARCHAR(50),
 	@Tags [TagsType] READONLY,
-	@LayerTypeId TINYINT
+	@LayerTypeId TINYINT,
+	@AuthorObjectId UNIQUEIDENTIFIER
 AS
 BEGIN TRY
     BEGIN TRANSACTION 
 	DECLARE @TagIds TABLE (TagId INT);
-	INSERT INTO [Layer] (LayerId, LayerName, LayerTypeId, DateCreated, DateUpdated) VALUES 	(@LayerId, @LayerName, @LayerTypeId, GETUTCDATE(), GETUTCDATE());
+	INSERT INTO [Layer] (LayerId, LayerName, LayerTypeId, DateCreated, DateUpdated, AuthorObjectId) VALUES 	(@LayerId, @LayerName, @LayerTypeId, GETUTCDATE(), GETUTCDATE(), @AuthorObjectId);
 
 	MERGE [Tag] AS TARGET
 	USING @Tags AS SOURCE
