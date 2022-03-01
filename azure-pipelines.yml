@@ -43,5 +43,5 @@ steps:
     SqlPassword: $(SqlAdministratorPassword)
     DacpacFile: '$(Build.SourcesDirectory)/VideoDatabase/bin/$(configuration)/VideoDatabase.dacpac'
     AdditionalArguments: >-
-      /v:sqlLoginMusicVideoBuilderApplicationPassword="$($SqlLoginMusicVideoBuilderApplicationPassword)"
+      /v:sqlLoginMusicVideoBuilderApplicationPassword=$(SqlLoginMusicVideoBuilderApplicationPassword)
       
