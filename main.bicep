@@ -113,6 +113,7 @@ resource appServiceLogging 'Microsoft.Web/sites/config@2020-06-01' = {
     WEBSITE_RUN_FROM_PACKAGE: '1'
     WEBSITE_ENABLE_SYNC_UPDATE_SITE: 'true'
     ReverseProxy__Routes__route1__ClusterId: 'cluster1'
+    ReverseProxy__Routes__route1__AuthorizationPolicy: 'AuthorRolePolicy'
     ReverseProxy__Routes__route1__Match__Path: '/Upload'
     ReverseProxy__Routes__route1__Transforms__0__PathRemovePrefix: '/Upload'
     ReverseProxy__Clusters__cluster1__Destinations__destination1__Address: '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${imageUploaderFunctionSecret})'
