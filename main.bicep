@@ -35,9 +35,10 @@ param storageAccountType string = 'Standard_LRS'
 var keyvaultName = resourceName
 var appServicePlanName = resourceName
 var webSiteName = resourceName
+var storageAccountNameWeb = resourceName
 var storageAccountNamePublic = '${resourceName}public'
 var storageAccountNamePrivate = '${resourceName}private'
-var publicStorageSecretName = 'PublicStorageConnectionString'
+var webStorageSecretName = 'WebStorageConnectionString'
 var imageUploaderFunctionSecret = 'ImageUploaderFunctionUri'
 
 resource keyvault 'Microsoft.KeyVault/vaults@2019-09-01' existing = {
@@ -169,7 +170,7 @@ module imageUploaderFunction 'function.bicep' = {
     location: location
     resourceName: resourceName
     appInsightsConnectionString: appInsights.outputs.appInsightsConnectionString
-    storageSecretName: publicStorageSecretName
+    storageSecretName: webStorageSecretName
     functionSecretName: imageUploaderFunctionSecret
   }
   dependsOn:[
@@ -198,8 +199,9 @@ module storagePublic 'storageAccount.bicep' = {
     location: location
     storageAccountName: storageAccountNamePublic
     storageAccountType: storageAccountType
-    secretName: publicStorageSecretName
+    secretName: 'PublicStorageConnectionString'
     keyvaultName: keyvaultName
+    customDomain: 'musicvideobuilder.com'
   }
 }
 
@@ -211,6 +213,18 @@ module storagePrivate 'storageAccount.bicep' = {
     storageAccountName: storageAccountNamePrivate
     storageAccountType: storageAccountType
     secretName: 'PrivateStorageConnectionString'
+    keyvaultName: keyvaultName
+  }
+}
+
+module storageWeb 'storageAccount.bicep' = {
+  name: 'deployStorageWeb'
+  params: {
+    accessTier: 'Hot'
+    location: location
+    storageAccountName: storageAccountNameWeb
+    storageAccountType: storageAccountType
+    secretName: webStorageSecretName
     keyvaultName: keyvaultName
   }
 }

@@ -20,6 +20,24 @@ param accessTier string
 @description('Key vault name')
 param keyvaultName string
 
+@description('Custom domain name')
+param customDomain string = string(null)
+
+var baseProperties = {
+  accessTier: accessTier
+  allowBlobPublicAccess: true
+  publicNetworkAccess: 'Enabled'
+}
+
+var customDomainProperties = {
+  supportsHttpsTrafficOnly: false
+  customDomain: {
+    name: customDomain
+  }
+}
+
+var allProperties = customDomain == null ? baseProperties : union(baseProperties, customDomainProperties)
+
 // nothing for setting up static website - manual
 resource storageAccount 'Microsoft.Storage/storageAccounts@2021-06-01' = {
   name: storageAccountName
@@ -28,11 +46,7 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2021-06-01' = {
     name: storageAccountType
   }
   kind: 'StorageV2'
-  properties: {
-    accessTier: accessTier
-    allowBlobPublicAccess: true
-    publicNetworkAccess:'Enabled'
-  }
+  properties: allProperties
 }
 
 resource keyvault 'Microsoft.KeyVault/vaults@2019-09-01' existing = {
