@@ -31,9 +31,9 @@ var baseProperties = {
 
 var customDomainProperties = {
   supportsHttpsTrafficOnly: false
-  customDomain: {
-    name: customDomain
-  }
+  // customDomain: {
+  //   name: customDomain
+  // } Clouflare not good when being proxied
 }
 
 var allProperties = customDomain == '' ? baseProperties : union(baseProperties, customDomainProperties)
