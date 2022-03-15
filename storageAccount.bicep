@@ -21,7 +21,7 @@ param accessTier string
 param keyvaultName string
 
 @description('Custom domain name')
-param customDomain string = string(null)
+param customDomain string = ''
 
 var baseProperties = {
   accessTier: accessTier
@@ -36,7 +36,7 @@ var customDomainProperties = {
   }
 }
 
-var allProperties = customDomain == null ? baseProperties : union(baseProperties, customDomainProperties)
+var allProperties = customDomain == '' ? baseProperties : union(baseProperties, customDomainProperties)
 
 // nothing for setting up static website - manual
 resource storageAccount 'Microsoft.Storage/storageAccounts@2021-06-01' = {
