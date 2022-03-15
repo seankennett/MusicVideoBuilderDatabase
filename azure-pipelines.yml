@@ -1,8 +1,5 @@
 trigger:
 - master
-
-name: Deploy Bicep files
-
 variables:
   vmImageName: 'ubuntu-latest'
 

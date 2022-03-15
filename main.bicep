@@ -40,6 +40,7 @@ var storageAccountNamePublic = '${resourceName}public'
 var storageAccountNamePrivate = '${resourceName}private'
 var webStorageSecretName = 'WebStorageConnectionString'
 var imageUploaderFunctionSecret = 'ImageUploaderFunctionUri'
+var hostName = 'musicvideobuilder.com'
 
 resource keyvault 'Microsoft.KeyVault/vaults@2019-09-01' existing = {
   name: keyvaultName
@@ -201,7 +202,7 @@ module storagePublic 'storageAccount.bicep' = {
     storageAccountType: storageAccountType
     secretName: 'PublicStorageConnectionString'
     keyvaultName: keyvaultName
-    customDomain: 'musicvideobuilder.com'
+    customDomain: 'cdn.${hostName}'
   }
 }
 
@@ -226,5 +227,6 @@ module storageWeb 'storageAccount.bicep' = {
     storageAccountType: storageAccountType
     secretName: webStorageSecretName
     keyvaultName: keyvaultName
+    customDomain: hostName
   }
 }
