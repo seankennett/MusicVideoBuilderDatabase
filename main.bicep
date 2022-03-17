@@ -35,10 +35,10 @@ param storageAccountType string = 'Standard_LRS'
 var keyvaultName = resourceName
 var appServicePlanName = resourceName
 var webSiteName = resourceName
-var storageAccountNameWeb = resourceName
+var staticSiteName = resourceName
 var storageAccountNamePublic = '${resourceName}public'
 var storageAccountNamePrivate = '${resourceName}private'
-var webStorageSecretName = 'WebStorageConnectionString'
+var publicStorageSecretName = 'PublicStorageConnectionString'
 var imageUploaderFunctionSecret = 'ImageUploaderFunctionUri'
 var hostName = 'musicvideobuilder.com'
 
@@ -171,10 +171,10 @@ module imageUploaderFunction 'function.bicep' = {
     location: location
     resourceName: resourceName
     appInsightsConnectionString: appInsights.outputs.appInsightsConnectionString
-    storageSecretName: webStorageSecretName
+    storageSecretName: publicStorageSecretName
     functionSecretName: imageUploaderFunctionSecret
   }
-  dependsOn:[
+  dependsOn: [
     storagePublic
   ]
 }
@@ -218,15 +218,27 @@ module storagePrivate 'storageAccount.bicep' = {
   }
 }
 
-module storageWeb 'storageAccount.bicep' = {
-  name: 'deployStorageWeb'
-  params: {
-    accessTier: 'Hot'
-    location: location
-    storageAccountName: storageAccountNameWeb
-    storageAccountType: storageAccountType
-    secretName: webStorageSecretName
-    keyvaultName: keyvaultName
-    customDomain: hostName
+resource staticSite 'Microsoft.Web/staticSites@2021-03-01' = {
+  name: staticSiteName
+  location: location
+  sku: {
+    tier: 'Free'
+    name: 'Free'
+  }
+  properties:{
+    repositoryUrl: 'https://dev.azure.com/musicvideobuilder/Music Video Builder/_git/MusicVideoBuilderSPA'
+    branch: 'master'
+    provider:'DevOps'
+    buildProperties:{
+      skipGithubActionWorkflowGeneration: true
+    }
+  }
+}
+
+resource secret 'Microsoft.KeyVault/vaults/secrets@2021-06-01-preview' = {
+  name: 'StaticWebAppDeploymentToken'
+  parent: keyvault
+  properties: {
+    value: listSecrets(staticSite.id, staticSite.apiVersion).properties.apiKey
   }
 }
