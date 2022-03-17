@@ -220,7 +220,7 @@ module storagePrivate 'storageAccount.bicep' = {
 
 resource staticSite 'Microsoft.Web/staticSites@2021-03-01' = {
   name: staticSiteName
-  location: location
+  location: 'West Europe'
   sku: {
     tier: 'Free'
     name: 'Free'
