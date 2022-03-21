@@ -33,8 +33,6 @@ param resourceName string = 'musicvideobuilder'
 param storageAccountType string = 'Standard_LRS'
 
 var keyvaultName = resourceName
-var appServicePlanName = resourceName
-var webSiteName = resourceName
 var staticSiteName = resourceName
 var storageAccountNamePublic = '${resourceName}public'
 var storageAccountNamePrivate = '${resourceName}private'
@@ -42,120 +40,7 @@ var publicStorageSecretName = 'PublicStorageConnectionString'
 var imageUploaderFunctionSecret = 'ImageUploaderFunctionUri'
 var hostName = 'musicvideobuilder.com'
 
-resource keyvault 'Microsoft.KeyVault/vaults@2019-09-01' existing = {
-  name: keyvaultName
-  scope: resourceGroup()
-}
 
-resource appServicePlan 'Microsoft.Web/serverfarms@2020-06-01' = {
-  name: appServicePlanName
-  location: location
-  sku: {
-    name: webAppSkuName
-    capacity: webAppSkuCapacity
-  }
-  tags: {
-    displayName: 'HostingPlan'
-    ProjectName: resourceName
-  }
-}
-
-resource appService 'Microsoft.Web/sites@2020-06-01' = {
-  name: webSiteName
-  location: location
-  identity: {
-    type: 'SystemAssigned'
-  }
-  tags: {
-    displayName: 'Website'
-    ProjectName: resourceName
-  }
-  dependsOn: [
-    appInsights
-  ]
-  properties: {
-    serverFarmId: appServicePlan.id
-    httpsOnly: true
-    siteConfig: {
-      minTlsVersion: '1.2'
-    }
-  }
-}
-
-resource keyVaultAccessPolicy 'Microsoft.KeyVault/vaults/accessPolicies@2021-06-01-preview' = {
-  name: 'add'
-  parent: keyvault
-  properties: {
-    accessPolicies: [
-      {
-        tenantId: subscription().tenantId
-        objectId: appService.identity.principalId
-        permissions: {
-          secrets: [
-            'list'
-            'get'
-          ]
-        }
-      }
-    ]
-  }
-}
-
-resource appServiceLogging 'Microsoft.Web/sites/config@2020-06-01' = {
-  parent: appService
-  name: 'appsettings'
-  properties: {
-    APPLICATIONINSIGHTS_CONNECTION_STRING: appInsights.outputs.appInsightsConnectionString
-    AzureB2C__Instance: 'https://musicvideobuilder.b2clogin.com'
-    AzureB2C__Domain: 'musicvideobuilder.onmicrosoft.com'
-    AzureB2C__ClientId: '36b06244-f6ad-46c3-95e0-9b1baecbd025'
-    AzureB2C__SignUpSignInPolicyId: 'B2C_1_signupsignin'
-    AzureB2C__TenantId: subscription().tenantId
-    AzureKeyVaultEndpoint: 'https://${keyvaultName}${environment().suffixes.keyvaultDns}/'
-    WEBSITE_RUN_FROM_PACKAGE: '1'
-    WEBSITE_ENABLE_SYNC_UPDATE_SITE: 'true'
-    ReverseProxy__Routes__route1__ClusterId: 'cluster1'
-    ReverseProxy__Routes__route1__AuthorizationPolicy: 'AuthorRolePolicy'
-    ReverseProxy__Routes__route1__Match__Path: '/Upload'
-    ReverseProxy__Routes__route1__Transforms__0__PathRemovePrefix: '/Upload'
-    ReverseProxy__Clusters__cluster1__Destinations__destination1__Address: '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${imageUploaderFunctionSecret})'
-  }
-  dependsOn: [
-    appServiceAppSettings
-  ]
-}
-
-resource appServiceAppSettings 'Microsoft.Web/sites/siteextensions@2020-06-01' = {
-  parent: appService
-  name: 'Microsoft.ApplicationInsights.AzureWebSites'
-  dependsOn: [
-    appInsights
-  ]
-}
-
-resource appServiceSiteExtension 'Microsoft.Web/sites/config@2020-06-01' = {
-  parent: appService
-  name: 'logs'
-  properties: {
-    applicationLogs: {
-      fileSystem: {
-        level: 'Warning'
-      }
-    }
-    httpLogs: {
-      fileSystem: {
-        retentionInMb: 40
-        enabled: true
-      }
-    }
-    failedRequestsTracing: {
-      enabled: true
-    }
-    detailedErrorMessages: {
-      enabled: true
-    }
-  }
-}
 
 module appInsights 'appInsights.bicep' = {
   name: 'deployAppInsights'
@@ -177,6 +62,23 @@ module imageUploaderFunction 'function.bicep' = {
   dependsOn: [
     storagePublic
   ]
+}
+
+module webApi 'webApi.bicep' ={
+  name:'deployWebApi'
+  params:{
+    appInsightsConnectionString: appInsights.outputs.appInsightsConnectionString
+    functionSecret: imageUploaderFunctionSecret
+    location: location
+    resourceName: resourceName
+    webAppSkuCapacity: webAppSkuCapacity
+    webAppSkuName: webAppSkuName
+  }
+}
+
+resource keyvault 'Microsoft.KeyVault/vaults@2019-09-01' existing = {
+  name: keyvaultName
+  scope: resourceGroup()
 }
 
 module sql 'sqlServerModule.bicep' = {
@@ -218,27 +120,9 @@ module storagePrivate 'storageAccount.bicep' = {
   }
 }
 
-resource staticSite 'Microsoft.Web/staticSites@2021-03-01' = {
-  name: staticSiteName
-  location: 'West Europe'
-  sku: {
-    tier: 'Free'
-    name: 'Free'
-  }
-  properties:{
-    repositoryUrl: 'https://dev.azure.com/musicvideobuilder/Music Video Builder/_git/MusicVideoBuilderSPA'
-    branch: 'master'
-    provider:'DevOps'
-    buildProperties:{
-      skipGithubActionWorkflowGeneration: true
-    }
-  }
-}
-
-resource secret 'Microsoft.KeyVault/vaults/secrets@2021-06-01-preview' = {
-  name: 'StaticWebAppDeploymentToken'
-  parent: keyvault
-  properties: {
-    value: listSecrets(staticSite.id, staticSite.apiVersion).properties.apiKey
+module staticWebsite 'staticSite.bicep' = {
+  name: 'deployStaticWebsite'
+  params:{
+    resourceName: staticSiteName
   }
 }
