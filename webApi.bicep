@@ -53,6 +53,10 @@ resource appService 'Microsoft.Web/sites@2021-03-01' = {
           value: appInsightsConnectionString
         }
         {
+          name: 'ApplicationInsightsAgent_EXTENSION_VERSION'
+          value: '~2'
+        }
+        {
           name: 'AzureAdB2C__Instance'
           value: 'https://musicvideobuilder.b2clogin.com'
         }
@@ -63,7 +67,7 @@ resource appService 'Microsoft.Web/sites@2021-03-01' = {
         {
           name: 'AzureAdB2C__Domain'
           value: 'musicvideobuilder.onmicrosoft.com'
-        }        
+        }
         {
           name: 'AzureAdB2C__SignUpSignInPolicyId'
           value: 'B2C_1_signupsignin'
@@ -105,12 +109,12 @@ resource appService 'Microsoft.Web/sites@2021-03-01' = {
           value: '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${functionSecret})'
         }
       ]
-      cors:{
+      cors: {
         allowedOrigins: [
           'https://musicvideobuilder.com'
         ]
       }
-      netFrameworkVersion:'v6.0'
+      netFrameworkVersion: 'v6.0'
     }
   }
 }
