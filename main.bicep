@@ -14,7 +14,7 @@ param databaseTier string = 'Standard'
 param databaseCapacity int = 10
 
 @description('Location for all resources.')
-param location string = 'North Europe'
+param location string = 'West Europe'
 
 @description('Name that will be used to build associated artifacts')
 param resourceName string = 'musicvideobuilder'
@@ -74,6 +74,9 @@ module webApi 'webApi.bicep' ={
     webAppSkuCapacity: webAppSkuCapacity
     webAppSkuName: webAppSkuName
   }
+  dependsOn:[
+    imageUploaderFunction
+  ]
 }
 
 resource keyvault 'Microsoft.KeyVault/vaults@2019-09-01' existing = {
@@ -124,5 +127,6 @@ module staticWebsite 'staticSite.bicep' = {
   name: 'deployStaticWebsite'
   params:{
     resourceName: staticSiteName
+    location: location
   }
 }

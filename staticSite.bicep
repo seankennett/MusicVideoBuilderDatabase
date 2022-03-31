@@ -1,6 +1,9 @@
 @description('Name that will be used to build associated artifacts')
 param resourceName string
 
+@description('Location for all resources.')
+param location string
+
 var staticSiteName = resourceName
 var keyvaultName = resourceName
 
@@ -10,7 +13,7 @@ var staticSkuName = 'Free'
 
 resource staticSite 'Microsoft.Web/staticSites@2021-03-01' = {
   name: staticSiteName
-  location: 'West Europe'
+  location: location
   sku: {
     tier: staticSkuTier
     name: staticSkuName
