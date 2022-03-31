@@ -8,7 +8,8 @@ param location string
 param appInsightsConnectionString string
 
 @description('Storage account secret name')
-param storageSecretName string
+@secure()
+param storageConnectionString string
 
 @description('Function secret name')
 param functionSecretName string
@@ -16,7 +17,6 @@ param functionSecretName string
 var functionAppServicePlanName = '${resourceName}function'
 var functionAppName = '${resourceName}function'
 var keyvaultName = resourceName
-var secretReference = '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${storageSecretName})'
 
 resource functionPlan 'Microsoft.Web/serverfarms@2020-12-01' = {
   name: functionAppServicePlanName
@@ -64,6 +64,14 @@ resource functionApp 'Microsoft.Web/sites@2021-03-01' = {
           value: appInsightsConnectionString
         }
         {
+          name: 'AzureWebJobsStorage'
+          value: storageConnectionString
+        }
+        {
+          name: 'WEBSITE_CONTENTAZUREFILECONNECTIONSTRING'
+          value: storageConnectionString
+        }
+        {
           name: 'WEBSITE_CONTENTSHARE'
           value: toLower(functionAppName)
         }
@@ -95,19 +103,6 @@ resource keyVaultAccessPolicy 'Microsoft.KeyVault/vaults/accessPolicies@2021-06-
       }
     ]
   }
-}
-
-// secret references done later so can get access to vault
-resource siteconfig 'Microsoft.Web/sites/config@2020-12-01' = {
-  name: 'appsettings'
-  parent: functionApp
-  properties: {
-    AzureWebJobsStorage: secretReference
-    WEBSITE_CONTENTAZUREFILECONNECTIONSTRING: secretReference
-  }
-  dependsOn: [
-    keyVaultAccessPolicy
-  ]
 }
 
 resource secret 'Microsoft.KeyVault/vaults/secrets@2021-06-01-preview' = {
