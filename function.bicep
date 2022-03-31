@@ -130,4 +130,7 @@ resource secret 'Microsoft.KeyVault/vaults/secrets@2021-06-01-preview' = {
   properties: {
     value: 'https://${functionApp.properties.defaultHostName}/api/ImageUploaderFunction?code=${uriComponent(listkeys('${functionApp.id}/host/default', '2016-08-01').functionKeys.default)}'
   }
+  dependsOn:[
+    siteconfig //changing config FUNCTIONS_EXTENSION_VERSION from default of ~1 changes the default functionkey so have to delay until done
+  ]
 }
