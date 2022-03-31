@@ -98,11 +98,11 @@ resource appService 'Microsoft.Web/sites@2021-03-01' = {
         }
         {
           name: 'ReverseProxy__Routes__route1__Match__Path'
-          value: 'api/LayerUpload"'
+          value: 'api/LayerUpload'
         }
         {
           name: 'ReverseProxy__Routes__route1__Transforms__0__PathRemovePrefix'
-          value: 'api/LayerUpload"'
+          value: 'api/LayerUpload'
         }
         {
           name: 'ReverseProxy__Clusters__cluster1__Destinations__destination1__Address'
