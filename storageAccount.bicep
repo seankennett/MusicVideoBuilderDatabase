@@ -64,6 +64,13 @@ resource symbolicname 'Microsoft.Storage/storageAccounts/blobServices@2018-07-01
           allowedOrigins: [
             '*'
           ]
+          allowedHeaders: [
+            ''
+          ]
+          exposedHeaders: [
+            ''
+          ]
+          maxAgeInSeconds: 0
         }
       ]
     }
