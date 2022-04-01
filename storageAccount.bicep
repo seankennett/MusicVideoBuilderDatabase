@@ -49,17 +49,17 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2021-06-01' = {
   properties: allProperties
 }
 
-resource blobServices 'Microsoft.Storage/storageAccounts/blobServices@2021-04-01' = {
-  parent: storageAccount
+resource symbolicname 'Microsoft.Storage/storageAccounts/blobServices@2018-07-01' = {
   name: 'default'
+  parent: storageAccount
   properties: {
     cors: {
       corsRules: [
         {
           allowedMethods: [
             'GET'
-            'OPTIONS'
             'HEAD'
+            'OPTIONS'
           ]
           allowedOrigins: [
             '*'
