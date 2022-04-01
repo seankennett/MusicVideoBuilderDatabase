@@ -49,6 +49,27 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2021-06-01' = {
   properties: allProperties
 }
 
+resource blobServices 'Microsoft.Storage/storageAccounts/blobServices@2021-04-01' = {
+  parent: storageAccount
+  name: 'default'
+  properties: {
+    cors: {
+      corsRules: [
+        {
+          allowedMethods: [
+            'GET'
+            'OPTIONS'
+            'HEAD'
+          ]
+          allowedOrigins: [
+            '*'
+          ]
+        }
+      ]
+    }
+  }
+}
+
 resource keyvault 'Microsoft.KeyVault/vaults@2019-09-01' existing = {
   name: keyvaultName
   scope: resourceGroup()
