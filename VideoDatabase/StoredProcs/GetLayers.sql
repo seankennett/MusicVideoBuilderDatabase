@@ -3,7 +3,9 @@
 @userObjectId UNIQUEIDENTIFIER
 )
 AS
-	
-SELECT l.[LayerId], l.[LayerName], l.[LayerTypeId], l.[DateUpdated], ul.UserLayerStatusId  FROM [dbo].[Layer] l LEFT JOIN (SELECT * FROM [dbo].[UserLayers] WHERE UserObjectId = @userObjectId) ul ON l.LayerId = ul.LayerId
 
-SELECT lt.LayerId, t.TagId, t.TagName FROM [dbo].[LayerTags] lt JOIN [dbo].[Tag] t ON lt.TagId = t.TagId
+SELECT lt.LayerId, lt.TagId, l.LayerName, l.LayerTypeId, l.DateUpdated, ul.UserLayerStatusId  FROM [dbo].[LayerTags] lt 
+INNER JOIN [dbo].[Layer] l ON l.LayerId = lt.LayerId 
+LEFT JOIN (SELECT UserLayerStatusId, LayerId FROM [dbo].[UserLayers] WHERE UserObjectId = @userObjectId) ul ON l.LayerId = ul.LayerId
+
+SELECT TagId, TagName FROM [dbo].[Tags]
