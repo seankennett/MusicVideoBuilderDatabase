@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [dbo].[CreateUserLayers](
+﻿CREATE PROCEDURE [dbo].[GetUserLayers](
 @userObjectId UNIQUEIDENTIFIER
 )
 AS
