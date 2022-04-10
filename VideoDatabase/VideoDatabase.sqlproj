@@ -71,8 +71,7 @@
     <Build Include="StoredProcs\GetTags.sql" />
     <Build Include="StoredProcs\GetLayers.sql" />
     <Build Include="StoredProcs\GetUserLayers.sql" />
-    <Build Include="StoredProcs\UpsertUserLayers.sql" />
-    <Build Include="Types\UserLayersType.sql" />
+    <Build Include="StoredProcs\InsertUserLayer.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="VideoDatabase.refactorlog" />

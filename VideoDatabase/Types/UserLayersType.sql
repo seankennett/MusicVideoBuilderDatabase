@@ -1,6 +1,0 @@
-﻿CREATE TYPE [dbo].[UserLayersType] AS TABLE
-(
-	[UserObjectId] UNIQUEIDENTIFIER NOT NULL,
-	[LayerId] UNIQUEIDENTIFIER NOT NULL,
-	[UserLayerStatusId] TINYINT NOT NULL
-)
