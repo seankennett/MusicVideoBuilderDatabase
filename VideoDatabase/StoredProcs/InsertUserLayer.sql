@@ -6,7 +6,8 @@
 AS
 BEGIN TRY
     BEGIN TRANSACTION 
-	INSERT INTO UserLayers (DateCreated, DateUpdated, LayerId, UserLayerStatusId, UserObjectId) OUTPUT Inserted.* VALUES (GETUTCDATE(), GETUTCDATE(), @layerId, @userLayerStatusId, @userObjectId)
+	INSERT INTO [UserLayers] (DateCreated, DateUpdated, LayerId, UserLayerStatusId, UserObjectId) VALUES (GETUTCDATE(), GETUTCDATE(), @layerId, @userLayerStatusId, @userObjectId);
+    SELECT * FROM [UserLayers] WHERE UserLayerId = SCOPE_IDENTITY();
 
 	COMMIT
 	END TRY
