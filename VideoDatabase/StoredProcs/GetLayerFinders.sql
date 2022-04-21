@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [dbo].[GetLayers]
+﻿CREATE PROCEDURE [dbo].[GetLayerFinders]
 AS
 
 SELECT [LayerId], [LayerName], [LayerTypeId], [DateUpdated] FROM [dbo].[Layer]

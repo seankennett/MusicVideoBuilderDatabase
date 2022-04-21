@@ -3,4 +3,4 @@
 )
 AS
 
-SELECT [LayerId], [UserLayerStatusId], [UserLayerId], [DateUpdated] FROM [dbo].[UserLayers] WHERE UserObjectId = @userObjectId
+SELECT ul.[LayerId], ul.[UserLayerStatusId], ul.[UserLayerId], ul.[DateUpdated], l.[LayerTypeId] FROM [dbo].[UserLayers] ul JOIN [dbo].[Layer] l ON ul.LayerId = l.LayerId WHERE ul.UserObjectId = @userObjectId

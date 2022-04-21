@@ -69,7 +69,7 @@
     <Build Include="StoredProcs\InsertLayer.sql" />
     <Build Include="Types\TagsType.sql" />
     <Build Include="StoredProcs\GetTags.sql" />
-    <Build Include="StoredProcs\GetLayers.sql" />
+    <Build Include="StoredProcs\GetLayerFinders.sql" />
     <Build Include="StoredProcs\GetUserLayers.sql" />
     <Build Include="StoredProcs\InsertUserLayer.sql" />
   </ItemGroup>
