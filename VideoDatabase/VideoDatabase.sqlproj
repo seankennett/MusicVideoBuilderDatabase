@@ -72,6 +72,8 @@
     <Build Include="StoredProcs\GetLayerFinders.sql" />
     <Build Include="StoredProcs\GetUserLayers.sql" />
     <Build Include="StoredProcs\InsertUserLayer.sql" />
+    <Build Include="StoredProcs\UpsertClip.sql" />
+    <Build Include="Types\IntOrderType.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="VideoDatabase.refactorlog" />
@@ -84,8 +86,8 @@
     <None Include="VideoDatabase.publish.xml" />
   </ItemGroup>
   <ItemGroup>
-    <Build Include="Tables\UserLayers.sql" />
-    <Build Include="Tables\UserLayersClips.sql" />
+    <Build Include="Tables\UserLayer.sql" />
+    <Build Include="Tables\ClipUserLayers.sql" />
     <Build Include="Tables\UserLayerStatus.sql" />
     <Build Include="Tables\Video.sql" />
   </ItemGroup>

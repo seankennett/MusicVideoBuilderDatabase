@@ -1,4 +1,4 @@
-﻿CREATE TABLE [dbo].[UserLayers]
+﻿CREATE TABLE [dbo].[UserLayer]
 (
 	[UserLayerId] INT IDENTITY NOT NULL PRIMARY KEY,
 	[UserObjectId] UNIQUEIDENTIFIER NOT NULL,
