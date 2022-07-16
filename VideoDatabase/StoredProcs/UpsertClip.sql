@@ -17,6 +17,8 @@ BEGIN TRY
 
 	INSERT INTO [ClipUserLayers] (ClipId, UserLayerId, [Order], DateCreated) SELECT @ClipId, [ForeignId], [Order], GETUTCDATE() FROM @UserLayers;
 	
+	SELECT @ClipId
+
 	COMMIT
 	END TRY
 BEGIN CATCH
