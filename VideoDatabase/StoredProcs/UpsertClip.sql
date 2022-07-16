@@ -5,19 +5,23 @@
 AS
 BEGIN TRY
     BEGIN TRANSACTION
+	
+	DECLARE @NewClipId INT;
+
 	IF (@ClipId > 0)
 	BEGIN
+	SET @NewClipId = @ClipId
 	UPDATE [Clip] SET ClipName = @ClipName, DateUpdated = GETUTCDATE() WHERE ClipId = @ClipId;
 	DELETE FROM [ClipUserLayers] WHERE ClipId = @ClipId;
 	END
 	ELSE
 	BEGIN
-	INSERT INTO [Clip] (ClipName, DateCreated, DateUpdated) OUTPUT INSERTED.ClipId INTO @ClipId VALUES (@ClipName, GETUTCDATE(), GETUTCDATE())
+	INSERT INTO [Clip] (ClipName, DateCreated, DateUpdated) OUTPUT INSERTED.ClipId INTO @NewClipId VALUES (@ClipName, GETUTCDATE(), GETUTCDATE())
 	END
 
-	INSERT INTO [ClipUserLayers] (ClipId, UserLayerId, [Order], DateCreated) SELECT @ClipId, [ForeignId], [Order], GETUTCDATE() FROM @UserLayers;
+	INSERT INTO [ClipUserLayers] (ClipId, UserLayerId, [Order], DateCreated) SELECT @NewClipId, [ForeignId], [Order], GETUTCDATE() FROM @UserLayers;
 	
-	SELECT @ClipId
+	SELECT @NewClipId
 
 	COMMIT
 	END TRY
