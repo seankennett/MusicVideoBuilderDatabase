@@ -6,7 +6,7 @@
 	[UserLayerStatusId] TINYINT NOT NULL,
 	[DateCreated] DATETIME2 NOT NULL,
 	[DateUpdated] DATETIME2 NOT NULL,
-	CONSTRAINT FK_UserLayers_Layer FOREIGN KEY ([LayerId]) REFERENCES [dbo].[Layer]([LayerId]),
-	CONSTRAINT FK_UserLayers_UserLayerStatus FOREIGN KEY ([UserLayerStatusId]) REFERENCES [dbo].[UserLayerStatus]([UserLayerStatusId]),
-	CONSTRAINT UQ_UserLayers_UserId_LayerId UNIQUE ([UserObjectId], [LayerId])
+	CONSTRAINT FK_UserLayer_Layer FOREIGN KEY ([LayerId]) REFERENCES [dbo].[Layer]([LayerId]),
+	CONSTRAINT FK_UserLayer_UserLayerStatus FOREIGN KEY ([UserLayerStatusId]) REFERENCES [dbo].[UserLayerStatus]([UserLayerStatusId]),
+	CONSTRAINT UQ_UserLayer_UserId_LayerId UNIQUE ([UserObjectId], [LayerId])
 )
