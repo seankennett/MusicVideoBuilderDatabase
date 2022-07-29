@@ -18,3 +18,5 @@ SELECT c.ClipId, c.ClipName, c.DateUpdated FROM [Clip] c
 WHERE c.ClipId IN (SELECT ClipId FROM #ClipUserLayers)
 
 SELECT * FROM #ClipUserLayers
+
+DROP TABLE #ClipUserLayers

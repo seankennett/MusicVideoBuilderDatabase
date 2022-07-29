@@ -1,5 +1,6 @@
-﻿CREATE PROCEDURE [dbo].[GetVideos](
-@userObjectId UNIQUEIDENTIFIER
+﻿CREATE PROCEDURE [dbo].[GetVideo](
+@userObjectId UNIQUEIDENTIFIER,
+@VideoId INTEGER
 )
 AS
 
@@ -12,7 +13,8 @@ CREATE TABLE #ClipUserLayers (
 
 INSERT INTO #ClipUserLayers (ClipId, UserLayerId, [Order], LayerId) (SELECT cu.ClipId, cu.UserLayerId, cu.[Order], u.LayerId FROM [dbo].[ClipUserLayers] cu
 JOIN [dbo].[UserLayer] u ON cu.UserLayerId = u.UserLayerId
-WHERE u.UserObjectId = @userObjectId AND u.UserLayerStatusId > 1)
+JOIN [dbo].[VideoClips] vc ON vc.ClipId = cu.ClipId
+WHERE u.UserObjectId = @userObjectId AND u.UserLayerStatusId > 1 AND vc.VideoId = @VideoId)
 
 SELECT DISTINCT v.BPM, v.DateUpdated, v.FormatId, v.VideoName FROM [Video] v
 JOIN [VideoClips] vc ON v.VideoId = vc.VideoId

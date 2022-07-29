@@ -77,6 +77,8 @@
     <Build Include="StoredProcs\GetClips.sql" />
     <Build Include="StoredProcs\GetClip.sql" />
     <Build Include="StoredProcs\GetVideos.sql" />
+    <Build Include="StoredProcs\GetVideo.sql" />
+    <Build Include="StoredProcs\UpsertVideo.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="VideoDatabase.refactorlog" />
