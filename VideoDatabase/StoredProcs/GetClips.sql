@@ -3,11 +3,18 @@
 )
 AS
 
-SELECT DISTINCT c.ClipId, c.ClipName, c.DateUpdated FROM [Clip] c 
-JOIN [ClipUserLayers] cu ON c.ClipId = cu.ClipId
-JOIN [UserLayer] u ON cu.UserLayerId = u.UserLayerId
-WHERE u.UserObjectId = @userObjectId AND u.UserLayerStatusId > 1
+CREATE TABLE #ClipUserLayers (
+    [ClipId] INT,
+	[UserLayerId] INT,
+	[Order] TINYINT,
+	[LayerId] UNIQUEIDENTIFIER
+);
 
-SELECT cu.ClipId, cu.UserLayerId, cu.[Order], u.LayerId FROM [dbo].[ClipUserLayers] cu
+INSERT INTO #ClipUserLayers (ClipId, UserLayerId, [Order], LayerId) (SELECT cu.ClipId, cu.UserLayerId, cu.[Order], u.LayerId FROM [dbo].[ClipUserLayers] cu
 JOIN [dbo].[UserLayer] u ON cu.UserLayerId = u.UserLayerId
-WHERE u.UserObjectId = @userObjectId AND u.UserLayerStatusId > 1
+WHERE u.UserObjectId = @userObjectId AND u.UserLayerStatusId > 1)
+
+SELECT c.ClipId, c.ClipName, c.DateUpdated FROM [Clip] c 
+WHERE c.ClipId IN (SELECT ClipId FROM #ClipUserLayers)
+
+SELECT * FROM #ClipUserLayers
