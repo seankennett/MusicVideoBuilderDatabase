@@ -12,9 +12,9 @@ Post-Deployment Script Template
 
 IF NOT EXISTS(SELECT 1 FROM [dbo].[Format])
 BEGIN
-    INSERT INTO [dbo].[Format] ([FormatId], [FormatName]) VALUES (1, '.mp4') 
-    INSERT INTO [dbo].[Format] ([FormatId], [FormatName]) VALUES (2, '.mov') 
-    INSERT INTO [dbo].[Format] ([FormatId], [FormatName]) VALUES (3, '.avi')
+    INSERT INTO [dbo].[Format] ([FormatId], [FormatName]) VALUES (1, 'mp4') 
+    INSERT INTO [dbo].[Format] ([FormatId], [FormatName]) VALUES (2, 'mov') 
+    INSERT INTO [dbo].[Format] ([FormatId], [FormatName]) VALUES (3, 'avi')
 END
 
 IF NOT EXISTS(SELECT 1 FROM [dbo].[LayerType])
