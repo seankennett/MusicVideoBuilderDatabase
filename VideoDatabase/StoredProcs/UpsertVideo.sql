@@ -10,7 +10,7 @@ BEGIN TRY
 
 	IF (@VideoId > 0)
 	BEGIN
-	UPDATE [Video] SET VideoName = @VideoName, BPM = @BPM, FormatId = @FormatId, VideoName = @VideoName, DateUpdated = GETUTCDATE() WHERE VideoId = @VideoId;
+	UPDATE [Video] SET VideoName = @VideoName, BPM = @BPM, FormatId = @FormatId, DateUpdated = GETUTCDATE() WHERE VideoId = @VideoId;
 	DELETE FROM [VideoClips] WHERE VideoId = @VideoId;
 	END
 	ELSE
