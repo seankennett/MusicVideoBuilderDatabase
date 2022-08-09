@@ -7,4 +7,11 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="UserId" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="0c5b349f-7d33-4d56-8399-973dca3ab254" ChangeDateTime="08/09/2022 21:11:18">
+    <Property Name="ElementName" Value="[dbo].[Video].[VideoDelayMilliseconds]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Video]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="VideoDelay" />
+  </Operation>
 </Operations>

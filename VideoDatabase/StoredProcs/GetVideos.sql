@@ -14,7 +14,7 @@ INSERT INTO #ClipUserLayers (ClipId, UserLayerId, [Order], LayerId) (SELECT cu.C
 JOIN [dbo].[UserLayer] u ON cu.UserLayerId = u.UserLayerId
 WHERE u.UserObjectId = @userObjectId AND u.UserLayerStatusId > 1)
 
-SELECT DISTINCT v.VideoId, v.BPM, v.DateUpdated, v.FormatId, v.VideoName FROM [Video] v
+SELECT DISTINCT v.VideoId, v.BPM, v.AudioFileName, v.VideoDelay, v.DateUpdated, v.FormatId, v.VideoName FROM [Video] v
 JOIN [VideoClips] vc ON v.VideoId = vc.VideoId
 WHERE vc.ClipId IN (SELECT ClipId FROM #ClipUserLayers)
 
