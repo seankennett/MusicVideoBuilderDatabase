@@ -4,7 +4,7 @@
 	@BPM TINYINT,
 	@FormatId TINYINT,
 	@AudioFileName NVARCHAR(50) = NULL,
-	@VideoDelay TIME = NULL,
+	@VideoDelayMilliseconds INT = NULL,
 	@Clips [IntOrderType] READONLY
 AS
 BEGIN TRY
@@ -12,12 +12,12 @@ BEGIN TRY
 
 	IF (@VideoId > 0)
 	BEGIN
-	UPDATE [Video] SET VideoName = @VideoName, BPM = @BPM, FormatId = @FormatId, DateUpdated = GETUTCDATE(), AudioFileName = @AudioFileName, VideoDelay = @VideoDelay WHERE VideoId = @VideoId;
+	UPDATE [Video] SET VideoName = @VideoName, BPM = @BPM, FormatId = @FormatId, DateUpdated = GETUTCDATE(), AudioFileName = @AudioFileName, VideoDelayMilliseconds = @VideoDelayMilliseconds WHERE VideoId = @VideoId;
 	DELETE FROM [VideoClips] WHERE VideoId = @VideoId;
 	END
 	ELSE
 	BEGIN
-	INSERT INTO [Video] (VideoName, BPM, FormatId, AudioFileName, VideoDelay, DateCreated, DateUpdated) VALUES (@VideoName, @BPM, @FormatId, @AudioFileName, @VideoDelay, GETUTCDATE(), GETUTCDATE())
+	INSERT INTO [Video] (VideoName, BPM, FormatId, AudioFileName, VideoDelayMilliseconds, DateCreated, DateUpdated) VALUES (@VideoName, @BPM, @FormatId, @AudioFileName, @VideoDelayMilliseconds, GETUTCDATE(), GETUTCDATE())
 	SET @VideoId = SCOPE_IDENTITY();
 	END
 
