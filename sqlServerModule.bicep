@@ -63,8 +63,8 @@ resource sqlserver 'Microsoft.Sql/servers@2020-11-01-preview' = {
   resource firewallRuleLocal 'firewallRules@2020-11-01-preview' = {
     name: 'LocalIp'
     properties: {
-      endIpAddress: '195.213.152.64'
-      startIpAddress: '195.213.152.65'
+      endIpAddress: '195.213.152.65'
+      startIpAddress: '195.213.152.64'
     }
   }
 }
