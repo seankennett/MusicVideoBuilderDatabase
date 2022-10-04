@@ -59,14 +59,6 @@ resource sqlserver 'Microsoft.Sql/servers@2020-11-01-preview' = {
       startIpAddress: '0.0.0.0'
     }
   }
-
-  resource firewallRuleLocal 'firewallRules@2020-11-01-preview' = {
-    name: 'LocalIp'
-    properties: {
-      endIpAddress: '31.111.84.169'
-      startIpAddress: '31.111.84.169'
-    }
-  }
 }
 
 resource keyvault 'Microsoft.KeyVault/vaults@2019-09-01' existing = {
