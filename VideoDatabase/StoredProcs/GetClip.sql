@@ -8,10 +8,11 @@ CREATE TABLE #ClipUserLayers (
     [ClipId] INT,
 	[UserLayerId] INT,
 	[Order] TINYINT,
-	[LayerId] UNIQUEIDENTIFIER
+	[LayerId] UNIQUEIDENTIFIER,
+	[UserLayerStatusId] TINYINT
 );
 
-INSERT INTO #ClipUserLayers (ClipId, UserLayerId, [Order], LayerId) (SELECT cu.ClipId, cu.UserLayerId, cu.[Order], u.LayerId FROM [dbo].[ClipUserLayers] cu
+INSERT INTO #ClipUserLayers (ClipId, UserLayerId, [Order], LayerId, [UserLayerStatusId] ) (SELECT cu.ClipId, cu.UserLayerId, cu.[Order], u.LayerId, u.UserLayerStatusId FROM [dbo].[ClipUserLayers] cu
 JOIN [dbo].[UserLayer] u ON cu.UserLayerId = u.UserLayerId
 WHERE [cu].[ClipId] = @ClipId AND u.UserObjectId = @userObjectId AND u.UserLayerStatusId > 1)
 
