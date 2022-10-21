@@ -19,11 +19,11 @@ WHERE u.UserObjectId = @userObjectId AND u.UserLayerStatusId > 1 AND vc.VideoId 
 
 SELECT DISTINCT v.VideoId, v.BPM, v.VideoDelayMilliseconds, v.DateUpdated, v.FormatId, v.VideoName FROM [Video] v
 JOIN [VideoClips] vc ON v.VideoId = vc.VideoId
-WHERE vc.ClipId IN (SELECT ClipId FROM #ClipUserLayers)
+WHERE vc.ClipId IN (SELECT ClipId FROM #ClipUserLayers) AND v.VideoId = @VideoId
 
 SELECT vc.VideoId, vc.ClipId, vc.[Order], c.ClipName FROM [VideoClips] vc
 JOIN [dbo].[Clip] c ON vc.ClipId = c.[ClipId]
-WHERE vc.ClipId IN (SELECT ClipId FROM #ClipUserLayers)
+WHERE vc.ClipId IN (SELECT ClipId FROM #ClipUserLayers) AND vc.VideoId = @VideoId
 
 SELECT * FROM #ClipUserLayers
 

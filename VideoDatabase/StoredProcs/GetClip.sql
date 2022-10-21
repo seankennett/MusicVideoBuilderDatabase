@@ -17,7 +17,7 @@ JOIN [dbo].[UserLayer] u ON cu.UserLayerId = u.UserLayerId
 WHERE [cu].[ClipId] = @ClipId AND u.UserObjectId = @userObjectId AND u.UserLayerStatusId > 1)
 
 SELECT c.ClipId, c.ClipName, c.DateUpdated FROM [Clip] c 
-WHERE c.ClipId IN (SELECT ClipId FROM #ClipUserLayers)
+WHERE c.ClipId IN (SELECT ClipId FROM #ClipUserLayers) AND c.ClipId = @ClipId
 
 SELECT * FROM #ClipUserLayers
 
