@@ -14,8 +14,7 @@ CREATE TABLE #ClipUserLayers (
 
 INSERT INTO #ClipUserLayers (ClipId, UserLayerId, [Order], LayerId, [UserLayerStatusId]) (SELECT cu.ClipId, cu.UserLayerId, cu.[Order], u.LayerId, u.UserLayerStatusId FROM [dbo].[ClipUserLayers] cu
 JOIN [dbo].[UserLayer] u ON cu.UserLayerId = u.UserLayerId
-JOIN [dbo].[VideoClips] vc ON vc.ClipId = cu.ClipId
-WHERE u.UserObjectId = @userObjectId AND u.UserLayerStatusId > 1 AND vc.VideoId = @VideoId)
+WHERE u.UserObjectId = @userObjectId AND u.UserLayerStatusId > 1)
 
 SELECT DISTINCT v.VideoId, v.BPM, v.VideoDelayMilliseconds, v.DateUpdated, v.FormatId, v.VideoName FROM [Video] v
 JOIN [VideoClips] vc ON v.VideoId = vc.VideoId
