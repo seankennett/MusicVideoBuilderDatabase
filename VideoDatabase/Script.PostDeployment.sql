@@ -23,11 +23,14 @@ BEGIN
     INSERT INTO [dbo].[LayerType] ([LayerTypeId], [LayerTypeName]) VALUES (2, 'Foreground') 
 END
 
+Update UserLayer SET UserLayerStatusId = 1
+Update [UserLayerStatus] SET UserLayerStatusName = 'Saved' WHERE UserLayerStatusId = 1
+DELETE FROM [dbo].[UserLayerStatus] WHERE UserLayerStatusId = 3
+
 IF NOT EXISTS(SELECT 1 FROM [dbo].[UserLayerStatus])
 BEGIN
-    INSERT INTO [dbo].[UserLayerStatus] ([UserLayerStatusId], [UserLayerStatusName]) VALUES (1, 'Removed') 
-    INSERT INTO [dbo].[UserLayerStatus] ([UserLayerStatusId], [UserLayerStatusName]) VALUES (2, 'Bought') 
-    INSERT INTO [dbo].[UserLayerStatus] ([UserLayerStatusId], [UserLayerStatusName]) VALUES (3, 'Saved') 
+    INSERT INTO [dbo].[UserLayerStatus] ([UserLayerStatusId], [UserLayerStatusName]) VALUES (1, 'Bought') 
+    INSERT INTO [dbo].[UserLayerStatus] ([UserLayerStatusId], [UserLayerStatusName]) VALUES (2, 'Saved') 
 END
 
 IF NOT EXISTS (SELECT [name] FROM sys.database_principals WHERE [name] = 'MusicVideoBuilderApplication')
