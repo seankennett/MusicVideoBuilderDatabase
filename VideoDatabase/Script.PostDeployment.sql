@@ -23,10 +23,6 @@ BEGIN
     INSERT INTO [dbo].[LayerType] ([LayerTypeId], [LayerTypeName]) VALUES (2, 'Foreground') 
 END
 
-Update UserLayer SET UserLayerStatusId = 1
-Update [UserLayerStatus] SET UserLayerStatusName = 'Saved' WHERE UserLayerStatusId = 1
-DELETE FROM [dbo].[UserLayerStatus] WHERE UserLayerStatusId = 3
-
 IF NOT EXISTS(SELECT 1 FROM [dbo].[UserLayerStatus])
 BEGIN
     INSERT INTO [dbo].[UserLayerStatus] ([UserLayerStatusId], [UserLayerStatusName]) VALUES (1, 'Bought') 
