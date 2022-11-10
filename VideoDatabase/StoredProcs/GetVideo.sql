@@ -4,26 +4,13 @@
 )
 AS
 
-CREATE TABLE #ClipUserLayers (
-    [ClipId] INT,
-	[UserLayerId] INT,
-	[Order] TINYINT,
-	[LayerId] UNIQUEIDENTIFIER,
-	[UserLayerStatusId] TINYINT
-);
+SELECT VideoId, BPM, VideoDelayMilliseconds, DateUpdated, FormatId, VideoName FROM [Video]
+WHERE UserObjectId = @userObjectId
 
-INSERT INTO #ClipUserLayers (ClipId, UserLayerId, [Order], LayerId, [UserLayerStatusId]) (SELECT cu.ClipId, cu.UserLayerId, cu.[Order], u.LayerId, u.UserLayerStatusId FROM [dbo].[ClipUserLayers] cu
-JOIN [dbo].[UserLayer] u ON cu.UserLayerId = u.UserLayerId
-WHERE u.UserObjectId = @userObjectId)
-
-SELECT DISTINCT v.VideoId, v.BPM, v.VideoDelayMilliseconds, v.DateUpdated, v.FormatId, v.VideoName FROM [Video] v
-JOIN [VideoClips] vc ON v.VideoId = vc.VideoId
-WHERE vc.ClipId IN (SELECT ClipId FROM #ClipUserLayers) AND v.VideoId = @VideoId
-
-SELECT vc.VideoId, vc.ClipId, vc.[Order], c.ClipName FROM [VideoClips] vc
+SELECT vc.VideoId, vc.ClipId, vc.[Order], c.ClipName, c.BackgroundColour FROM [VideoClips] vc
 JOIN [dbo].[Clip] c ON vc.ClipId = c.[ClipId]
-WHERE vc.ClipId IN (SELECT ClipId FROM #ClipUserLayers) AND vc.VideoId = @VideoId
+WHERE c.UserObjectId = @userObjectId AND vc.VideoId = @VideoId
 
-SELECT * FROM #ClipUserLayers
-
-DROP TABLE #ClipUserLayers
+SELECT cu.ClipId, cu.UserLayerId, cu.[Order], u.LayerId, u.UserLayerStatusId FROM [dbo].[ClipUserLayers] cu
+JOIN [dbo].[UserLayer] u ON cu.UserLayerId = u.UserLayerId
+WHERE u.UserObjectId = @userObjectId

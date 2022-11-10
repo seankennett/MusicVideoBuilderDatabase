@@ -4,7 +4,8 @@
 	@BPM TINYINT,
 	@FormatId TINYINT,
 	@VideoDelayMilliseconds INT = NULL,
-	@Clips [IntOrderType] READONLY
+	@Clips [IntOrderType] READONLY,
+	@userObjectId UNIQUEIDENTIFIER
 AS
 BEGIN TRY
     BEGIN TRANSACTION
@@ -16,7 +17,7 @@ BEGIN TRY
 	END
 	ELSE
 	BEGIN
-	INSERT INTO [Video] (VideoName, BPM, FormatId, VideoDelayMilliseconds, DateCreated, DateUpdated) VALUES (@VideoName, @BPM, @FormatId, @VideoDelayMilliseconds, GETUTCDATE(), GETUTCDATE())
+	INSERT INTO [Video] (VideoName, BPM, FormatId, VideoDelayMilliseconds, DateCreated, DateUpdated, UserObjectId) VALUES (@VideoName, @BPM, @FormatId, @VideoDelayMilliseconds, GETUTCDATE(), GETUTCDATE(), @userObjectId)
 	SET @VideoId = SCOPE_IDENTITY();
 	END
 

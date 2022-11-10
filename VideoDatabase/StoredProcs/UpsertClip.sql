@@ -1,19 +1,21 @@
 ﻿CREATE PROCEDURE [dbo].[UpsertClip]
 	@ClipId INT,
 	@ClipName NVARCHAR(50),
-	@UserLayers [IntOrderType] READONLY
+	@BackgroundColour CHAR(6) NULL,
+	@UserLayers [IntOrderType] READONLY,
+	@userObjectId UNIQUEIDENTIFIER
 AS
 BEGIN TRY
     BEGIN TRANSACTION
 
 	IF (@ClipId > 0)
 	BEGIN
-	UPDATE [Clip] SET ClipName = @ClipName, DateUpdated = GETUTCDATE() WHERE ClipId = @ClipId;
+	UPDATE [Clip] SET ClipName = @ClipName, DateUpdated = GETUTCDATE(), BackgroundColour = @BackgroundColour WHERE ClipId = @ClipId;
 	DELETE FROM [ClipUserLayers] WHERE ClipId = @ClipId;
 	END
 	ELSE
 	BEGIN
-	INSERT INTO [Clip] (ClipName, DateCreated, DateUpdated) VALUES (@ClipName, GETUTCDATE(), GETUTCDATE())
+	INSERT INTO [Clip] (ClipName, DateCreated, DateUpdated, BackgroundColour, UserObjectId) VALUES (@ClipName, GETUTCDATE(), GETUTCDATE(), @BackgroundColour, @userObjectId)
 	SET @ClipId = SCOPE_IDENTITY();
 	END
 
