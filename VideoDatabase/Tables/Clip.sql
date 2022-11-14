@@ -6,6 +6,6 @@
 	[DateUpdated] DATETIME2 NOT NULL,
 	[BackgroundColour] CHAR(6) NULL,
 	[UserObjectId] UNIQUEIDENTIFIER NOT NULL, 
-    [BeatLength] TINYINT NOT NULL DEFAULT 4,
-    [StartingBeat] TINYINT NOT NULL DEFAULT 1
+    [BeatLength] TINYINT NOT NULL,
+    [StartingBeat] TINYINT NOT NULL
 )
