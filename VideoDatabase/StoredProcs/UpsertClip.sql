@@ -2,6 +2,8 @@
 	@ClipId INT,
 	@ClipName NVARCHAR(50),
 	@BackgroundColour CHAR(6) NULL,
+	@BeatLength TINYINT,
+	@StartingBeat TINYINT,
 	@UserLayers [IntOrderType] READONLY,
 	@userObjectId UNIQUEIDENTIFIER
 AS
@@ -10,12 +12,12 @@ BEGIN TRY
 
 	IF (@ClipId > 0)
 	BEGIN
-	UPDATE [Clip] SET ClipName = @ClipName, DateUpdated = GETUTCDATE(), BackgroundColour = @BackgroundColour WHERE ClipId = @ClipId;
+	UPDATE [Clip] SET ClipName = @ClipName, DateUpdated = GETUTCDATE(), BackgroundColour = @BackgroundColour, BeatLength = @BeatLength, StartingBeat = @StartingBeat WHERE ClipId = @ClipId;
 	DELETE FROM [ClipUserLayers] WHERE ClipId = @ClipId;
 	END
 	ELSE
 	BEGIN
-	INSERT INTO [Clip] (ClipName, DateCreated, DateUpdated, BackgroundColour, UserObjectId) VALUES (@ClipName, GETUTCDATE(), GETUTCDATE(), @BackgroundColour, @userObjectId)
+	INSERT INTO [Clip] (ClipName, DateCreated, DateUpdated, BackgroundColour, BeatLength, StartingBeat, UserObjectId) VALUES (@ClipName, GETUTCDATE(), GETUTCDATE(), @BackgroundColour, @BeatLength, @StartingBeat, @userObjectId)
 	SET @ClipId = SCOPE_IDENTITY();
 	END
 

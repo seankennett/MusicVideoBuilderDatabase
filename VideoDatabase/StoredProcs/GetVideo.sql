@@ -7,7 +7,7 @@ AS
 SELECT VideoId, BPM, VideoDelayMilliseconds, DateUpdated, FormatId, VideoName FROM [Video]
 WHERE UserObjectId = @userObjectId AND VideoId = @VideoId
 
-SELECT vc.VideoId, vc.ClipId, vc.[Order], c.ClipName, c.BackgroundColour FROM [VideoClips] vc
+SELECT vc.VideoId, vc.ClipId, vc.[Order], c.ClipName, c.BackgroundColour, c.BeatLength, c.StartingBeat FROM [VideoClips] vc
 JOIN [dbo].[Clip] c ON vc.ClipId = c.[ClipId]
 WHERE c.UserObjectId = @userObjectId AND vc.VideoId = @VideoId
 
