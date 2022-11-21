@@ -60,15 +60,16 @@ resource symbolicname 'Microsoft.Storage/storageAccounts/blobServices@2018-07-01
             'GET'
             'HEAD'
             'OPTIONS'
+            'PUT'
           ]
           allowedOrigins: [
             '*'
           ]
           allowedHeaders: [
-            ''
+            '*'
           ]
           exposedHeaders: [
-            ''
+            '*'
           ]
           maxAgeInSeconds: 0
         }
