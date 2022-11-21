@@ -40,8 +40,6 @@ var publicStorageSecretName = 'PublicStorageConnectionString'
 var imageUploaderFunctionSecret = 'ImageUploaderFunctionUri'
 var hostName = 'musicvideobuilder.com'
 
-
-
 module appInsights 'appInsights.bicep' = {
   name: 'deployAppInsights'
   params: {
@@ -64,9 +62,9 @@ module imageUploaderFunction 'function.bicep' = {
   ]
 }
 
-module webApi 'webApi.bicep' ={
-  name:'deployWebApi'
-  params:{
+module webApi 'webApi.bicep' = {
+  name: 'deployWebApi'
+  params: {
     appInsightsConnectionString: appInsights.outputs.appInsightsConnectionString
     functionSecret: imageUploaderFunctionSecret
     location: location
@@ -74,7 +72,7 @@ module webApi 'webApi.bicep' ={
     webAppSkuCapacity: webAppSkuCapacity
     webAppSkuName: webAppSkuName
   }
-  dependsOn:[
+  dependsOn: [
     imageUploaderFunction
   ]
 }
@@ -108,6 +106,13 @@ module storagePublic 'storageAccount.bicep' = {
     secretName: 'PublicStorageConnectionString'
     keyvaultName: keyvaultName
     customDomain: 'cdn.${hostName}'
+    containers: [
+      {
+        name: 'sprites'
+        publicAccess: 'Blob'
+      }
+
+    ]
   }
 }
 
@@ -120,12 +125,25 @@ module storagePrivate 'storageAccount.bicep' = {
     storageAccountType: storageAccountType
     secretName: 'PrivateStorageConnectionString'
     keyvaultName: keyvaultName
+    containers: [
+      {
+        name: '4k-zips'
+        publicAccess: 'None'
+      }
+      {
+        name: 'hd-zips'
+        publicAccess: 'None'
+      }
+    ]
+    queues: [
+      'image-process'
+    ]
   }
 }
 
 module staticWebsite 'staticSite.bicep' = {
   name: 'deployStaticWebsite'
-  params:{
+  params: {
     resourceName: staticSiteName
     location: location
   }

@@ -23,6 +23,12 @@ param keyvaultName string
 @description('Custom domain name')
 param customDomain string = ''
 
+@description('list of containers')
+param containers array = []
+
+@description('list of containers')
+param queues array = []
+
 var baseProperties = {
   accessTier: accessTier
   allowBlobPublicAccess: true
@@ -38,6 +44,8 @@ var customDomainProperties = {
 
 var allProperties = customDomain == '' ? baseProperties : union(baseProperties, customDomainProperties)
 
+var defaultServiceName = 'default'
+
 // nothing for setting up static website - manual
 resource storageAccount 'Microsoft.Storage/storageAccounts@2021-06-01' = {
   name: storageAccountName
@@ -49,7 +57,30 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2021-06-01' = {
   properties: allProperties
 }
 
-resource symbolicname 'Microsoft.Storage/storageAccounts/blobServices@2018-07-01' = {
+resource queueServices 'Microsoft.Storage/storageAccounts/queueServices@2022-05-01' existing = {
+  name: defaultServiceName
+  parent: storageAccount
+}
+
+resource queue 'Microsoft.Storage/storageAccounts/queueServices/queues@2022-05-01' = [for queueName in queues: {
+  name: queueName
+  parent: queueServices
+}]
+
+resource blobServices 'Microsoft.Storage/storageAccounts/blobServices@2022-05-01' existing = {
+  name: defaultServiceName
+  parent: storageAccount
+}
+
+resource container 'Microsoft.Storage/storageAccounts/blobServices/containers@2022-05-01' = [for container in containers: {
+  name: container.Name
+  parent: blobServices
+  properties: {
+    publicAccess: container.publicAccess
+  }
+}]
+
+resource storageAccountProperties 'Microsoft.Storage/storageAccounts/blobServices@2018-07-01' = {
   name: 'default'
   parent: storageAccount
   properties: {
