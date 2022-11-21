@@ -36,7 +36,7 @@ var keyvaultName = resourceName
 var staticSiteName = resourceName
 var storageAccountNamePublic = '${resourceName}public'
 var storageAccountNamePrivate = '${resourceName}private'
-var publicStorageSecretName = 'PublicStorageConnectionString'
+var privateStorageSecretName = 'PrivateStorageConnectionString'
 var imageUploaderFunctionSecret = 'ImageUploaderFunctionUri'
 var hostName = 'musicvideobuilder.com'
 
@@ -54,11 +54,11 @@ module imageUploaderFunction 'function.bicep' = {
     location: location
     resourceName: resourceName
     appInsightsConnectionString: appInsights.outputs.appInsightsConnectionString
-    storageConnectionString: keyvault.getSecret(publicStorageSecretName)
+    storageConnectionString: keyvault.getSecret(privateStorageSecretName)
     functionSecretName: imageUploaderFunctionSecret
   }
   dependsOn: [
-    storagePublic
+    storagePrivate
   ]
 }
 

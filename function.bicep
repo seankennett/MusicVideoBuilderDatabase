@@ -68,6 +68,10 @@ resource functionApp 'Microsoft.Web/sites@2021-03-01' = {
           value: storageConnectionString
         }
         {
+          name: 'ConnectionString'
+          value: storageConnectionString
+        }
+        {
           name: 'WEBSITE_CONTENTAZUREFILECONNECTIONSTRING'
           value: storageConnectionString
         }
