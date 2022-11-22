@@ -13,9 +13,6 @@ param webAppSkuCapacity int
 @description('Application Inisghts connection string')
 param appInsightsConnectionString string
 
-@description('Name of the image uploader function secret')
-param functionSecret string
-
 var appServicePlanName = resourceName
 var webSiteName = resourceName
 var keyvaultName = resourceName
@@ -87,26 +84,6 @@ resource appService 'Microsoft.Web/sites@2021-03-01' = {
         {
           name: 'WEBSITE_ENABLE_SYNC_UPDATE_SITE'
           value: 'true'
-        }
-        {
-          name: 'ReverseProxy__Routes__route1__ClusterId'
-          value: 'cluster1'
-        }
-        {
-          name: 'ReverseProxy__Routes__route1__AuthorizationPolicy'
-          value: 'AuthorRolePolicy'
-        }
-        {
-          name: 'ReverseProxy__Routes__route1__Match__Path'
-          value: 'api/LayerUpload'
-        }
-        {
-          name: 'ReverseProxy__Routes__route1__Transforms__0__PathRemovePrefix'
-          value: 'api/LayerUpload'
-        }
-        {
-          name: 'ReverseProxy__Clusters__cluster1__Destinations__destination1__Address'
-          value: '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${functionSecret})'
         }
       ]
       cors: {
