@@ -7,7 +7,7 @@ param location string
 @description('App insights connection string')
 param appInsightsConnectionString string
 
-@description('Storage account secret name')
+@description('Storage account connection string')
 @secure()
 param storageConnectionString string
 
@@ -62,10 +62,6 @@ resource functionApp 'Microsoft.Web/sites@2021-03-01' = {
         }
         {
           name: 'AzureWebJobsStorage'
-          value: storageConnectionString
-        }
-        {
-          name: 'ConnectionString'
           value: storageConnectionString
         }
         {
