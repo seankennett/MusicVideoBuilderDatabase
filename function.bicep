@@ -9,13 +9,15 @@ param appInsightsConnectionString string
 
 @description('Storage account connection string')
 @secure()
-param storageConnectionString string
+param publicStorageConnectionString string
 
-@description('secret name containing the queue connection')
-param queueConnectionSecretName string
+@description('Storage account connection string')
+@secure()
+param privateStorageConnectionString string
 
-var functionAppServicePlanName = '${resourceName}function'
-var functionAppName = '${resourceName}function'
+var functionAppName = 'imageprocessfunction'
+var functionAppServicePlanName = functionAppName
+
 var keyvaultName = resourceName
 
 resource functionPlan 'Microsoft.Web/serverfarms@2020-12-01' = {
@@ -65,15 +67,15 @@ resource functionApp 'Microsoft.Web/sites@2021-03-01' = {
         }
         {
           name: 'AzureWebJobsStorage'
-          value: storageConnectionString
+          value: publicStorageConnectionString
         }
         {
           name: 'WEBSITE_CONTENTAZUREFILECONNECTIONSTRING'
-          value: storageConnectionString
+          value: publicStorageConnectionString
         }
         {
           name:'ConnectionString'
-          value: '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${queueConnectionSecretName})'
+          value: privateStorageConnectionString
         }
         {
           name: 'WEBSITE_CONTENTSHARE'

@@ -54,11 +54,12 @@ module imageUploaderFunction 'function.bicep' = {
     location: location
     resourceName: resourceName
     appInsightsConnectionString: appInsights.outputs.appInsightsConnectionString
-    storageConnectionString: keyvault.getSecret(publicStorageSecretName)
-    queueConnectionSecretName: privateStorageSecretName
+    publicStorageConnectionString: keyvault.getSecret(publicStorageSecretName)
+    privateStorageConnectionString: keyvault.getSecret(privateStorageSecretName)
   }
   dependsOn: [
     storagePrivate
+    storagePublic
   ]
 }
 
