@@ -11,6 +11,9 @@ param appInsightsConnectionString string
 @secure()
 param storageConnectionString string
 
+@description('secret name containing the queue connection')
+param queueConnectionSecretName string
+
 var functionAppServicePlanName = '${resourceName}function'
 var functionAppName = '${resourceName}function'
 var keyvaultName = resourceName
@@ -67,6 +70,10 @@ resource functionApp 'Microsoft.Web/sites@2021-03-01' = {
         {
           name: 'WEBSITE_CONTENTAZUREFILECONNECTIONSTRING'
           value: storageConnectionString
+        }
+        {
+          name:'ConnectionString'
+          value: '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${queueConnectionSecretName})'
         }
         {
           name: 'WEBSITE_CONTENTSHARE'
