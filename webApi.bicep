@@ -85,6 +85,10 @@ resource appService 'Microsoft.Web/sites@2021-03-01' = {
           name: 'WEBSITE_ENABLE_SYNC_UPDATE_SITE'
           value: 'true'
         }
+        {
+          name:'ContentDeliveryNetworkBaseUrl'
+          value: 'https://cdn.musicvideobuilder.com'
+        }
       ]
       cors: {
         allowedOrigins: [
