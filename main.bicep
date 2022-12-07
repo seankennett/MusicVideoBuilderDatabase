@@ -34,6 +34,7 @@ param storageAccountType string = 'Standard_LRS'
 
 var keyvaultName = resourceName
 var staticSiteName = resourceName
+var batchServiceName = resourceName
 var storageAccountNamePublic = '${resourceName}public'
 var storageAccountNamePrivate = '${resourceName}private'
 var publicStorageSecretName = 'PublicStorageConnectionString'
@@ -146,5 +147,14 @@ module staticWebsite 'staticSite.bicep' = {
   params: {
     resourceName: staticSiteName
     location: location
+  }
+}
+
+module batchService 'batchService.bicep' = {
+  name: 'deployBatchService'
+  params:{
+    resourceName: batchServiceName
+    location: location
+    storageAccountId: storagePrivate.outputs.id
   }
 }

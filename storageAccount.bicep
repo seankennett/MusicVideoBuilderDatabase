@@ -122,3 +122,5 @@ resource secret 'Microsoft.KeyVault/vaults/secrets@2021-06-01-preview' = {
     value: connectionString
   }
 }
+
+output id string = storageAccount.id
