@@ -1,0 +1,30 @@
+{
+    "pool": {
+        "type": "Microsoft.Batch/batchAccounts/pools",
+        "apiVersion": "2016-12-01",
+        "properties": {
+            "id": "testPool",
+            "virtualMachineConfiguration": {
+                "imageReference": {
+                    "publisher": "Canonical",
+                    "offer": "0001-com-ubuntu-server-focal",
+                    "sku": "20_04-lts-gen2",
+                    "version": "latest"
+                },
+                "nodeAgentSKUId": "batch.node.ubuntu 20.04"
+            },
+            "vmSize": "Standard_F4s_v2",
+            "packageReferences": [
+                {
+                    "type": "aptPackage",
+                    "id": "ffmpeg"
+                }
+            ],
+            "enableAutoScale": true,
+            "autoScaleFormula": "startingNumberOfVMs = 0;maxNumberofVMs = 2;pendingTaskSamplePercent = $PendingTasks.GetSamplePercent(5 * TimeInterval_Minute);pendingTaskSamples = pendingTaskSamplePercent < 70 ? startingNumberOfVMs : avg($PendingTasks.GetSample(5 * TimeInterval_Minute));$TargetLowPriorityNodes=min(maxNumberofVMs, pendingTaskSamples);$NodeDeallocationOption = taskcompletion;",
+            "autoScaleEvaluationInterval": "PT5M",
+            "enableInterNodeCommunication": false
+        }
+    }
+}
+// this is for azure batch cli extension  https://github.com/Azure/azure-batch-cli-extensions.  It shows what to do with start task.  az batch pool create --template poolTemplate.json --account-name musicvideobuilder --account-endpoint musicvideobuilder.westeurope.batch.azure.com
