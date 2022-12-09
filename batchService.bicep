@@ -44,7 +44,7 @@ resource symbolicname 'Microsoft.Batch/batchAccounts/pools@2022-10-01' = {
       }
     }
     startTask: {
-      commandLine: '/bin/bash -c \'apt-get update;apt-get install -y ffmpeg\''
+      commandLine: '/bin/bash -c \'apt-get update;apt-get install -y ffmpeg;apt-get install unzip\''
       userIdentity: {
         autoUser: {
           scope: 'Pool'
