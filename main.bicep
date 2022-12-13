@@ -107,35 +107,18 @@ module storagePublic 'storageAccount.bicep' = {
     secretName: 'PublicStorageConnectionString'
     keyvaultName: keyvaultName
     customDomain: 'cdn.${hostName}'
-    containers: [
-      {
-        name: 'sprites'
-        publicAccess: 'Blob'
-      }
-
-    ]
   }
 }
 
 module storagePrivate 'storageAccount.bicep' = {
   name: 'deployStoragePrivate'
   params: {
-    accessTier: 'Cool'
+    accessTier: 'Hot'
     location: location
     storageAccountName: storageAccountNamePrivate
     storageAccountType: storageAccountType
     secretName: 'PrivateStorageConnectionString'
     keyvaultName: keyvaultName
-    containers: [
-      {
-        name: '4k-zips'
-        publicAccess: 'None'
-      }
-      {
-        name: 'hd-zips'
-        publicAccess: 'None'
-      }
-    ]
     queues: [
       'image-process'
     ]
