@@ -21,7 +21,7 @@ resource batchService 'Microsoft.Batch/batchAccounts@2022-10-01' = {
 }
 
 resource symbolicname 'Microsoft.Batch/batchAccounts/pools@2022-10-01' = {
-  name: 'builderPool'
+  name: 'builderPoolF8SV2'
   parent: batchService
   properties: {
     vmSize: 'STANDARD_F8S_V2'
