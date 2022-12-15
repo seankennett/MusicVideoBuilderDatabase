@@ -24,7 +24,7 @@ resource symbolicname 'Microsoft.Batch/batchAccounts/pools@2022-10-01' = {
   name: 'builderPool'
   parent: batchService
   properties: {
-    vmSize: 'STANDARD_F4S_V2'
+    vmSize: 'STANDARD_F8S_V2'
     interNodeCommunication: 'Disabled'
     deploymentConfiguration: {
       virtualMachineConfiguration: {
@@ -44,7 +44,7 @@ resource symbolicname 'Microsoft.Batch/batchAccounts/pools@2022-10-01' = {
       }
     }
     startTask: {
-      commandLine: '/bin/bash -c \'apt-get update;apt-get install -y ffmpeg;apt-get install unzip\''
+      commandLine: '/bin/bash -c \'apt-get update;apt-get install -y ffmpeg\''
       userIdentity: {
         autoUser: {
           scope: 'Pool'
