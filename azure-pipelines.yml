@@ -7,6 +7,8 @@ variables:
   resourceGroupName: 'music-video-builder'
   location: 'West Europe'
   templateFile: './main.bicep'
+  jobName: 'builderJob'
+  poolName: 'builderPoolF8SV2'
 pool:
   vmImage: $(vmImageName)
 
@@ -19,4 +21,17 @@ steps:
     inlineScript: |
       az --version
       az group create --name $(resourceGroupName) --location $(location)
-      az deployment group create --resource-group $(resourceGroupName) --template-file $(templateFile)
+      az deployment group create --resource-group $(resourceGroupName) --template-file $(templateFile) --parameters jobName='$(jobName)' poolName='$(poolName)'
+- task: AzureKeyVault@2
+  inputs:
+    azureSubscription: $(azureServiceConnection)
+    KeyVaultName: musicvideobuilder
+    SecretsFilter: 'BatchServiceName,BatchServiceEndpoint,BatchServiceKey'
+    RunAsPreJob: false
+- task: AzureCLI@2
+  inputs:
+    azureSubscription: $(azureServiceConnection)
+    scriptType: bash
+    scriptLocation: inlineScript
+    inlineScript: |
+      az batch job create --account-endpoint $(BatchServiceEndpoint) --account-key $(BatchServiceKey) --account-name $(BatchServiceName) --id $(jobName) --pool-id $(poolName)
