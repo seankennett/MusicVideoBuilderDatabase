@@ -32,9 +32,4 @@ resource logAnalyticsWorkspace 'Microsoft.OperationalInsights/workspaces@2020-08
   }
 }
 
-resource keyvault 'Microsoft.KeyVault/vaults@2019-09-01' existing = {
-  name: keyvaultName
-  scope: resourceGroup()
-}
-
 output appInsightsConnectionString string = appInsights.properties.ConnectionString
