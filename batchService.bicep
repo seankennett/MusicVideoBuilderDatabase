@@ -82,7 +82,7 @@ resource secret2 'Microsoft.KeyVault/vaults/secrets@2021-06-01-preview' = {
   name: 'BatchServiceEndpoint'
   parent: keyvault
   properties: {
-    value: batchService.properties.accountEndpoint
+    value: 'https://${batchService.properties.accountEndpoint}'
   }
 }
 
