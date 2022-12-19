@@ -33,6 +33,5 @@ steps:
     azureSubscription: $(azureServiceConnection)
     scriptType: bash
     scriptLocation: inlineScript
-    continueOnError: true
     inlineScript: |
-      az batch job create --account-endpoint $(BatchServiceEndpoint) --account-key $(BatchServiceKey) --account-name $(BatchServiceName) --id $(jobName) --pool-id $(poolName)
+      az batch job create --account-endpoint $(BatchServiceEndpoint) --account-key $(BatchServiceKey) --account-name $(BatchServiceName) --id $(jobName) --pool-id $(poolName) 2>&1
