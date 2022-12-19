@@ -90,7 +90,7 @@ resource secret3 'Microsoft.KeyVault/vaults/secrets@2021-06-01-preview' = {
   name: 'BatchServiceKey'
   parent: keyvault
   properties: {
-    value: listKeys(batchService.id, batchService.apiVersion).primary.value
+    value: listKeys(batchService.id, batchService.apiVersion).primary
   }
 }
 
