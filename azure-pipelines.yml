@@ -34,4 +34,4 @@ steps:
     scriptType: bash
     scriptLocation: inlineScript
     inlineScript: |
-      az batch job create --account-endpoint $(BatchServiceEndpoint) --account-key $(BatchServiceKey) --account-name $(BatchServiceName) --id $(jobName) --pool-id $(poolName) 2>&1
+      az batch job create --account-endpoint $(BatchServiceEndpoint) --account-key $(BatchServiceKey) --account-name $(BatchServiceName) --id $(jobName) --pool-id $(poolName) 2>nul
