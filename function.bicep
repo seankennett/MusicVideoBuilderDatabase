@@ -1,5 +1,5 @@
 @description('Name that will be used to build associated artifacts')
-param resourceName string
+param keyvaultName string
 
 @description('Location for all resources.')
 param location string
@@ -15,10 +15,10 @@ param publicStorageConnectionString string
 @secure()
 param privateStorageConnectionString string
 
-var functionAppName = 'imageprocessfunction'
-var functionAppServicePlanName = functionAppName
+@description('Function App name')
+param functionAppName string
 
-var keyvaultName = resourceName
+var functionAppServicePlanName = functionAppName
 
 resource functionPlan 'Microsoft.Web/serverfarms@2020-12-01' = {
   name: functionAppServicePlanName

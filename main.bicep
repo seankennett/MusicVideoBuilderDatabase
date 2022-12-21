@@ -59,10 +59,27 @@ module imageUploaderFunction 'function.bicep' = {
   name: 'deployImageUploaderFunction'
   params: {
     location: location
-    resourceName: resourceName
+    keyvaultName: keyvaultName
     appInsightsConnectionString: appInsights.outputs.appInsightsConnectionString
     publicStorageConnectionString: keyvault.getSecret(publicStorageSecretName)
     privateStorageConnectionString: keyvault.getSecret(privateStorageSecretName)
+    functionAppName: 'imageprocessfunction'
+  }
+  dependsOn: [
+    storagePrivate
+    storagePublic
+  ]
+}
+
+module videoNotifyFunction 'function.bicep' = {
+  name: 'deployVideoNotifyFunction'
+  params: {
+    location: location
+    keyvaultName: keyvaultName
+    appInsightsConnectionString: appInsights.outputs.appInsightsConnectionString
+    publicStorageConnectionString: keyvault.getSecret(publicStorageSecretName)
+    privateStorageConnectionString: keyvault.getSecret(privateStorageSecretName)
+    functionAppName: 'videonotifyfunction'
   }
   dependsOn: [
     storagePrivate
@@ -141,7 +158,7 @@ module staticWebsite 'staticSite.bicep' = {
 
 module batchService 'batchService.bicep' = {
   name: 'deployBatchService'
-  params:{
+  params: {
     resourceName: batchServiceName
     location: location
     storageAccountId: storagePrivate.outputs.id
