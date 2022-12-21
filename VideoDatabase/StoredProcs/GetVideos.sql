@@ -3,7 +3,7 @@
 )
 AS
 
-SELECT VideoId, BPM, VideoDelayMilliseconds, DateUpdated, FormatId, VideoName FROM [Video] 
+SELECT VideoId, BPM, VideoDelayMilliseconds, DateUpdated, FormatId, VideoName, IsBuilding FROM [Video] 
 WHERE UserObjectId = @userObjectId
 
 SELECT vc.VideoId, vc.ClipId, vc.[Order], c.ClipName, c.BackgroundColour, c.BeatLength, c.StartingBeat FROM [VideoClips] vc

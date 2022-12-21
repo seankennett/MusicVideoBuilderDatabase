@@ -91,7 +91,6 @@
     <PostDeploy Include="Script.PostDeployment.sql" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="VideoDatabaseLocal.publish.xml" />
     <None Include="VideoDatabase.publish.xml" />
   </ItemGroup>
   <ItemGroup>

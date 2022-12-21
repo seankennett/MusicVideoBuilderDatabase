@@ -8,5 +8,6 @@
 	[DateCreated] DATETIME2 NOT NULL,
 	[DateUpdated] DATETIME2 NOT NULL,
 	[UserObjectId] UNIQUEIDENTIFIER NOT NULL,
-	CONSTRAINT FK_Video_Format FOREIGN KEY ([FormatId]) REFERENCES [dbo].[Format] ([FormatId])
+	[IsBuilding] BIT NOT NULL DEFAULT 0, 
+    CONSTRAINT FK_Video_Format FOREIGN KEY ([FormatId]) REFERENCES [dbo].[Format] ([FormatId])
 )
