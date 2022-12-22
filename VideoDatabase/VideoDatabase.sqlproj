@@ -83,6 +83,7 @@
     <Build Include="StoredProcs\DeleteClip.sql" />
     <Build Include="StoredProcs\DeleteUserLayer.sql" />
     <Build Include="StoredProcs\GetUserLayer.sql" />
+    <Build Include="StoredProcs\UpdateVideoIsBuilding.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="VideoDatabase.refactorlog" />
