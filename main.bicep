@@ -46,6 +46,7 @@ var storageAccountNamePrivate = '${resourceName}private'
 var publicStorageSecretName = 'PublicStorageConnectionString'
 var privateStorageSecretName = 'PrivateStorageConnectionString'
 var hostName = 'musicvideobuilder.com'
+var eventGridName = storageAccountNamePrivate
 
 module appInsights 'appInsights.bicep' = {
   name: 'deployAppInsights'
@@ -164,5 +165,16 @@ module batchService 'batchService.bicep' = {
     storageAccountId: storagePrivate.outputs.id
     poolName: poolName
     jobName: jobName
+  }
+}
+
+var functionInsideNamespace = '${videoNotifyFunction.outputs.id}/functions/VideoNotifyFunction'
+module eventGrid 'eventGrid.bicep' = {
+  name: 'deployEventGrid'
+  params: {
+    resourceName: eventGridName
+    location: location
+    storageAccountId: storagePrivate.outputs.id
+    functionId: functionInsideNamespace
   }
 }

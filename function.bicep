@@ -110,3 +110,5 @@ resource keyVaultAccessPolicy 'Microsoft.KeyVault/vaults/accessPolicies@2021-06-
     ]
   }
 }
+
+output id string = functionApp.id
