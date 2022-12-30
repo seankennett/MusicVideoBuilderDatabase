@@ -56,5 +56,9 @@ resource eventSubscription 'Microsoft.EventGrid/systemTopics/eventSubscriptions@
       ]
     }
     eventDeliverySchema: 'EventGridSchema'
+    retryPolicy:{
+      eventTimeToLiveInMinutes: 1440
+      maxDeliveryAttempts: 5
+    }
   }
 }
