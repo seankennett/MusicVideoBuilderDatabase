@@ -62,8 +62,8 @@ module imageUploaderFunction 'function.bicep' = {
     location: location
     keyvaultName: keyvaultName
     appInsightsConnectionString: appInsights.outputs.appInsightsConnectionString
-    publicStorageConnectionString: keyvault.getSecret(publicStorageSecretName)
-    privateStorageConnectionString: keyvault.getSecret(privateStorageSecretName)
+    storageConnectionString: keyvault.getSecret(publicStorageSecretName)
+    triggerConnectionString: keyvault.getSecret(privateStorageSecretName)
     functionAppName: 'imageprocessfunction'
   }
   dependsOn: [
@@ -77,9 +77,8 @@ module videoNotifyFunction 'function.bicep' = {
   params: {
     location: location
     keyvaultName: keyvaultName
+    storageConnectionString: keyvault.getSecret(publicStorageSecretName)
     appInsightsConnectionString: appInsights.outputs.appInsightsConnectionString
-    publicStorageConnectionString: keyvault.getSecret(publicStorageSecretName)
-    privateStorageConnectionString: keyvault.getSecret(privateStorageSecretName)
     functionAppName: 'videonotifyfunction'
   }
   dependsOn: [
@@ -131,6 +130,7 @@ module storagePublic 'storageAccount.bicep' = {
     secretName: 'PublicStorageConnectionString'
     keyvaultName: keyvaultName
     customDomain: 'cdn.${hostName}'
+    enableCors: true
   }
 }
 
@@ -146,6 +146,7 @@ module storagePrivate 'storageAccount.bicep' = {
     queues: [
       'image-process'
     ]
+    enableCors: true
   }
 }
 

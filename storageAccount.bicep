@@ -2,7 +2,7 @@
 param storageAccountName string
 
 @description('Secret name')
-param secretName string
+param secretName string = ''
 
 @description('Location for all resources.')
 param location string
@@ -28,6 +28,9 @@ param containers array = []
 
 @description('list of containers')
 param queues array = []
+
+@description('enable cors')
+param enableCors bool = false
 
 var baseProperties = {
   accessTier: accessTier
@@ -80,7 +83,7 @@ resource container 'Microsoft.Storage/storageAccounts/blobServices/containers@20
   }
 }]
 
-resource storageAccountProperties 'Microsoft.Storage/storageAccounts/blobServices@2018-07-01' = {
+resource storageAccountProperties 'Microsoft.Storage/storageAccounts/blobServices@2018-07-01' = if (enableCors){
   name: 'default'
   parent: storageAccount
   properties: {
@@ -109,17 +112,16 @@ resource storageAccountProperties 'Microsoft.Storage/storageAccounts/blobService
   }
 }
 
-resource keyvault 'Microsoft.KeyVault/vaults@2019-09-01' existing = {
+resource keyvault 'Microsoft.KeyVault/vaults@2019-09-01' existing = if (secretName != ''){
   name: keyvaultName
   scope: resourceGroup()
 }
 
-var connectionString = 'DefaultEndpointsProtocol=https;AccountName=${storageAccount.name};AccountKey=${listKeys(storageAccount.id, storageAccount.apiVersion).keys[0].value};EndpointSuffix=${environment().suffixes.storage}'
-resource secret 'Microsoft.KeyVault/vaults/secrets@2021-06-01-preview' = {
+resource secret 'Microsoft.KeyVault/vaults/secrets@2021-06-01-preview' = if (secretName != '') {
   name: secretName
   parent: keyvault
   properties: {
-    value: connectionString
+    value: 'DefaultEndpointsProtocol=https;AccountName=${storageAccount.name};AccountKey=${listKeys(storageAccount.id, storageAccount.apiVersion).keys[0].value};EndpointSuffix=${environment().suffixes.storage}'
   }
 }
 

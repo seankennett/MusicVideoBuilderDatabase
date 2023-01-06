@@ -9,11 +9,11 @@ param appInsightsConnectionString string
 
 @description('Storage account connection string')
 @secure()
-param publicStorageConnectionString string
+param storageConnectionString string
 
-@description('Storage account connection string')
+@description('Trigger connection string')
 @secure()
-param privateStorageConnectionString string
+param triggerConnectionString string = ''
 
 @description('Function App name')
 param functionAppName string
@@ -30,6 +30,52 @@ resource functionPlan 'Microsoft.Web/serverfarms@2020-12-01' = {
   properties: {}
 }
 
+var baseAppsettings = [
+  {
+    name: 'FUNCTIONS_WORKER_RUNTIME'
+    value: 'dotnet'
+  }
+  {
+    name: 'FUNCTIONS_EXTENSION_VERSION'
+    value: '~4'
+  }
+  {
+    name: 'WEBSITE_RUN_FROM_PACKAGE'
+    value: '1'
+  }
+  {
+    name: 'WEBSITE_ENABLE_SYNC_UPDATE_SITE'
+    value: 'true'
+  }
+  {
+    name: 'AzureKeyVaultEndpoint'
+    value: 'https://${keyvaultName}${environment().suffixes.keyvaultDns}/'
+  }
+  {
+    name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
+    value: appInsightsConnectionString
+  }
+  {
+    name: 'AzureWebJobsStorage'
+    value: storageConnectionString
+  }
+  {
+    name: 'WEBSITE_CONTENTAZUREFILECONNECTIONSTRING'
+    value: storageConnectionString
+  }  
+  {
+    name: 'WEBSITE_CONTENTSHARE'
+    value: toLower(functionAppName)
+  }
+]
+
+var triggerConnectionSetting = [{
+  name:'ConnectionString'
+  value: triggerConnectionString
+}]
+
+var allAppSettings = triggerConnectionString == '' ? baseAppsettings : union(baseAppsettings, triggerConnectionSetting)
+
 resource functionApp 'Microsoft.Web/sites@2021-03-01' = {
   name: functionAppName
   location: location
@@ -40,48 +86,7 @@ resource functionApp 'Microsoft.Web/sites@2021-03-01' = {
   properties: {
     serverFarmId: functionPlan.id
     siteConfig: {
-      appSettings: [
-        {
-          name: 'FUNCTIONS_WORKER_RUNTIME'
-          value: 'dotnet'
-        }
-        {
-          name: 'FUNCTIONS_EXTENSION_VERSION'
-          value: '~4'
-        }
-        {
-          name: 'WEBSITE_RUN_FROM_PACKAGE'
-          value: '1'
-        }
-        {
-          name: 'WEBSITE_ENABLE_SYNC_UPDATE_SITE'
-          value: 'true'
-        }
-        {
-          name: 'AzureKeyVaultEndpoint'
-          value: 'https://${keyvaultName}${environment().suffixes.keyvaultDns}/'
-        }
-        {
-          name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
-          value: appInsightsConnectionString
-        }
-        {
-          name: 'AzureWebJobsStorage'
-          value: publicStorageConnectionString
-        }
-        {
-          name: 'WEBSITE_CONTENTAZUREFILECONNECTIONSTRING'
-          value: publicStorageConnectionString
-        }
-        {
-          name:'ConnectionString'
-          value: privateStorageConnectionString
-        }
-        {
-          name: 'WEBSITE_CONTENTSHARE'
-          value: toLower(functionAppName)
-        }
-      ]
+      appSettings: allAppSettings
     }
     httpsOnly: true
   }
