@@ -2,7 +2,7 @@
 param storageAccountName string
 
 @description('Secret name')
-param secretName string = ''
+param secretName string
 
 @description('Location for all resources.')
 param location string
@@ -11,10 +11,10 @@ param location string
 param storageAccountType string
 
 @description('Key vault name')
-param keyvaultName string = ''
+param keyvaultName string
 
 @description('Custom domain name')
-param customDomain string = ''
+param supportHttpsOnly bool = true
 
 @description('list of containers')
 param containers array = []
@@ -24,21 +24,6 @@ param queues array = []
 
 @description('enable cors')
 param enableCors bool = false
-
-var baseProperties = {
-  accessTier: 'Hot'
-  allowBlobPublicAccess: true
-  publicNetworkAccess: 'Enabled'
-}
-
-var customDomainProperties = {
-  supportsHttpsTrafficOnly: false
-  // customDomain: {
-  //   name: customDomain
-  // } Clouflare not good when being proxied
-}
-
-var allProperties = customDomain == '' ? baseProperties : union(baseProperties, customDomainProperties)
 
 var defaultServiceName = 'default'
 
@@ -50,7 +35,12 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2021-06-01' = {
     name: storageAccountType
   }
   kind: 'StorageV2'
-  properties: allProperties
+  properties: {
+    accessTier: 'Hot'
+    allowBlobPublicAccess: true
+    publicNetworkAccess: 'Enabled'
+    supportsHttpsTrafficOnly: supportHttpsOnly
+  }
 }
 
 resource queueServices 'Microsoft.Storage/storageAccounts/queueServices@2022-05-01' existing = {
@@ -105,12 +95,12 @@ resource storageAccountProperties 'Microsoft.Storage/storageAccounts/blobService
   }
 }
 
-resource keyvault 'Microsoft.KeyVault/vaults@2019-09-01' existing = if (secretName != '' && keyvaultName != ''){
+resource keyvault 'Microsoft.KeyVault/vaults@2019-09-01' existing = {
   name: keyvaultName
   scope: resourceGroup()
 }
 
-resource secret 'Microsoft.KeyVault/vaults/secrets@2021-06-01-preview' = if (secretName != '' && keyvaultName != '') {
+resource secret 'Microsoft.KeyVault/vaults/secrets@2021-06-01-preview' = {
   name: secretName
   parent: keyvault
   properties: {

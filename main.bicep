@@ -45,8 +45,11 @@ var storageAccountNamePublic = '${resourceName}public'
 var storageAccountNamePrivate = '${resourceName}private'
 var publicStorageSecretName = 'PublicStorageConnectionString'
 var privateStorageSecretName = 'PrivateStorageConnectionString'
-var hostName = 'musicvideobuilder.com'
 var eventGridName = storageAccountNamePrivate
+var imageProcessFunctionAppName = 'imageprocessfunction'
+var imageUploaderConnectionSecretName = 'ImageUploaderConnectionString'
+var videoNotifyFunctionAppName = 'videonotifyfunction'
+var videoNotifyConnectionSecretName = 'VideoNotifyConnectionString'
 
 module appInsights 'appInsights.bicep' = {
   name: 'deployAppInsights'
@@ -56,26 +59,21 @@ module appInsights 'appInsights.bicep' = {
   }
 }
 
-var imageProcessFunctionAppName = 'imageprocessfunction'
+
 module imageUploaderFunction 'function.bicep' = {
   name: 'deployImageUploaderFunction'
   params: {
     location: location
     keyvaultName: keyvaultName
     appInsightsConnectionString: appInsights.outputs.appInsightsConnectionString
-    storageConnectionString: 'DefaultEndpointsProtocol=https;AccountName=${storageImageUploaderResource.name};AccountKey=${listKeys(storageImageUploaderResource.id, storageImageUploaderResource.apiVersion).keys[0].value};EndpointSuffix=${environment().suffixes.storage}'
+    storageConnectionString: keyvault.getSecret(imageUploaderConnectionSecretName)
     triggerConnectionString: keyvault.getSecret(privateStorageSecretName)
     functionAppName: imageProcessFunctionAppName
   }
   dependsOn: [
     storagePrivate
-    storagePublic
     storageImageUploader
   ]
-}
-
-resource storageImageUploaderResource 'Microsoft.Storage/storageAccounts@2021-06-01' existing = {
-  name: imageProcessFunctionAppName
 }
 
 module storageImageUploader 'storageAccount.bicep' = {
@@ -84,6 +82,8 @@ module storageImageUploader 'storageAccount.bicep' = {
     location: location
     storageAccountName: imageProcessFunctionAppName
     storageAccountType: storageAccountType
+    secretName: imageUploaderConnectionSecretName
+    keyvaultName: keyvaultName
   }
 }
 
@@ -92,14 +92,24 @@ module videoNotifyFunction 'function.bicep' = {
   params: {
     location: location
     keyvaultName: keyvaultName
-    storageConnectionString: keyvault.getSecret(publicStorageSecretName)
+    storageConnectionString: keyvault.getSecret(videoNotifyConnectionSecretName)
     appInsightsConnectionString: appInsights.outputs.appInsightsConnectionString
-    functionAppName: 'videonotifyfunction'
+    functionAppName: videoNotifyFunctionAppName
   }
   dependsOn: [
-    storagePrivate
-    storagePublic
+    storageVideoNotify
   ]
+}
+
+module storageVideoNotify 'storageAccount.bicep' = {
+  name: 'deployStorageVideoNotify'
+  params: {
+    location: location
+    storageAccountName: videoNotifyFunctionAppName
+    storageAccountType: storageAccountType
+    secretName: videoNotifyConnectionSecretName
+    keyvaultName: keyvaultName
+  }
 }
 
 module webApi 'webApi.bicep' = {
@@ -141,9 +151,9 @@ module storagePublic 'storageAccount.bicep' = {
     location: location
     storageAccountName: storageAccountNamePublic
     storageAccountType: storageAccountType
-    secretName: 'PublicStorageConnectionString'
+    secretName: publicStorageSecretName
     keyvaultName: keyvaultName
-    customDomain: 'cdn.${hostName}'
+    supportHttpsOnly: false // workaround for cert issue cdn will call http not great but you have to use azure cdn for this to work
     enableCors: true
   }
 }
@@ -154,7 +164,7 @@ module storagePrivate 'storageAccount.bicep' = {
     location: location
     storageAccountName: storageAccountNamePrivate
     storageAccountType: storageAccountType
-    secretName: 'PrivateStorageConnectionString'
+    secretName: privateStorageSecretName
     keyvaultName: keyvaultName
     queues: [
       'image-process'
