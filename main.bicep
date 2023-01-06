@@ -56,20 +56,35 @@ module appInsights 'appInsights.bicep' = {
   }
 }
 
+var imageProcessFunctionAppName = 'imageprocessfunction'
 module imageUploaderFunction 'function.bicep' = {
   name: 'deployImageUploaderFunction'
   params: {
     location: location
     keyvaultName: keyvaultName
     appInsightsConnectionString: appInsights.outputs.appInsightsConnectionString
-    storageConnectionString: keyvault.getSecret(publicStorageSecretName)
+    storageConnectionString: 'DefaultEndpointsProtocol=https;AccountName=${storageImageUploaderResource.name};AccountKey=${listKeys(storageImageUploaderResource.id, storageImageUploaderResource.apiVersion).keys[0].value};EndpointSuffix=${environment().suffixes.storage}'
     triggerConnectionString: keyvault.getSecret(privateStorageSecretName)
-    functionAppName: 'imageprocessfunction'
+    functionAppName: imageProcessFunctionAppName
   }
   dependsOn: [
     storagePrivate
     storagePublic
+    storageImageUploader
   ]
+}
+
+resource storageImageUploaderResource 'Microsoft.Storage/storageAccounts@2021-06-01' existing = {
+  name: imageProcessFunctionAppName
+}
+
+module storageImageUploader 'storageAccount.bicep' = {
+  name: 'deployStorageImageUploader'
+  params: {
+    location: location
+    storageAccountName: imageProcessFunctionAppName
+    storageAccountType: storageAccountType
+  }
 }
 
 module videoNotifyFunction 'function.bicep' = {
@@ -123,7 +138,6 @@ module sql 'sqlServerModule.bicep' = {
 module storagePublic 'storageAccount.bicep' = {
   name: 'deployStoragePublic'
   params: {
-    accessTier: 'Hot'
     location: location
     storageAccountName: storageAccountNamePublic
     storageAccountType: storageAccountType
@@ -137,7 +151,6 @@ module storagePublic 'storageAccount.bicep' = {
 module storagePrivate 'storageAccount.bicep' = {
   name: 'deployStoragePrivate'
   params: {
-    accessTier: 'Hot'
     location: location
     storageAccountName: storageAccountNamePrivate
     storageAccountType: storageAccountType

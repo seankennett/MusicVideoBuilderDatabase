@@ -10,15 +10,8 @@ param location string
 @description('Account type')
 param storageAccountType string
 
-@description('Access Tier')
-@allowed([
-  'Hot'
-  'Cool'
-])
-param accessTier string
-
 @description('Key vault name')
-param keyvaultName string
+param keyvaultName string = ''
 
 @description('Custom domain name')
 param customDomain string = ''
@@ -33,7 +26,7 @@ param queues array = []
 param enableCors bool = false
 
 var baseProperties = {
-  accessTier: accessTier
+  accessTier: 'Hot'
   allowBlobPublicAccess: true
   publicNetworkAccess: 'Enabled'
 }
@@ -112,12 +105,12 @@ resource storageAccountProperties 'Microsoft.Storage/storageAccounts/blobService
   }
 }
 
-resource keyvault 'Microsoft.KeyVault/vaults@2019-09-01' existing = if (secretName != ''){
+resource keyvault 'Microsoft.KeyVault/vaults@2019-09-01' existing = if (secretName != '' && keyvaultName != ''){
   name: keyvaultName
   scope: resourceGroup()
 }
 
-resource secret 'Microsoft.KeyVault/vaults/secrets@2021-06-01-preview' = if (secretName != '') {
+resource secret 'Microsoft.KeyVault/vaults/secrets@2021-06-01-preview' = if (secretName != '' && keyvaultName != '') {
   name: secretName
   parent: keyvault
   properties: {
