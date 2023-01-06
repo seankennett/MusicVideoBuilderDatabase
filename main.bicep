@@ -168,6 +168,7 @@ module storagePrivate 'storageAccount.bicep' = {
     keyvaultName: keyvaultName
     queues: [
       'image-process'
+      'music-video-builder'
     ]
     enableCors: true
   }
