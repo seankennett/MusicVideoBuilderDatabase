@@ -18,6 +18,9 @@ param triggerConnectionString string = ''
 @description('Function App name')
 param functionAppName string
 
+@description('AdditionalAppSettings')
+param additionalAppSettings array = []
+
 var functionAppServicePlanName = functionAppName
 
 resource functionPlan 'Microsoft.Web/serverfarms@2020-12-01' = {
@@ -30,49 +33,49 @@ resource functionPlan 'Microsoft.Web/serverfarms@2020-12-01' = {
   properties: {}
 }
 
-var baseAppsettings = [
-  {
-    name: 'FUNCTIONS_WORKER_RUNTIME'
-    value: 'dotnet'
-  }
-  {
-    name: 'FUNCTIONS_EXTENSION_VERSION'
-    value: '~4'
-  }
-  {
-    name: 'WEBSITE_RUN_FROM_PACKAGE'
-    value: '1'
-  }
-  {
-    name: 'WEBSITE_ENABLE_SYNC_UPDATE_SITE'
-    value: 'true'
-  }
-  {
-    name: 'AzureKeyVaultEndpoint'
-    value: 'https://${keyvaultName}${environment().suffixes.keyvaultDns}/'
-  }
-  {
-    name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
-    value: appInsightsConnectionString
-  }
-  {
-    name: 'AzureWebJobsStorage'
-    value: storageConnectionString
-  }
-  {
-    name: 'WEBSITE_CONTENTAZUREFILECONNECTIONSTRING'
-    value: storageConnectionString
-  }  
-  {
-    name: 'WEBSITE_CONTENTSHARE'
-    value: toLower(functionAppName)
-  }
-]
+var baseAppsettings = union([
+    {
+      name: 'FUNCTIONS_WORKER_RUNTIME'
+      value: 'dotnet'
+    }
+    {
+      name: 'FUNCTIONS_EXTENSION_VERSION'
+      value: '~4'
+    }
+    {
+      name: 'WEBSITE_RUN_FROM_PACKAGE'
+      value: '1'
+    }
+    {
+      name: 'WEBSITE_ENABLE_SYNC_UPDATE_SITE'
+      value: 'true'
+    }
+    {
+      name: 'AzureKeyVaultEndpoint'
+      value: 'https://${keyvaultName}${environment().suffixes.keyvaultDns}/'
+    }
+    {
+      name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
+      value: appInsightsConnectionString
+    }
+    {
+      name: 'AzureWebJobsStorage'
+      value: storageConnectionString
+    }
+    {
+      name: 'WEBSITE_CONTENTAZUREFILECONNECTIONSTRING'
+      value: storageConnectionString
+    }
+    {
+      name: 'WEBSITE_CONTENTSHARE'
+      value: toLower(functionAppName)
+    }
+  ], additionalAppSettings)
 
-var triggerConnectionSetting = [{
-  name:'ConnectionString'
-  value: triggerConnectionString
-}]
+var triggerConnectionSetting = [ {
+    name: 'ConnectionString'
+    value: triggerConnectionString
+  } ]
 
 var allAppSettings = triggerConnectionString == '' ? baseAppsettings : union(baseAppsettings, triggerConnectionSetting)
 
