@@ -50,8 +50,8 @@ var imageProcessFunctionAppName = 'imageprocessfunction'
 var imageUploaderConnectionSecretName = 'ImageUploaderConnectionString'
 var videoNotifyFunctionAppName = 'videonotifyfunction'
 var videoNotifyConnectionSecretName = 'VideoNotifyConnectionString'
-var musicVideoBuilderFunctionAppName = 'musicvideobuilderfunction'
-var musicVideoBuilderConnectionSecretName = 'MusicVideoBuilderConnectionString'
+var builderFunctionAppName = 'builderfunction'
+var builderConnectionSecretName = 'BuilderConnectionString'
 
 module appInsights 'appInsights.bicep' = {
   name: 'deployAppInsights'
@@ -118,9 +118,9 @@ module musicVideoBuilderFunction 'function.bicep' = {
   params: {
     location: location
     keyvaultName: keyvaultName
-    storageConnectionString: keyvault.getSecret(musicVideoBuilderConnectionSecretName)
+    storageConnectionString: keyvault.getSecret(builderConnectionSecretName)
     appInsightsConnectionString: appInsights.outputs.appInsightsConnectionString
-    functionAppName: musicVideoBuilderFunctionAppName
+    functionAppName: builderFunctionAppName
     additionalAppSettings: [
       {
         name: 'ContentDeliveryNetworkBaseUrl'
@@ -137,9 +137,9 @@ module storageMusicVideoBuilder 'storageAccount.bicep' = {
   name: 'deployStorageMusicVideoBuilder'
   params: {
     location: location
-    storageAccountName: musicVideoBuilderFunctionAppName
+    storageAccountName: builderFunctionAppName
     storageAccountType: storageAccountType
-    secretName: musicVideoBuilderConnectionSecretName
+    secretName: builderConnectionSecretName
     keyvaultName: keyvaultName
   }
 }
