@@ -118,6 +118,7 @@ module musicVideoBuilderFunction 'function.bicep' = {
   params: {
     location: location
     keyvaultName: keyvaultName
+    triggerConnectionString: keyvault.getSecret(privateStorageSecretName)
     storageConnectionString: keyvault.getSecret(builderConnectionSecretName)
     appInsightsConnectionString: appInsights.outputs.appInsightsConnectionString
     functionAppName: builderFunctionAppName
