@@ -45,6 +45,13 @@ resource eventSubscription 'Microsoft.EventGrid/systemTopics/eventSubscriptions@
           ]
         }
         {
+          operatorType: 'StringNotContains'
+          key: 'subject'
+          values: [
+            '/temp/'
+          ]
+        }
+        {
           operatorType: 'StringEndsWith'
           key: 'subject'
           values:[
