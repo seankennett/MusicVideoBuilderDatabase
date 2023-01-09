@@ -41,7 +41,7 @@ resource eventSubscription 'Microsoft.EventGrid/systemTopics/eventSubscriptions@
           operatorType: 'StringContains'
           key: 'subject'
           values: [
-            '-Assets/'
+            '/user-'
           ]
         }
         {
