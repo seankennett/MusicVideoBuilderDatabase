@@ -204,6 +204,7 @@ module storagePrivate 'storageAccount.bicep' = {
       'music-video-builder'
     ]
     enableCors: true
+    enableUserDeleteLifeCycle: true
   }
 }
 

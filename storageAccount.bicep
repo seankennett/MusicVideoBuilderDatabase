@@ -25,6 +25,9 @@ param queues array = []
 @description('enable cors')
 param enableCors bool = false
 
+@description('enable lifecyle for deleting user assets')
+param enableUserDeleteLifeCycle bool = false
+
 var defaultServiceName = 'default'
 
 // nothing for setting up static website - manual
@@ -66,7 +69,7 @@ resource container 'Microsoft.Storage/storageAccounts/blobServices/containers@20
   }
 }]
 
-resource storageAccountProperties 'Microsoft.Storage/storageAccounts/blobServices@2018-07-01' = if (enableCors){
+resource storageAccountProperties 'Microsoft.Storage/storageAccounts/blobServices@2018-07-01' = if (enableCors) {
   name: 'default'
   parent: storageAccount
   properties: {
@@ -89,6 +92,39 @@ resource storageAccountProperties 'Microsoft.Storage/storageAccounts/blobService
             '*'
           ]
           maxAgeInSeconds: 0
+        }
+      ]
+    }
+  }
+}
+
+resource deleteUserManagementPolicy 'Microsoft.Storage/storageAccounts/managementPolicies@2022-05-01' = if (enableUserDeleteLifeCycle) {
+  name: 'default'
+  parent: storageAccount
+  properties: {
+    policy: {
+      rules: [
+        {
+          enabled: true
+          name: 'deleteUserAssetRule'
+          type: 'Lifecycle'
+          definition: {
+            actions: {
+              baseBlob: {
+                delete: {
+                  daysAfterCreationGreaterThan: 28
+                }
+              }
+            }
+            filters: {
+              blobTypes: [
+                'blockBlob'
+              ]
+              prefixMatch: [
+                'user-'
+              ]
+            }
+          }
         }
       ]
     }
