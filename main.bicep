@@ -19,12 +19,6 @@ param location string = 'West Europe'
 @description('Name that will be used to build associated artifacts')
 param resourceName string = 'musicvideobuilder'
 
-@description('Job name for batch job')
-param jobName string
-
-@description('Pool name for batch job')
-param poolName string
-
 @description('Storage Account type')
 @allowed([
   'Premium_LRS'
@@ -222,8 +216,7 @@ module batchService 'batchService.bicep' = {
     resourceName: batchServiceName
     location: location
     storageAccountId: storagePrivate.outputs.id
-    poolName: poolName
-    jobName: jobName
+    poolName: 'builderPoolF8SV2'
   }
 }
 

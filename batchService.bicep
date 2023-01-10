@@ -10,9 +10,6 @@ param storageAccountId string
 @description('Pool name')
 param poolName string
 
-@description('Job name')
-param jobName string
-
 var keyvaultName = resourceName
 
 resource batchService 'Microsoft.Batch/batchAccounts@2022-10-01' = {
@@ -95,9 +92,9 @@ resource secret3 'Microsoft.KeyVault/vaults/secrets@2021-06-01-preview' = {
 }
 
 resource secret4 'Microsoft.KeyVault/vaults/secrets@2021-06-01-preview' = {
-  name: 'JobName'
+  name: 'PoolName'
   parent: keyvault
   properties: {
-    value: jobName
+    value: poolName
   }
 }
