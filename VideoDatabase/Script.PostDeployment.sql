@@ -25,8 +25,9 @@ END
 
 IF NOT EXISTS(SELECT 1 FROM [dbo].[UserLayerStatus])
 BEGIN
-    INSERT INTO [dbo].[UserLayerStatus] ([UserLayerStatusId], [UserLayerStatusName]) VALUES (1, 'Bought') 
-    INSERT INTO [dbo].[UserLayerStatus] ([UserLayerStatusId], [UserLayerStatusName]) VALUES (2, 'Saved') 
+    INSERT INTO [dbo].[UserLayerStatus] ([UserLayerStatusId], [UserLayerStatusName]) VALUES (1, 'Saved')
+    INSERT INTO [dbo].[UserLayerStatus] ([UserLayerStatusId], [UserLayerStatusName]) VALUES (2, 'BoughtHd') 
+    INSERT INTO [dbo].[UserLayerStatus] ([UserLayerStatusId], [UserLayerStatusName]) VALUES (3, 'Bought4k') 
 END
 
 IF NOT EXISTS (SELECT [name] FROM sys.database_principals WHERE [name] = 'MusicVideoBuilderApplication')
