@@ -6,7 +6,7 @@ param location string
 
 var appInsightName = resourceName
 var logAnalyticsName = resourceName
-var keyvaultName = resourceName
+var actionGroupName = resourceName
 
 resource appInsights 'Microsoft.Insights/components@2020-02-02' = {
   name: appInsightName
@@ -32,4 +32,19 @@ resource logAnalyticsWorkspace 'Microsoft.OperationalInsights/workspaces@2020-08
   }
 }
 
+resource actionGroup 'Microsoft.Insights/actionGroups@2022-06-01' = {
+  name: actionGroupName
+  location: 'Global'
+  properties:{
+    groupShortName: 'emailme'
+    enabled:true
+    emailReceivers:[{
+      emailAddress: 'seankennettwork@gmail.com'
+      name: 'emailme'
+      useCommonAlertSchema: false
+    }]
+  }
+}
+
 output appInsightsConnectionString string = appInsights.properties.ConnectionString
+output actionGroupId string = actionGroup.id

@@ -35,6 +35,7 @@ param storageAccountType string = 'Standard_LRS'
 var keyvaultName = resourceName
 var staticSiteName = resourceName
 var batchServiceName = resourceName
+var actionGroupName = resourceName
 var storageAccountNamePublic = '${resourceName}public'
 var storageAccountNamePrivate = '${resourceName}private'
 var publicStorageSecretName = 'PublicStorageConnectionString'
@@ -217,6 +218,7 @@ module batchService 'batchService.bicep' = {
     location: location
     storageAccountId: storagePrivate.outputs.id
     poolName: 'builderPoolF8SV2'
+    actionGroupId: appInsights.outputs.actionGroupId
   }
 }
 

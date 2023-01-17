@@ -10,6 +10,9 @@ param storageAccountId string
 @description('Pool name')
 param poolName string
 
+@description('action group id')
+param actionGroupId string
+
 var keyvaultName = resourceName
 
 resource batchService 'Microsoft.Batch/batchAccounts@2022-10-01' = {
@@ -22,6 +25,37 @@ resource batchService 'Microsoft.Batch/batchAccounts@2022-10-01' = {
     }
     poolAllocationMode: 'BatchService'
     publicNetworkAccess: 'Enabled'
+  }
+}
+
+var taskFailEvent = 'TaskFailEvent'
+resource metricAlert 'Microsoft.Insights/metricAlerts@2018-03-01' = {
+  name: taskFailEvent
+  location: 'global'
+  properties:{
+    criteria:{
+      'odata.type':'Microsoft.Azure.Monitor.SingleResourceMultipleMetricCriteria'
+      allOf:[{
+        threshold: 0
+        criterionType:'StaticThresholdCriterion'
+        metricName:taskFailEvent
+        name:taskFailEvent
+        operator:'GreaterThan'
+        timeAggregation:'Total'
+        metricNamespace:batchService.type        
+      }]
+    }
+    enabled:true
+    evaluationFrequency:'PT1M'
+    scopes:[
+      batchService.id
+    ]
+    severity:0
+    windowSize:'PT15M'
+    actions:[{
+      actionGroupId:actionGroupId
+    }]
+    description:'Alert for failing tasks. Means paying customer is not getting their video.'
   }
 }
 
