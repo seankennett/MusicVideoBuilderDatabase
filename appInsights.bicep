@@ -46,5 +46,40 @@ resource actionGroup 'Microsoft.Insights/actionGroups@2022-06-01' = {
   }
 }
 
+var builderFunctionOrchastratorFail = 'BuilderFunctionOrchastratorFail'
+resource metricAlert 'Microsoft.Insights/scheduledQueryRules@2022-06-15' = {
+  name: builderFunctionOrchastratorFail
+  location: location
+  properties:{
+    displayName: builderFunctionOrchastratorFail
+    severity:0
+    enabled:true
+    evaluationFrequency:'PT15M'
+    scopes:[
+      appInsights.id
+    ]
+    windowSize:'PT15M'
+    criteria:{
+      allOf:[{
+        query: 'requests\n| where timestamp > ago(15m)\n| where name=="MusicVideoBuilderOrchastrator"\n| where cloud_RoleName == "builderfunction"\n| where success == false\n| sort by timestamp desc'
+        timeAggregation:'Total'
+        metricMeasureColumn:'itemCount'
+        operator:'GreaterThan'
+        threshold:0
+        failingPeriods:{
+          minFailingPeriodsToAlert: 1
+          numberOfEvaluationPeriods: 1
+        }
+      }]
+    }
+    actions:{
+      actionGroups:[
+        actionGroup.id
+      ]
+    }
+    description:'Alert for failing tasks. Means paying customer is not getting their video.'
+  }
+}
+
 output appInsightsConnectionString string = appInsights.properties.ConnectionString
 output actionGroupId string = actionGroup.id
