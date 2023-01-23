@@ -44,9 +44,9 @@ var imageProcessFunctionAppName = 'imageprocessfunction'
 var imageUploaderConnectionSecretName = 'ImageUploaderConnectionString'
 var videoNotifyFunctionAppName = 'videonotifyfunction'
 var videoNotifyConnectionSecretName = 'VideoNotifyConnectionString'
-var builderFunctionAppName = 'builderfunction'
+var builderFunctionAppName = 'freebuilderfunction'
 var builderConnectionSecretName = 'BuilderConnectionString'
-var builderHdFunctionAppName = 'builderfunction'
+var builderHdFunctionAppName = 'hdbuilderfunction'
 var builderHdConnectionSecretName = 'BuilderHdConnectionString'
 
 var freeBuilderQueue = 'free-builder'
@@ -173,9 +173,9 @@ module storageHdBuilder 'storageAccount.bicep' = {
   name: 'deployStorageHdBuilder'
   params: {
     location: location
-    storageAccountName: builderFunctionAppName
+    storageAccountName: builderHdFunctionAppName
     storageAccountType: storageAccountType
-    secretName: builderConnectionSecretName
+    secretName: builderHdConnectionSecretName
     keyvaultName: keyvaultName
   }
 }
