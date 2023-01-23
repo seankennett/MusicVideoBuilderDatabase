@@ -52,6 +52,9 @@ var builderHdConnectionSecretName = 'BuilderHdConnectionString'
 var freeBuilderQueue = 'free-builder'
 var hdBuilderQueue = 'hd-builder'
 
+var freeResolution = 'free'
+var hdResolution = 'hd'
+
 module appInsights 'appInsights.bicep' = {
   name: 'deployAppInsights'
   params: {
@@ -130,6 +133,10 @@ module freeBuilderFunction 'function.bicep' = {
         name: 'QueueName'
         value: freeBuilderQueue
       }
+      {
+        name: 'Resolution'
+        value: freeResolution
+      }
     ]
   }
   dependsOn: [
@@ -161,6 +168,10 @@ module HdBuilderFunction 'function.bicep' = {
       {
         name: 'QueueName'
         value: hdBuilderQueue
+      }
+      {
+        name: 'Resolution'
+        value: hdResolution
       }
     ]
   }
