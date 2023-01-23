@@ -35,7 +35,6 @@ param storageAccountType string = 'Standard_LRS'
 var keyvaultName = resourceName
 var staticSiteName = resourceName
 var batchServiceName = resourceName
-var actionGroupName = resourceName
 var storageAccountNamePublic = '${resourceName}public'
 var storageAccountNamePrivate = '${resourceName}private'
 var publicStorageSecretName = 'PublicStorageConnectionString'
@@ -47,6 +46,11 @@ var videoNotifyFunctionAppName = 'videonotifyfunction'
 var videoNotifyConnectionSecretName = 'VideoNotifyConnectionString'
 var builderFunctionAppName = 'builderfunction'
 var builderConnectionSecretName = 'BuilderConnectionString'
+var builderHdFunctionAppName = 'builderfunction'
+var builderHdConnectionSecretName = 'BuilderHdConnectionString'
+
+var freeBuilderQueue = 'free-builder'
+var hdBuilderQueue = 'hd-builder'
 
 module appInsights 'appInsights.bicep' = {
   name: 'deployAppInsights'
@@ -108,8 +112,8 @@ module storageVideoNotify 'storageAccount.bicep' = {
   }
 }
 
-module musicVideoBuilderFunction 'function.bicep' = {
-  name: 'deployMusicVideoBuilderFunction'
+module freeBuilderFunction 'function.bicep' = {
+  name: 'deployFreeBuilderFunction'
   params: {
     location: location
     keyvaultName: keyvaultName
@@ -122,15 +126,51 @@ module musicVideoBuilderFunction 'function.bicep' = {
         name: 'ContentDeliveryNetworkBaseUrl'
         value: 'https://cdn.musicvideobuilder.com'
       }
+      {
+        name: 'QueueName'
+        value: freeBuilderQueue
+      }
     ]
   }
   dependsOn: [
-    storageMusicVideoBuilder
+    storageFreeBuilder
   ]
 }
 
-module storageMusicVideoBuilder 'storageAccount.bicep' = {
-  name: 'deployStorageMusicVideoBuilder'
+module storageFreeBuilder 'storageAccount.bicep' = {
+  name: 'deployStorageFreeBuilder'
+  params: {
+    location: location
+    storageAccountName: builderFunctionAppName
+    storageAccountType: storageAccountType
+    secretName: builderConnectionSecretName
+    keyvaultName: keyvaultName
+  }
+}
+
+module HdBuilderFunction 'function.bicep' = {
+  name: 'deployHdBuilderFunction'
+  params: {
+    location: location
+    keyvaultName: keyvaultName
+    triggerConnectionString: keyvault.getSecret(privateStorageSecretName)
+    storageConnectionString: keyvault.getSecret(builderHdConnectionSecretName)
+    appInsightsConnectionString: appInsights.outputs.appInsightsConnectionString
+    functionAppName: builderHdFunctionAppName
+    additionalAppSettings: [
+      {
+        name: 'QueueName'
+        value: hdBuilderQueue
+      }
+    ]
+  }
+  dependsOn: [
+    storageHdBuilder
+  ]
+}
+
+module storageHdBuilder 'storageAccount.bicep' = {
+  name: 'deployStorageHdBuilder'
   params: {
     location: location
     storageAccountName: builderFunctionAppName
@@ -196,7 +236,8 @@ module storagePrivate 'storageAccount.bicep' = {
     keyvaultName: keyvaultName
     queues: [
       'image-process'
-      'music-video-builder'
+      freeBuilderQueue
+      hdBuilderQueue
     ]
     enableCors: true
     enableUserDeleteLifeCycle: true
