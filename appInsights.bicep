@@ -61,7 +61,7 @@ resource metricAlert 'Microsoft.Insights/scheduledQueryRules@2022-06-15' = {
     windowSize:'PT15M'
     criteria:{
       allOf:[{
-        query: 'requests\n| where timestamp > ago(15m)\n| where name=="MusicVideoBuilderOrchastrator"\n| where success == false\n| sort by timestamp desc'
+        query: 'requests\n| where timestamp > ago(15m)\n| where name=="BuilderOrchastrator"\n| where success == false\n| sort by timestamp desc'
         timeAggregation:'Total'
         metricMeasureColumn:'itemCount'
         operator:'GreaterThan'
