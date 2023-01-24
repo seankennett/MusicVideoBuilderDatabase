@@ -137,6 +137,10 @@ module freeBuilderFunction 'function.bicep' = {
         name: 'Resolution'
         value: freeResolution
       }
+      {
+        name: 'AzureFunctionsJobHost__extensions__durableTask__maxConcurrentActivityFunctions'
+        value: 4
+      }
     ]
   }
   dependsOn: [
@@ -172,6 +176,10 @@ module HdBuilderFunction 'function.bicep' = {
       {
         name: 'Resolution'
         value: hdResolution
+      }
+      {
+        name: 'AzureFunctionsJobHost__extensions__durableTask__maxConcurrentActivityFunctions'
+        value: 1
       }
     ]
   }
