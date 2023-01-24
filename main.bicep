@@ -126,10 +126,6 @@ module freeBuilderFunction 'function.bicep' = {
     functionAppName: builderFunctionAppName
     additionalAppSettings: [
       {
-        name: 'ContentDeliveryNetworkBaseUrl'
-        value: 'https://cdn.musicvideobuilder.com'
-      }
-      {
         name: 'QueueName'
         value: freeBuilderQueue
       }
