@@ -124,6 +124,7 @@ module freeBuilderFunction 'function.bicep' = {
     storageConnectionString: keyvault.getSecret(builderConnectionSecretName)
     appInsightsConnectionString: appInsights.outputs.appInsightsConnectionString
     functionAppName: builderFunctionAppName
+    runFromPackage: false
     additionalAppSettings: [
       {
         name: 'QueueName'
@@ -164,6 +165,7 @@ module HdBuilderFunction 'function.bicep' = {
     storageConnectionString: keyvault.getSecret(builderHdConnectionSecretName)
     appInsightsConnectionString: appInsights.outputs.appInsightsConnectionString
     functionAppName: builderHdFunctionAppName
+    runFromPackage: false
     additionalAppSettings: [
       {
         name: 'QueueName'

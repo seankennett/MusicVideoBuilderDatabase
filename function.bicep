@@ -15,6 +15,9 @@ param storageConnectionString string
 @secure()
 param triggerConnectionString string = ''
 
+@description('Run from package')
+param runFromPackage bool = true
+
 @description('Function App name')
 param functionAppName string
 
@@ -41,11 +44,7 @@ var baseAppsettings = union([
     {
       name: 'FUNCTIONS_EXTENSION_VERSION'
       value: '~4'
-    }
-    {
-      name: 'WEBSITE_RUN_FROM_PACKAGE'
-      value: '1'
-    }
+    }    
     {
       name: 'WEBSITE_ENABLE_SYNC_UPDATE_SITE'
       value: 'true'
@@ -72,12 +71,20 @@ var baseAppsettings = union([
     }
   ], additionalAppSettings)
 
+var runFromPackageSetting = [
+  {
+    name: 'WEBSITE_RUN_FROM_PACKAGE'
+    value: '1'
+  }
+]
+
 var triggerConnectionSetting = [ {
     name: 'ConnectionString'
     value: triggerConnectionString
   } ]
 
-var allAppSettings = triggerConnectionString == '' ? baseAppsettings : union(baseAppsettings, triggerConnectionSetting)
+var triggerAndBaseSettings = triggerConnectionString == '' ? baseAppsettings : union(baseAppsettings, triggerConnectionSetting)
+var allAppSettings = runFromPackage ? union(triggerAndBaseSettings, runFromPackageSetting) : triggerAndBaseSettings
 
 resource functionApp 'Microsoft.Web/sites@2021-03-01' = {
   name: functionAppName
