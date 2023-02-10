@@ -11,8 +11,8 @@ param storageAccountId string
 param actionGroupId string
 
 var keyvaultName = resourceName
-var poolName = 'builderPoolA8V2'
-var vmSize = 'STANDARD_A8_V2'
+var poolName = 'builderPoolD8ASV2'
+var vmSize = 'STANDARD_D8AS_V4'
 
 resource batchService 'Microsoft.Batch/batchAccounts@2022-10-01' = {
   name: resourceName
