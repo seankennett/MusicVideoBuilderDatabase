@@ -7,13 +7,12 @@ param location string
 @description('Storage account id')
 param storageAccountId string
 
-@description('Pool name')
-param poolName string
-
 @description('action group id')
 param actionGroupId string
 
 var keyvaultName = resourceName
+var poolName = 'builderPoolA8V2'
+var vmSize = 'STANDARD_A8_V2'
 
 resource batchService 'Microsoft.Batch/batchAccounts@2022-10-01' = {
   name: resourceName
@@ -63,7 +62,7 @@ resource batchPool 'Microsoft.Batch/batchAccounts/pools@2022-10-01' = {
   name: poolName
   parent: batchService
   properties: {
-    vmSize: 'STANDARD_F8S_V2'
+    vmSize: vmSize
     interNodeCommunication: 'Disabled'
     deploymentConfiguration: {
       virtualMachineConfiguration: {

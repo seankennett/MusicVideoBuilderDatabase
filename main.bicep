@@ -275,7 +275,6 @@ module batchService 'batchService.bicep' = {
     resourceName: batchServiceName
     location: location
     storageAccountId: storagePrivate.outputs.id
-    poolName: 'builderPoolF8SV2'
     actionGroupId: appInsights.outputs.actionGroupId
   }
 }
