@@ -11,8 +11,8 @@ param storageAccountId string
 param actionGroupId string
 
 var keyvaultName = resourceName
-var poolName = 'builderPoolD8ADSV5'
-var vmSize = 'STANDARD_D8ADS_V5'
+var poolName = 'builderPoolD2ADSV5'
+var vmSize = 'STANDARD_D2ADS_V5'
 
 resource batchService 'Microsoft.Batch/batchAccounts@2022-10-01' = {
   name: resourceName
@@ -77,7 +77,7 @@ resource batchPool 'Microsoft.Batch/batchAccounts/pools@2022-10-01' = {
     }
     scaleSettings: {
       autoScale: {
-        formula: 'maxNumberofVMs = 1;pendingTaskSamplePercent = $PendingTasks.GetSamplePercent(1 * TimeInterval_Minute);pendingTaskSamples = pendingTaskSamplePercent < 50 ? $CurrentLowPriorityNodes : min($PendingTasks.GetSample(1 * TimeInterval_Minute));$TargetLowPriorityNodes=min(maxNumberofVMs, pendingTaskSamples);$NodeDeallocationOption = taskcompletion;'
+        formula: 'maxNumberofVMs = 4;pendingTaskSamplePercent = $PendingTasks.GetSamplePercent(1 * TimeInterval_Minute);pendingTaskSamples = pendingTaskSamplePercent < 50 ? $CurrentLowPriorityNodes : min($PendingTasks.GetSample(1 * TimeInterval_Minute));$TargetLowPriorityNodes=min(maxNumberofVMs, pendingTaskSamples);$NodeDeallocationOption = taskcompletion;'
         evaluationInterval: 'PT5M'
       }
     }
