@@ -77,7 +77,7 @@ resource batchPool 'Microsoft.Batch/batchAccounts/pools@2022-10-01' = {
     }
     scaleSettings: {
       autoScale: {
-        formula: 'maxNumberofVMs = 4;pendingTaskSamplePercent = $PendingTasks.GetSamplePercent(1 * TimeInterval_Minute);pendingTaskSamples = pendingTaskSamplePercent < 50 ? $CurrentLowPriorityNodes : min($PendingTasks.GetSample(1 * TimeInterval_Minute));$TargetLowPriorityNodes=min(maxNumberofVMs, pendingTaskSamples);$NodeDeallocationOption = taskcompletion;'
+        formula: 'maxNumberofVMs = 5;pendingTaskMinimum = min($PendingTasks.GetSample(1 * TimeInterval_Minute, 49));numberofVms = round(pendingTaskMinimum / 4);$TargetLowPriorityNodes=min(maxNumberofVMs, numberofVms);$NodeDeallocationOption = taskcompletion;'
         evaluationInterval: 'PT5M'
       }
     }
