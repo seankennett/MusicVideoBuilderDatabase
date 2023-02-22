@@ -1,0 +1,5 @@
+﻿CREATE TYPE [dbo].[GuidOrderType] AS TABLE
+(
+	[ForeignId] UNIQUEIDENTIFIER NOT NULL,
+	[Order] SMALLINT NOT NULL
+)

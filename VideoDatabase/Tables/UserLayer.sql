@@ -3,10 +3,10 @@
 	[UserLayerId] INT IDENTITY NOT NULL PRIMARY KEY,
 	[UserObjectId] UNIQUEIDENTIFIER NOT NULL,
 	[LayerId] UNIQUEIDENTIFIER NOT NULL,
-	[UserLayerStatusId] TINYINT NOT NULL,
+	[ResolutionId] TINYINT NOT NULL,
+	[LicenseId] TINYINT NOT NULL,
 	[DateCreated] DATETIME2 NOT NULL,
 	[DateUpdated] DATETIME2 NOT NULL,
-	CONSTRAINT FK_UserLayer_Layer FOREIGN KEY ([LayerId]) REFERENCES [dbo].[Layer]([LayerId]),
-	CONSTRAINT FK_UserLayer_UserLayerStatus FOREIGN KEY ([UserLayerStatusId]) REFERENCES [dbo].[UserLayerStatus]([UserLayerStatusId]),
-	CONSTRAINT UQ_UserLayer_UserId_LayerId UNIQUE ([UserObjectId], [LayerId])
+	CONSTRAINT FK_UserLayer_Resolution FOREIGN KEY ([ResolutionId]) REFERENCES [dbo].[Resolution]([ResolutionId]),
+	CONSTRAINT FK_UserLayer_License FOREIGN KEY ([LicenseId]) REFERENCES [dbo].[License]([LicenseId])
 )

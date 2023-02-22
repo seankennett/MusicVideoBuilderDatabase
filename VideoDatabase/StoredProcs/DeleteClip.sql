@@ -4,7 +4,7 @@ AS
 BEGIN TRY
     BEGIN TRANSACTION
 
-	DELETE FROM ClipUserLayers WHERE ClipId = @ClipId
+	DELETE FROM ClipLayers WHERE ClipId = @ClipId
 
     DELETE FROM Clip WHERE ClipId = @ClipId
 

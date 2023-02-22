@@ -23,11 +23,26 @@ BEGIN
     INSERT INTO [dbo].[LayerType] ([LayerTypeId], [LayerTypeName]) VALUES (2, 'Foreground') 
 END
 
-IF NOT EXISTS(SELECT 1 FROM [dbo].[UserLayerStatus])
+IF NOT EXISTS(SELECT 1 FROM [dbo].[BuildStatus])
 BEGIN
-    INSERT INTO [dbo].[UserLayerStatus] ([UserLayerStatusId], [UserLayerStatusName]) VALUES (1, 'Saved')
-    INSERT INTO [dbo].[UserLayerStatus] ([UserLayerStatusId], [UserLayerStatusName]) VALUES (2, 'BoughtHd') 
-    INSERT INTO [dbo].[UserLayerStatus] ([UserLayerStatusId], [UserLayerStatusName]) VALUES (3, 'Bought4k') 
+    INSERT INTO [dbo].[BuildStatus] ([BuildStatusId], [BuildStatusName]) VALUES (1, 'HoldPending')
+    INSERT INTO [dbo].[BuildStatus] ([BuildStatusId], [BuildStatusName]) VALUES (2, 'Building') 
+    INSERT INTO [dbo].[BuildStatus] ([BuildStatusId], [BuildStatusName]) VALUES (3, 'ChargePending')
+    INSERT INTO [dbo].[BuildStatus] ([BuildStatusId], [BuildStatusName]) VALUES (4, 'Complete') 
+END
+
+IF NOT EXISTS(SELECT 1 FROM [dbo].[Resolution])
+BEGIN
+    INSERT INTO [dbo].[Resolution] ([ResolutionId], [ResolutionName]) VALUES (1, 'Free')
+    INSERT INTO [dbo].[Resolution] ([ResolutionId], [ResolutionName]) VALUES (2, 'HD') 
+    INSERT INTO [dbo].[Resolution] ([ResolutionId], [ResolutionName]) VALUES (3, '4K')
+END
+
+IF NOT EXISTS(SELECT 1 FROM [dbo].[License])
+BEGIN
+    INSERT INTO [dbo].[License] ([LicenseId], [LicenseName]) VALUES (1, 'Personal')
+    INSERT INTO [dbo].[License] ([LicenseId], [LicenseName]) VALUES (2, 'Standard') 
+    INSERT INTO [dbo].[License] ([LicenseId], [LicenseName]) VALUES (3, 'Enhanced')
 END
 
 IF NOT EXISTS (SELECT [name] FROM sys.database_principals WHERE [name] = 'MusicVideoBuilderApplication')

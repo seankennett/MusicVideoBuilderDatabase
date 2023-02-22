@@ -83,8 +83,11 @@
     <Build Include="StoredProcs\DeleteClip.sql" />
     <Build Include="StoredProcs\DeleteUserLayer.sql" />
     <Build Include="StoredProcs\GetUserLayer.sql" />
-    <Build Include="StoredProcs\UpdateVideoIsBuilding.sql" />
     <Build Include="StoredProcs\UpdateUserLayer.sql" />
+    <Build Include="Tables\Resolution.sql" />
+    <Build Include="Tables\License.sql" />
+    <Build Include="Tables\Build.sql" />
+    <Build Include="Types\GuidOrderType.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="VideoDatabase.refactorlog" />
@@ -97,8 +100,8 @@
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\UserLayer.sql" />
-    <Build Include="Tables\ClipUserLayers.sql" />
-    <Build Include="Tables\UserLayerStatus.sql" />
+    <Build Include="Tables\ClipLayers.sql" />
+    <Build Include="Tables\BuildStatus.sql" />
     <Build Include="Tables\Video.sql" />
   </ItemGroup>
   <ItemGroup>

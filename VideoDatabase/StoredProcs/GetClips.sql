@@ -6,7 +6,7 @@ AS
 SELECT ClipId, ClipName, DateUpdated, BackgroundColour, BeatLength, StartingBeat  FROM [Clip] 
 WHERE UserObjectId = @userObjectId
 
-SELECT cu.ClipId, cu.UserLayerId, cu.[Order], u.LayerId, l.LayerName, u.UserLayerStatusId FROM [dbo].[ClipUserLayers] cu
-JOIN [dbo].[UserLayer] u ON cu.UserLayerId = u.UserLayerId
-JOIN [dbo].[Layer] l ON u.LayerId = l.LayerId
-WHERE u.UserObjectId = @userObjectId
+SELECT cu.ClipId, cu.LayerId, cu.[Order], l.LayerName FROM [dbo].[ClipLayers] cu
+JOIN [dbo].[Layer] l ON cu.LayerId = l.LayerId
+JOIN [dbo].[Clip] c ON c.ClipId = cu.ClipId
+WHERE c.UserObjectId = @userObjectId
