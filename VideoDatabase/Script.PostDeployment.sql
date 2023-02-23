@@ -25,10 +25,11 @@ END
 
 IF NOT EXISTS(SELECT 1 FROM [dbo].[BuildStatus])
 BEGIN
-    INSERT INTO [dbo].[BuildStatus] ([BuildStatusId], [BuildStatusName]) VALUES (1, 'HoldPending')
-    INSERT INTO [dbo].[BuildStatus] ([BuildStatusId], [BuildStatusName]) VALUES (2, 'Building') 
-    INSERT INTO [dbo].[BuildStatus] ([BuildStatusId], [BuildStatusName]) VALUES (3, 'ChargePending')
+    INSERT INTO [dbo].[BuildStatus] ([BuildStatusId], [BuildStatusName]) VALUES (1, 'PaymentAuthorisationPending')
+    INSERT INTO [dbo].[BuildStatus] ([BuildStatusId], [BuildStatusName]) VALUES (2, 'BuildingPending') 
+    INSERT INTO [dbo].[BuildStatus] ([BuildStatusId], [BuildStatusName]) VALUES (3, 'PaymentChargePending')
     INSERT INTO [dbo].[BuildStatus] ([BuildStatusId], [BuildStatusName]) VALUES (4, 'Complete') 
+    INSERT INTO [dbo].[BuildStatus] ([BuildStatusId], [BuildStatusName]) VALUES (5, 'Failed') 
 END
 
 IF NOT EXISTS(SELECT 1 FROM [dbo].[Resolution])

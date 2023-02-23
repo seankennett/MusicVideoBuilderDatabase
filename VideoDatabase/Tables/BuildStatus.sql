@@ -1,5 +1,5 @@
 ﻿CREATE TABLE [dbo].[BuildStatus]
 (
 	[BuildStatusId] TINYINT NOT NULL PRIMARY KEY,
-	[BuildStatusName] VARCHAR(20) NOT NULL
+	[BuildStatusName] VARCHAR(30) NOT NULL
 )
