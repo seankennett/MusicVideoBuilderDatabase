@@ -89,6 +89,7 @@
     <Build Include="Tables\Build.sql" />
     <Build Include="Types\GuidOrderType.sql" />
     <Build Include="StoredProcs\GetBuilds.sql" />
+    <Build Include="StoredProcs\UpsertBuild.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="VideoDatabase.refactorlog" />

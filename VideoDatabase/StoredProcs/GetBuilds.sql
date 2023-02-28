@@ -3,4 +3,4 @@
 )
 AS
 
-SELECT BuildId, BuildStatusId, LicenseId, ResolutionId, VideoId  FROM [dbo].[Build] WHERE UserObjectId = @userObjectId
+SELECT BuildId, BuildStatusId, LicenseId, ResolutionId, VideoId, PaymentIntentId, HasAudio, DateUpdated  FROM [dbo].[Build] WHERE UserObjectId = @userObjectId
