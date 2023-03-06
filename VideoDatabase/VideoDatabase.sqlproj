@@ -90,6 +90,7 @@
     <Build Include="Types\GuidOrderType.sql" />
     <Build Include="StoredProcs\GetBuilds.sql" />
     <Build Include="StoredProcs\UpsertBuild.sql" />
+    <Build Include="StoredProcs\GetUserBuildByPaymentIntentId.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="VideoDatabase.refactorlog" />
