@@ -5,13 +5,13 @@ param webAppSkuName string = 'F1'
 param webAppSkuCapacity int = 1
 
 @description('Database sku')
-param databaseSku string = 'Standard'
+param databaseSku string = 'Basic'
 
 @description('Database Tier')
-param databaseTier string = 'Standard'
+param databaseTier string = 'Basic'
 
 @description('Database DTU capacity')
-param databaseCapacity int = 10
+param databaseCapacity int = 5
 
 @description('Location for all resources.')
 param location string = 'West Europe'
