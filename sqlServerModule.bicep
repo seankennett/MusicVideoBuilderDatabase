@@ -19,6 +19,9 @@ param databaseTier string
 @description('Database DTU capacity')
 param databaseCapacity int
 
+@description('Database storage size in bytes')
+param databaseMaxSizeBytes int
+
 @description('Location for all resources.')
 param location string
 
@@ -48,7 +51,7 @@ resource sqlserver 'Microsoft.Sql/servers@2020-11-01-preview' = {
     }
     properties: {
       collation: 'SQL_Latin1_General_CP1_CI_AS'
-      maxSizeBytes: 268435456000
+      maxSizeBytes: databaseMaxSizeBytes
     }
   }
 

@@ -13,6 +13,9 @@ param databaseTier string = 'Basic'
 @description('Database DTU capacity')
 param databaseCapacity int = 5
 
+@description('Database DTU capacity')
+param databaseMaxSizeBytes int = 2147483648
+
 @description('Location for all resources.')
 param location string = 'West Europe'
 
@@ -156,7 +159,7 @@ module storageFreeBuilder 'storageAccount.bicep' = {
   }
 }
 
-module HdBuilderFunction 'function.bicep' = {
+module hdBuilderFunction 'function.bicep' = {
   name: 'deployHdBuilderFunction'
   params: {
     location: location
@@ -225,6 +228,7 @@ module sql 'sqlServerModule.bicep' = {
     databaseCapacity: databaseCapacity
     databaseSku: databaseSku
     databaseTier: databaseTier
+    databaseMaxSizeBytes: databaseMaxSizeBytes
     location: location
     resourceName: resourceName
   }
