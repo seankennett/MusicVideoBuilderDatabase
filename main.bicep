@@ -40,10 +40,10 @@ var storageAccountNamePrivate = '${resourceName}private'
 var publicStorageSecretName = 'PublicStorageConnectionString'
 var privateStorageSecretName = 'PrivateStorageConnectionString'
 var eventGridName = storageAccountNamePrivate
-var imageProcessFunctionAppName = 'imageprocessfunction'
-var imageUploaderConnectionSecretName = 'ImageUploaderConnectionString'
-var videoNotifyFunctionAppName = 'videonotifyfunction'
-var videoNotifyConnectionSecretName = 'VideoNotifyConnectionString'
+var uploadLayerFunctionAppName = 'uploadlayerfunction'
+var uploadLayerConnectionSecretName = 'UploadLayerConnectionString'
+var newVideoFunctionAppName = 'newvideofunction'
+var newVideoConnectionSecretName = 'NewVideoConnectionString'
 var builderFunctionAppName = 'freebuilderfunction'
 var builderConnectionSecretName = 'BuilderConnectionString'
 var builderHdFunctionAppName = 'hdbuilderfunction'
@@ -63,54 +63,54 @@ module appInsights 'appInsights.bicep' = {
   }
 }
 
-module imageUploaderFunction 'function.bicep' = {
-  name: 'deployImageUploaderFunction'
+module uploadLayerFunction 'function.bicep' = {
+  name: 'deployUploadLayerFunction'
   params: {
     location: location
     keyvaultName: keyvaultName
     appInsightsConnectionString: appInsights.outputs.appInsightsConnectionString
-    storageConnectionString: keyvault.getSecret(imageUploaderConnectionSecretName)
+    storageConnectionString: keyvault.getSecret(uploadLayerConnectionSecretName)
     triggerConnectionString: keyvault.getSecret(privateStorageSecretName)
-    functionAppName: imageProcessFunctionAppName
+    functionAppName: uploadLayerFunctionAppName
   }
   dependsOn: [
     storagePrivate
-    storageImageUploader
+    storageUploadLayer
   ]
 }
 
-module storageImageUploader 'storageAccount.bicep' = {
-  name: 'deployStorageImageUploader'
+module storageUploadLayer 'storageAccount.bicep' = {
+  name: 'deployStorageUploadLayer'
   params: {
     location: location
-    storageAccountName: imageProcessFunctionAppName
+    storageAccountName: uploadLayerFunctionAppName
     storageAccountType: storageAccountType
-    secretName: imageUploaderConnectionSecretName
+    secretName: uploadLayerConnectionSecretName
     keyvaultName: keyvaultName
   }
 }
 
-module videoNotifyFunction 'function.bicep' = {
-  name: 'deployVideoNotifyFunction'
+module newVideoFunction 'function.bicep' = {
+  name: 'deployNewVideoFunction'
   params: {
     location: location
     keyvaultName: keyvaultName
-    storageConnectionString: keyvault.getSecret(videoNotifyConnectionSecretName)
+    storageConnectionString: keyvault.getSecret(newVideoConnectionSecretName)
     appInsightsConnectionString: appInsights.outputs.appInsightsConnectionString
-    functionAppName: videoNotifyFunctionAppName
+    functionAppName: newVideoFunctionAppName
   }
   dependsOn: [
-    storageVideoNotify
+    storageNewVideo
   ]
 }
 
-module storageVideoNotify 'storageAccount.bicep' = {
-  name: 'deployStorageVideoNotify'
+module storageNewVideo 'storageAccount.bicep' = {
+  name: 'deployStorageNewVideo'
   params: {
     location: location
-    storageAccountName: videoNotifyFunctionAppName
+    storageAccountName: newVideoFunctionAppName
     storageAccountType: storageAccountType
-    secretName: videoNotifyConnectionSecretName
+    secretName: newVideoConnectionSecretName
     keyvaultName: keyvaultName
   }
 }
@@ -207,7 +207,7 @@ module webApi 'webApi.bicep' = {
     webAppSkuName: webAppSkuName
   }
   dependsOn: [
-    imageUploaderFunction
+    uploadLayerFunction
   ]
 }
 
@@ -279,7 +279,7 @@ module batchService 'batchService.bicep' = {
   }
 }
 
-var functionInsideNamespace = '${videoNotifyFunction.outputs.id}/functions/VideoNotifyFunction'
+var functionInsideNamespace = '${newVideoFunction.outputs.id}/functions/NewVideoFunction'
 module eventGrid 'eventGrid.bicep' = {
   name: 'deployEventGrid'
   params: {
