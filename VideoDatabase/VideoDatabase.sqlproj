@@ -71,7 +71,6 @@
     <Build Include="StoredProcs\GetTags.sql" />
     <Build Include="StoredProcs\GetLayerFinders.sql" />
     <Build Include="StoredProcs\GetUserLayers.sql" />
-    <Build Include="StoredProcs\InsertUserLayer.sql" />
     <Build Include="StoredProcs\UpsertClip.sql" />
     <Build Include="Types\IntOrderType.sql" />
     <Build Include="StoredProcs\GetClips.sql" />
@@ -82,8 +81,6 @@
     <Build Include="StoredProcs\DeleteVideo.sql" />
     <Build Include="StoredProcs\DeleteClip.sql" />
     <Build Include="StoredProcs\DeleteUserLayer.sql" />
-    <Build Include="StoredProcs\GetUserLayer.sql" />
-    <Build Include="StoredProcs\UpdateUserLayer.sql" />
     <Build Include="Tables\Resolution.sql" />
     <Build Include="Tables\License.sql" />
     <Build Include="Tables\Build.sql" />
@@ -91,6 +88,8 @@
     <Build Include="StoredProcs\GetBuilds.sql" />
     <Build Include="StoredProcs\UpsertBuild.sql" />
     <Build Include="StoredProcs\GetUserBuildByPaymentIntentId.sql" />
+    <Build Include="StoredProcs\GetUserBuild.sql" />
+    <Build Include="StoredProcs\InsertUserLayers.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="VideoDatabase.refactorlog" />
