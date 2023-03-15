@@ -51,9 +51,13 @@ var builderFunctionAppName = 'freebuilderfunction'
 var builderConnectionSecretName = 'BuilderConnectionString'
 var builderHdFunctionAppName = 'hdbuilderfunction'
 var builderHdConnectionSecretName = 'BuilderHdConnectionString'
+var buildInstructorFunctionAppName = 'buildinstructorfunction'
+var buildInstructorConnectionSecretName = 'BuildInstructorConnectionString'
 
 var freeBuilderQueue = 'free-builder'
 var hdBuilderQueue = 'hd-builder'
+var uploadLayerQueue = 'upload-layer'
+var buildInstructorQueue = 'build-instructor'
 
 var freeResolution = 'free'
 var hdResolution = 'hd'
@@ -200,6 +204,33 @@ module storageHdBuilder 'storageAccount.bicep' = {
   }
 }
 
+module buildInstructorFunction 'function.bicep' = {
+  name: 'deployBuildInstructorFunction'
+  params: {
+    location: location
+    keyvaultName: keyvaultName
+    appInsightsConnectionString: appInsights.outputs.appInsightsConnectionString
+    storageConnectionString: keyvault.getSecret(buildInstructorConnectionSecretName)
+    triggerConnectionString: keyvault.getSecret(privateStorageSecretName)
+    functionAppName: buildInstructorFunctionAppName
+  }
+  dependsOn: [
+    storagePrivate
+    storageBuildInstructor
+  ]
+}
+
+module storageBuildInstructor 'storageAccount.bicep' = {
+  name: 'deployStorageBuildInstructor'
+  params: {
+    location: location
+    storageAccountName: buildInstructorFunctionAppName
+    storageAccountType: storageAccountType
+    secretName: buildInstructorConnectionSecretName
+    keyvaultName: keyvaultName
+  }
+}
+
 module webApi 'webApi.bicep' = {
   name: 'deployWebApi'
   params: {
@@ -256,9 +287,10 @@ module storagePrivate 'storageAccount.bicep' = {
     secretName: privateStorageSecretName
     keyvaultName: keyvaultName
     queues: [
-      'image-process'
+      uploadLayerQueue
       freeBuilderQueue
       hdBuilderQueue
+      buildInstructorQueue
     ]
     enableCors: true
     enableUserDeleteLifeCycle: true
