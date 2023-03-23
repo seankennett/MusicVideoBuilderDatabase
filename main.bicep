@@ -39,7 +39,11 @@ var keyvaultName = resourceName
 var staticSiteName = resourceName
 var batchServiceName = resourceName
 var storageAccountNamePublic = '${resourceName}public'
+var PublicBlobStorageUrl = 'https://${storageAccountNamePublic}.blob.${environment().suffixes.storage}'
 var storageAccountNamePrivate = '${resourceName}private'
+var PrivateBlobStorageUrl = 'https://${storageAccountNamePrivate}.blob.${environment().suffixes.storage}'
+var PrivateQueueStorageUrl = 'https://${storageAccountNamePrivate}.queue.${environment().suffixes.storage}'
+
 var publicStorageSecretName = 'PublicStorageConnectionString'
 var privateStorageSecretName = 'PrivateStorageConnectionString'
 var eventGridName = storageAccountNamePrivate
@@ -62,6 +66,17 @@ var buildInstructorQueue = 'build-instructor'
 var freeResolution = 'free'
 var hdResolution = 'hd'
 
+var userIdentityName = resourceName
+
+module userIdentity 'userIdentity.bicep' = {
+  name: 'deployUserIdentity'
+  params: {
+    keyvaultName: keyvaultName
+    location: location
+    userIdentityName: userIdentityName
+  }
+}
+
 module appInsights 'appInsights.bicep' = {
   name: 'deployAppInsights'
   params: {
@@ -74,11 +89,23 @@ module uploadLayerFunction 'function.bicep' = {
   name: 'deployUploadLayerFunction'
   params: {
     location: location
-    keyvaultName: keyvaultName
     appInsightsConnectionString: appInsights.outputs.appInsightsConnectionString
-    storageConnectionString: keyvault.getSecret(uploadLayerConnectionSecretName)
-    triggerConnectionString: keyvault.getSecret(privateStorageSecretName)
+    storageAccountName: uploadLayerFunctionAppName
+    triggerStorageAccountName: storageAccountNamePrivate
+    storageSecretName: uploadLayerConnectionSecretName
     functionAppName: uploadLayerFunctionAppName
+    userIdentityId: userIdentity.outputs.id
+    keyvaultName: keyvaultName
+    additionalAppSettings:[
+      {
+        name: 'PrivateBlobStorageUrl'
+        value: PrivateBlobStorageUrl
+      }
+      {
+        name: 'PublicBlobStorageUrl'
+        value: PublicBlobStorageUrl
+      }
+    ]
   }
   dependsOn: [
     storagePrivate
@@ -101,10 +128,18 @@ module newVideoFunction 'function.bicep' = {
   name: 'deployNewVideoFunction'
   params: {
     location: location
-    keyvaultName: keyvaultName
-    storageConnectionString: keyvault.getSecret(newVideoConnectionSecretName)
+    storageAccountName: newVideoFunctionAppName
+    storageSecretName: newVideoConnectionSecretName
     appInsightsConnectionString: appInsights.outputs.appInsightsConnectionString
     functionAppName: newVideoFunctionAppName
+    userIdentityId: userIdentity.outputs.id
+    keyvaultName: keyvaultName
+    additionalAppSettings:[
+      {
+        name: 'PrivateBlobStorageUrl'
+        value: PrivateBlobStorageUrl
+      }
+    ]
   }
   dependsOn: [
     storageNewVideo
@@ -126,9 +161,9 @@ module freeBuilderFunction 'function.bicep' = {
   name: 'deployFreeBuilderFunction'
   params: {
     location: location
-    keyvaultName: keyvaultName
-    triggerConnectionString: keyvault.getSecret(privateStorageSecretName)
-    storageConnectionString: keyvault.getSecret(builderConnectionSecretName)
+    triggerStorageAccountName: storageAccountNamePrivate
+    storageAccountName: builderFunctionAppName
+    storageSecretName: builderConnectionSecretName
     appInsightsConnectionString: appInsights.outputs.appInsightsConnectionString
     functionAppName: builderFunctionAppName
     runFromPackage: false
@@ -142,10 +177,20 @@ module freeBuilderFunction 'function.bicep' = {
         value: freeResolution
       }
       {
+        name: 'PrivateBlobStorageUrl'
+        value: PrivateBlobStorageUrl
+      }
+      {
+        name: 'PublicBlobStorageUrl'
+        value: PublicBlobStorageUrl
+      }
+      {
         name: 'AzureFunctionsJobHost__extensions__durableTask__maxConcurrentActivityFunctions'
         value: 4
       }
     ]
+    keyvaultName: keyvaultName
+    userIdentityId: userIdentity.outputs.id
   }
   dependsOn: [
     storageFreeBuilder
@@ -167,9 +212,9 @@ module hdBuilderFunction 'function.bicep' = {
   name: 'deployHdBuilderFunction'
   params: {
     location: location
-    keyvaultName: keyvaultName
-    triggerConnectionString: keyvault.getSecret(privateStorageSecretName)
-    storageConnectionString: keyvault.getSecret(builderHdConnectionSecretName)
+    triggerStorageAccountName: storageAccountNamePrivate
+    storageAccountName: builderHdFunctionAppName
+    storageSecretName: builderHdConnectionSecretName
     appInsightsConnectionString: appInsights.outputs.appInsightsConnectionString
     functionAppName: builderHdFunctionAppName
     runFromPackage: false
@@ -183,10 +228,20 @@ module hdBuilderFunction 'function.bicep' = {
         value: hdResolution
       }
       {
+        name: 'PrivateBlobStorageUrl'
+        value: PrivateBlobStorageUrl
+      }
+      {
+        name: 'PublicBlobStorageUrl'
+        value: PublicBlobStorageUrl
+      }
+      {
         name: 'AzureFunctionsJobHost__extensions__durableTask__maxConcurrentActivityFunctions'
         value: 1
       }
     ]
+    keyvaultName: keyvaultName
+    userIdentityId: userIdentity.outputs.id
   }
   dependsOn: [
     storageHdBuilder
@@ -208,11 +263,23 @@ module buildInstructorFunction 'function.bicep' = {
   name: 'deployBuildInstructorFunction'
   params: {
     location: location
-    keyvaultName: keyvaultName
     appInsightsConnectionString: appInsights.outputs.appInsightsConnectionString
-    storageConnectionString: keyvault.getSecret(buildInstructorConnectionSecretName)
-    triggerConnectionString: keyvault.getSecret(privateStorageSecretName)
+    triggerStorageAccountName: storageAccountNamePrivate
+    storageAccountName: buildInstructorFunctionAppName
+    storageSecretName: buildInstructorConnectionSecretName
     functionAppName: buildInstructorFunctionAppName
+    userIdentityId: userIdentity.outputs.id
+    keyvaultName: keyvaultName
+    additionalAppSettings: [
+      {
+        name: 'PrivateBlobStorageUrl'
+        value: PrivateBlobStorageUrl
+      }
+      {
+        name: 'PrivateQueueStorageUrl'
+        value: PrivateQueueStorageUrl
+      }
+    ]
   }
   dependsOn: [
     storagePrivate
@@ -239,12 +306,16 @@ module webApi 'webApi.bicep' = {
     resourceName: resourceName
     webAppSkuCapacity: webAppSkuCapacity
     webAppSkuName: webAppSkuName
+    userIdentityId: userIdentity.outputs.id
+    privateBlobStorageUrl: PrivateBlobStorageUrl
+    privateQueueStorageUrl: PrivateQueueStorageUrl
   }
   dependsOn: [
     uploadLayerFunction
   ]
 }
 
+// would be nice top move to identities
 resource keyvault 'Microsoft.KeyVault/vaults@2019-09-01' existing = {
   name: keyvaultName
   scope: resourceGroup()
@@ -312,6 +383,7 @@ module batchService 'batchService.bicep' = {
     location: location
     storageAccountId: storagePrivate.outputs.id
     actionGroupId: appInsights.outputs.actionGroupId
+    userIdentityId: userIdentity.outputs.id
   }
 }
 

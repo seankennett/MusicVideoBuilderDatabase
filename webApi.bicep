@@ -13,6 +13,15 @@ param webAppSkuCapacity int
 @description('Application Inisghts connection string')
 param appInsightsConnectionString string
 
+@description('User Identity Name')
+param userIdentityId string
+
+@description('Private blob storage url')
+param privateBlobStorageUrl string
+
+@description('Private queue storage url')
+param privateQueueStorageUrl string
+
 var appServicePlanName = resourceName
 var webSiteName = resourceName
 var keyvaultName = resourceName
@@ -34,7 +43,10 @@ resource appService 'Microsoft.Web/sites@2021-03-01' = {
   name: webSiteName
   location: location
   identity: {
-    type: 'SystemAssigned'
+    type: 'UserAssigned'
+    userAssignedIdentities: {
+      '${userIdentityId}': {}
+    }
   }
   tags: {
     displayName: 'Website'
@@ -86,8 +98,12 @@ resource appService 'Microsoft.Web/sites@2021-03-01' = {
           value: 'true'
         }
         {
-          name:'ContentDeliveryNetworkBaseUrl'
-          value: 'https://cdn.musicvideobuilder.com'
+          name: 'PrivateBlobStorageUrl'
+          value: privateBlobStorageUrl
+        }
+        {
+          name: 'PrivateQueueStorageUrl'
+          value: privateQueueStorageUrl
         }
       ]
       cors: {
@@ -97,29 +113,5 @@ resource appService 'Microsoft.Web/sites@2021-03-01' = {
       }
       netFrameworkVersion: 'v6.0'
     }
-  }
-}
-
-resource keyvault 'Microsoft.KeyVault/vaults@2019-09-01' existing = {
-  name: keyvaultName
-  scope: resourceGroup()
-}
-
-resource keyVaultAccessPolicy 'Microsoft.KeyVault/vaults/accessPolicies@2021-06-01-preview' = {
-  name: 'add'
-  parent: keyvault
-  properties: {
-    accessPolicies: [
-      {
-        tenantId: subscription().tenantId
-        objectId: appService.identity.principalId
-        permissions: {
-          secrets: [
-            'list'
-            'get'
-          ]
-        }
-      }
-    ]
   }
 }

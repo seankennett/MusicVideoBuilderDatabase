@@ -7,13 +7,14 @@ param location string
 @description('App insights connection string')
 param appInsightsConnectionString string
 
-@description('Storage account connection string')
-@secure()
-param storageConnectionString string
+@description('Storage account secret name')
+param storageSecretName string
+
+@description('Storage account name')
+param storageAccountName string
 
 @description('Trigger connection string')
-@secure()
-param triggerConnectionString string = ''
+param triggerStorageAccountName string = ''
 
 @description('Run from package')
 param runFromPackage bool = true
@@ -23,6 +24,9 @@ param functionAppName string
 
 @description('AdditionalAppSettings')
 param additionalAppSettings array = []
+
+@description('User Identity Name')
+param userIdentityId string
 
 var functionAppServicePlanName = functionAppName
 
@@ -58,12 +62,12 @@ var baseAppsettings = union([
       value: appInsightsConnectionString
     }
     {
-      name: 'AzureWebJobsStorage'
-      value: storageConnectionString
+      name: 'AzureWebJobsStorage__accountName'
+      value: storageAccountName
     }
     {
       name: 'WEBSITE_CONTENTAZUREFILECONNECTIONSTRING'
-      value: storageConnectionString
+      value: '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${storageSecretName})'
     }
     {
       name: 'WEBSITE_CONTENTSHARE'
@@ -79,11 +83,11 @@ var runFromPackageSetting = [
 ]
 
 var triggerConnectionSetting = [ {
-    name: 'ConnectionString'
-    value: triggerConnectionString
+    name: 'ConnectionString__queueServiceUri'
+    value: 'https://${triggerStorageAccountName}${environment().suffixes.storage}' 
   } ]
 
-var triggerAndBaseSettings = triggerConnectionString == '' ? baseAppsettings : union(baseAppsettings, triggerConnectionSetting)
+var triggerAndBaseSettings = triggerStorageAccountName == '' ? baseAppsettings : union(baseAppsettings, triggerConnectionSetting)
 var allAppSettings = runFromPackage ? union(triggerAndBaseSettings, runFromPackageSetting) : triggerAndBaseSettings
 
 resource functionApp 'Microsoft.Web/sites@2021-03-01' = {
@@ -91,7 +95,10 @@ resource functionApp 'Microsoft.Web/sites@2021-03-01' = {
   location: location
   kind: 'functionapp'
   identity: {
-    type: 'SystemAssigned'
+    type: 'UserAssigned'
+    userAssignedIdentities:{
+      '${userIdentityId}':{}
+    }
   }
   properties: {
     serverFarmId: functionPlan.id
@@ -99,30 +106,7 @@ resource functionApp 'Microsoft.Web/sites@2021-03-01' = {
       appSettings: allAppSettings
     }
     httpsOnly: true
-  }
-}
-
-resource keyvault 'Microsoft.KeyVault/vaults@2019-09-01' existing = {
-  name: keyvaultName
-  scope: resourceGroup()
-}
-
-resource keyVaultAccessPolicy 'Microsoft.KeyVault/vaults/accessPolicies@2021-06-01-preview' = {
-  name: 'add'
-  parent: keyvault
-  properties: {
-    accessPolicies: [
-      {
-        tenantId: subscription().tenantId
-        objectId: functionApp.identity.principalId
-        permissions: {
-          secrets: [
-            'list'
-            'get'
-          ]
-        }
-      }
-    ]
+    keyVaultReferenceIdentity: userIdentityId
   }
 }
 

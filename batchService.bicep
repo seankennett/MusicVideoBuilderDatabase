@@ -10,6 +10,9 @@ param storageAccountId string
 @description('action group id')
 param actionGroupId string
 
+@description('User Identity Name')
+param userIdentityId string
+
 var keyvaultName = resourceName
 var poolName = 'builderPoolD2ADSV5'
 var vmSize = 'STANDARD_D2ADS_V5'
@@ -17,10 +20,19 @@ var vmSize = 'STANDARD_D2ADS_V5'
 resource batchService 'Microsoft.Batch/batchAccounts@2022-10-01' = {
   name: resourceName
   location: location
+  identity: {
+    type: 'UserAssigned'
+    userAssignedIdentities: {
+      '${userIdentityId}': {}
+    }
+  }
   properties: {
     autoStorage: {
       storageAccountId: storageAccountId
-      authenticationMode: 'StorageKeys'
+      authenticationMode: 'BatchAccountManagedIdentity'
+      nodeIdentityReference: {
+        resourceId: userIdentityId
+      }
     }
     poolAllocationMode: 'BatchService'
     publicNetworkAccess: 'Enabled'
@@ -31,36 +43,42 @@ var taskFailEvent = 'TaskFailEvent'
 resource metricAlert 'Microsoft.Insights/metricAlerts@2018-03-01' = {
   name: taskFailEvent
   location: 'global'
-  properties:{
-    criteria:{
-      'odata.type':'Microsoft.Azure.Monitor.SingleResourceMultipleMetricCriteria'
-      allOf:[{
-        threshold: 0
-        criterionType:'StaticThresholdCriterion'
-        metricName:taskFailEvent
-        name:taskFailEvent
-        operator:'GreaterThan'
-        timeAggregation:'Total'
-        metricNamespace:batchService.type        
-      }]
+  properties: {
+    criteria: {
+      'odata.type': 'Microsoft.Azure.Monitor.SingleResourceMultipleMetricCriteria'
+      allOf: [ {
+          threshold: 0
+          criterionType: 'StaticThresholdCriterion'
+          metricName: taskFailEvent
+          name: taskFailEvent
+          operator: 'GreaterThan'
+          timeAggregation: 'Total'
+          metricNamespace: batchService.type
+        } ]
     }
-    enabled:true
-    evaluationFrequency:'PT1M'
-    scopes:[
+    enabled: true
+    evaluationFrequency: 'PT1M'
+    scopes: [
       batchService.id
     ]
-    severity:0
-    windowSize:'PT15M'
-    actions:[{
-      actionGroupId:actionGroupId
-    }]
-    description:'Alert for failing tasks. Means paying customer is not getting their video.'
+    severity: 0
+    windowSize: 'PT15M'
+    actions: [ {
+        actionGroupId: actionGroupId
+      } ]
+    description: 'Alert for failing tasks. Means paying customer is not getting their video.'
   }
 }
 
 resource batchPool 'Microsoft.Batch/batchAccounts/pools@2022-10-01' = {
   name: poolName
   parent: batchService
+  identity: {
+    type: 'UserAssigned'
+    userAssignedIdentities: {
+      '${userIdentityId}': {}
+    }
+  }
   properties: {
     vmSize: vmSize
     interNodeCommunication: 'Disabled'
