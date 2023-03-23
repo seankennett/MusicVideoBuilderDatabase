@@ -14,7 +14,7 @@ param storageSecretName string
 param storageAccountName string
 
 @description('Trigger connection string')
-param triggerStorageAccountName string = ''
+param triggerStorageQueueUri string = ''
 
 @description('Run from package')
 param runFromPackage bool = true
@@ -84,10 +84,10 @@ var runFromPackageSetting = [
 
 var triggerConnectionSetting = [ {
     name: 'ConnectionString__queueServiceUri'
-    value: 'https://${triggerStorageAccountName}${environment().suffixes.storage}' 
+    value: triggerStorageQueueUri
   } ]
 
-var triggerAndBaseSettings = triggerStorageAccountName == '' ? baseAppsettings : union(baseAppsettings, triggerConnectionSetting)
+var triggerAndBaseSettings = triggerStorageQueueUri == '' ? baseAppsettings : union(baseAppsettings, triggerConnectionSetting)
 var allAppSettings = runFromPackage ? union(triggerAndBaseSettings, runFromPackageSetting) : triggerAndBaseSettings
 
 resource functionApp 'Microsoft.Web/sites@2021-03-01' = {

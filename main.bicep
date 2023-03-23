@@ -91,7 +91,7 @@ module uploadLayerFunction 'function.bicep' = {
     location: location
     appInsightsConnectionString: appInsights.outputs.appInsightsConnectionString
     storageAccountName: uploadLayerFunctionAppName
-    triggerStorageAccountName: storageAccountNamePrivate
+    triggerStorageQueueUri: PrivateQueueStorageUrl
     storageSecretName: uploadLayerConnectionSecretName
     functionAppName: uploadLayerFunctionAppName
     userIdentityId: userIdentity.outputs.id
@@ -161,7 +161,7 @@ module freeBuilderFunction 'function.bicep' = {
   name: 'deployFreeBuilderFunction'
   params: {
     location: location
-    triggerStorageAccountName: storageAccountNamePrivate
+    triggerStorageQueueUri: PrivateQueueStorageUrl
     storageAccountName: builderFunctionAppName
     storageSecretName: builderConnectionSecretName
     appInsightsConnectionString: appInsights.outputs.appInsightsConnectionString
@@ -212,7 +212,7 @@ module hdBuilderFunction 'function.bicep' = {
   name: 'deployHdBuilderFunction'
   params: {
     location: location
-    triggerStorageAccountName: storageAccountNamePrivate
+    triggerStorageQueueUri: PrivateQueueStorageUrl
     storageAccountName: builderHdFunctionAppName
     storageSecretName: builderHdConnectionSecretName
     appInsightsConnectionString: appInsights.outputs.appInsightsConnectionString
@@ -264,7 +264,7 @@ module buildInstructorFunction 'function.bicep' = {
   params: {
     location: location
     appInsightsConnectionString: appInsights.outputs.appInsightsConnectionString
-    triggerStorageAccountName: storageAccountNamePrivate
+    triggerStorageQueueUri: PrivateQueueStorageUrl
     storageAccountName: buildInstructorFunctionAppName
     storageSecretName: buildInstructorConnectionSecretName
     functionAppName: buildInstructorFunctionAppName
