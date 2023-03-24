@@ -17,6 +17,14 @@ resource keyvault 'Microsoft.KeyVault/vaults@2019-09-01' existing = {
   scope: resourceGroup()
 }
 
+resource secret 'Microsoft.KeyVault/vaults/secrets@2021-06-01-preview' = {
+  name: 'ManagedIdentityClientId'
+  parent: keyvault
+  properties: {
+    value: userIdentity.properties.clientId
+  }
+}
+
 resource keyVaultAccessPolicy 'Microsoft.KeyVault/vaults/accessPolicies@2021-06-01-preview' = {
   name: 'add'
   parent: keyvault
