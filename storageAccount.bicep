@@ -112,7 +112,7 @@ resource deleteUserManagementPolicy 'Microsoft.Storage/storageAccounts/managemen
             actions: {
               baseBlob: {
                 delete: {
-                  daysAfterCreationGreaterThan: 28
+                  daysAfterCreationGreaterThan: 7
                 }
               }
             }
