@@ -70,6 +70,14 @@ var baseAppsettings = union([
       value: storageAccountName
     }
     {
+      name: 'AzureWebJobsStorage__credential'
+      value: 'managedidentity'
+    }
+    {
+      name: 'AzureWebJobsStorage__clientId'
+      value: managedIdentityClientIdSecretReference
+    }
+    {
       name: 'WEBSITE_CONTENTAZUREFILECONNECTIONSTRING'
       value: '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${storageSecretName})'
     }
