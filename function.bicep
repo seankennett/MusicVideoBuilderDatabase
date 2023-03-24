@@ -39,7 +39,7 @@ resource functionPlan 'Microsoft.Web/serverfarms@2020-12-01' = {
   }
   properties: {}
 }
-
+var managedIdentityClientIdSecretReference = '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=ManagedIdentityClientId)'
 var baseAppsettings = union([
     {
       name: 'FUNCTIONS_WORKER_RUNTIME'
@@ -48,7 +48,7 @@ var baseAppsettings = union([
     {
       name: 'FUNCTIONS_EXTENSION_VERSION'
       value: '~4'
-    }    
+    }
     {
       name: 'WEBSITE_ENABLE_SYNC_UPDATE_SITE'
       value: 'true'
@@ -59,7 +59,7 @@ var baseAppsettings = union([
     }
     {
       name: 'ManagedIdentityClientId'
-      value: '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=ManagedIdentityClientId)'
+      value: managedIdentityClientIdSecretReference
     }
     {
       name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
@@ -86,10 +86,20 @@ var runFromPackageSetting = [
   }
 ]
 
-var triggerConnectionSetting = [ {
+var triggerConnectionSetting = [
+  {
     name: 'ConnectionString__queueServiceUri'
     value: triggerStorageQueueUri
-  } ]
+  }
+  {
+    name: 'ConnectionString__credential'
+    value: 'managedidentity'
+  }
+  {
+    name: 'ConnectionString__clientId'
+    value: managedIdentityClientIdSecretReference
+  }
+]
 
 var triggerAndBaseSettings = triggerStorageQueueUri == '' ? baseAppsettings : union(baseAppsettings, triggerConnectionSetting)
 var allAppSettings = runFromPackage ? union(triggerAndBaseSettings, runFromPackageSetting) : triggerAndBaseSettings
@@ -100,8 +110,8 @@ resource functionApp 'Microsoft.Web/sites@2021-03-01' = {
   kind: 'functionapp'
   identity: {
     type: 'UserAssigned'
-    userAssignedIdentities:{
-      '${userIdentityId}':{}
+    userAssignedIdentities: {
+      '${userIdentityId}': {}
     }
   }
   properties: {
