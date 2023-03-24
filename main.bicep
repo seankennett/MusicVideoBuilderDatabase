@@ -279,6 +279,10 @@ module buildInstructorFunction 'function.bicep' = {
         name: 'PrivateQueueStorageUrl'
         value: PrivateQueueStorageUrl
       }
+      {
+        name: 'ManagedIdentityIdReference'
+        value: userIdentity.outputs.id
+      }
     ]
   }
   dependsOn: [
