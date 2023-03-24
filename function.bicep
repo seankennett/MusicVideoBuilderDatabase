@@ -58,6 +58,10 @@ var baseAppsettings = union([
       value: 'https://${keyvaultName}${environment().suffixes.keyvaultDns}/'
     }
     {
+      name: 'ManagedIdentityClientId'
+      value: '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=ManagedIdentityClientId)'
+    }
+    {
       name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
       value: appInsightsConnectionString
     }
