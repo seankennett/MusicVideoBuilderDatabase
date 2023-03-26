@@ -2,7 +2,7 @@
 param storageAccountName string
 
 @description('Secret name')
-param secretName string = ''
+param secretName string = 'dummy'
 
 @description('Location for all resources.')
 param location string
@@ -11,7 +11,7 @@ param location string
 param storageAccountType string
 
 @description('Key vault name')
-param keyvaultName string = ''
+param keyvaultName string = 'dummy'
 
 @description('Custom domain name')
 param supportHttpsOnly bool = true
@@ -131,19 +131,17 @@ resource deleteUserManagementPolicy 'Microsoft.Storage/storageAccounts/managemen
   }
 }
 
-resource keyvault 'Microsoft.KeyVault/vaults@2019-09-01' existing = if (keyvaultName != '' && secretName != '') {
+resource keyvault 'Microsoft.KeyVault/vaults@2019-09-01' existing = if (keyvaultName != 'dummy' && secretName != 'dummy') {
   name: keyvaultName
   scope: resourceGroup()
 }
 
-resource secret 'Microsoft.KeyVault/vaults/secrets@2021-06-01-preview' = if (keyvaultName != '' && secretName != '') {
-  name: '${keyvaultName}/${secretName}'
+resource secret 'Microsoft.KeyVault/vaults/secrets@2021-06-01-preview' = if (keyvaultName != 'dummy' && secretName != 'dummy') {
+  name: secretName
+  parent: keyvault
   properties: {
     value: 'DefaultEndpointsProtocol=https;AccountName=${storageAccount.name};AccountKey=${listKeys(storageAccount.id, storageAccount.apiVersion).keys[0].value};EndpointSuffix=${environment().suffixes.storage}'
   }
-  dependsOn:[
-    keyvault
-  ]
 }
 
 output id string = storageAccount.id
