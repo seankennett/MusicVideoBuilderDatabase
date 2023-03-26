@@ -137,7 +137,7 @@ resource keyvault 'Microsoft.KeyVault/vaults@2019-09-01' existing = if (keyvault
 }
 
 resource secret 'Microsoft.KeyVault/vaults/secrets@2021-06-01-preview' = if (keyvaultName != '' && secretName != '') {
-  name: '${keyvault}/${secretName}'
+  name: '${keyvaultName}/${secretName}'
   properties: {
     value: 'DefaultEndpointsProtocol=https;AccountName=${storageAccount.name};AccountKey=${listKeys(storageAccount.id, storageAccount.apiVersion).keys[0].value};EndpointSuffix=${environment().suffixes.storage}'
   }
