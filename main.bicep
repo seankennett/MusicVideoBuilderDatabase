@@ -61,9 +61,6 @@ var hdBuilderQueue = 'hd-builder'
 var uploadLayerQueue = 'upload-layer'
 var buildInstructorQueue = 'build-instructor'
 
-var freeResolution = 'free'
-var hdResolution = 'hd'
-
 var userIdentityName = resourceName
 
 module userIdentity 'userIdentity.bicep' = {
