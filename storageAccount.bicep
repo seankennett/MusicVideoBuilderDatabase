@@ -2,7 +2,7 @@
 param storageAccountName string
 
 @description('Secret name')
-param secretName string
+param secretName string = ''
 
 @description('Location for all resources.')
 param location string
@@ -11,7 +11,7 @@ param location string
 param storageAccountType string
 
 @description('Key vault name')
-param keyvaultName string
+param keyvaultName string = ''
 
 @description('Custom domain name')
 param supportHttpsOnly bool = true
@@ -131,12 +131,12 @@ resource deleteUserManagementPolicy 'Microsoft.Storage/storageAccounts/managemen
   }
 }
 
-resource keyvault 'Microsoft.KeyVault/vaults@2019-09-01' existing = {
+resource keyvault 'Microsoft.KeyVault/vaults@2019-09-01' existing = if (keyvaultName != '' && secretName != '') {
   name: keyvaultName
   scope: resourceGroup()
 }
 
-resource secret 'Microsoft.KeyVault/vaults/secrets@2021-06-01-preview' = {
+resource secret 'Microsoft.KeyVault/vaults/secrets@2021-06-01-preview' = if (keyvaultName != '' && secretName != '') {
   name: secretName
   parent: keyvault
   properties: {

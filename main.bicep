@@ -44,8 +44,6 @@ var storageAccountNamePrivate = '${resourceName}private'
 var PrivateBlobStorageUrl = 'https://${storageAccountNamePrivate}.blob.${environment().suffixes.storage}'
 var PrivateQueueStorageUrl = 'https://${storageAccountNamePrivate}.queue.${environment().suffixes.storage}'
 
-var publicStorageSecretName = 'PublicStorageConnectionString'
-var privateStorageSecretName = 'PrivateStorageConnectionString'
 var eventGridName = storageAccountNamePrivate
 var uploadLayerFunctionAppName = 'uploadlayerfunction'
 var uploadLayerConnectionSecretName = 'UploadLayerConnectionString'
@@ -173,16 +171,8 @@ module freeBuilderFunction 'function.bicep' = {
         value: freeBuilderQueue
       }
       {
-        name: 'Resolution'
-        value: freeResolution
-      }
-      {
         name: 'PrivateBlobStorageUrl'
         value: PrivateBlobStorageUrl
-      }
-      {
-        name: 'PublicBlobStorageUrl'
-        value: PublicBlobStorageUrl
       }
       {
         name: 'AzureFunctionsJobHost__extensions__durableTask__maxConcurrentActivityFunctions'
@@ -224,16 +214,8 @@ module hdBuilderFunction 'function.bicep' = {
         value: hdBuilderQueue
       }
       {
-        name: 'Resolution'
-        value: hdResolution
-      }
-      {
         name: 'PrivateBlobStorageUrl'
         value: PrivateBlobStorageUrl
-      }
-      {
-        name: 'PublicBlobStorageUrl'
-        value: PublicBlobStorageUrl
       }
       {
         name: 'AzureFunctionsJobHost__extensions__durableTask__maxConcurrentActivityFunctions'
@@ -346,8 +328,6 @@ module storagePublic 'storageAccount.bicep' = {
     location: location
     storageAccountName: storageAccountNamePublic
     storageAccountType: storageAccountType
-    secretName: publicStorageSecretName
-    keyvaultName: keyvaultName
     supportHttpsOnly: false // workaround for cert issue cdn will call http not great but you have to use azure cdn for this to work
     enableCors: true
   }
@@ -359,8 +339,6 @@ module storagePrivate 'storageAccount.bicep' = {
     location: location
     storageAccountName: storageAccountNamePrivate
     storageAccountType: storageAccountType
-    secretName: privateStorageSecretName
-    keyvaultName: keyvaultName
     queues: [
       uploadLayerQueue
       freeBuilderQueue
