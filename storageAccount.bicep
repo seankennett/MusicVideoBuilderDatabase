@@ -142,6 +142,9 @@ resource secret 'Microsoft.KeyVault/vaults/secrets@2021-06-01-preview' = if (key
   properties: {
     value: 'DefaultEndpointsProtocol=https;AccountName=${storageAccount.name};AccountKey=${listKeys(storageAccount.id, storageAccount.apiVersion).keys[0].value};EndpointSuffix=${environment().suffixes.storage}'
   }
+  dependsOn:[
+    keyvault
+  ]
 }
 
 output id string = storageAccount.id
