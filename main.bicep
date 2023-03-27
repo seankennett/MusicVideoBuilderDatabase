@@ -93,6 +93,10 @@ module uploadLayerFunction 'function.bicep' = {
     keyvaultName: keyvaultName
     additionalAppSettings:[
       {
+        name: 'QueueName'
+        value: uploadLayerQueue
+      }
+      {
         name: 'PrivateBlobStorageUrl'
         value: PrivateBlobStorageUrl
       }
@@ -251,6 +255,10 @@ module buildInstructorFunction 'function.bicep' = {
     keyvaultName: keyvaultName
     additionalAppSettings: [
       {
+        name: 'QueueName'
+        value: buildInstructorQueue
+      }
+      {
         name: 'PrivateBlobStorageUrl'
         value: PrivateBlobStorageUrl
       }
@@ -261,6 +269,14 @@ module buildInstructorFunction 'function.bicep' = {
       {
         name: 'ManagedIdentityIdReference'
         value: userIdentity.outputs.id
+      }
+      {
+        name: 'FreeBuilderQueueName'
+        value: freeBuilderQueue
+      }
+      {
+        name: 'HdBuilderQueueName'
+        value: hdBuilderQueue
       }
     ]
   }
@@ -292,6 +308,8 @@ module webApi 'webApi.bicep' = {
     userIdentityId: userIdentity.outputs.id
     privateBlobStorageUrl: PrivateBlobStorageUrl
     privateQueueStorageUrl: PrivateQueueStorageUrl
+    buildInstructorQueue: buildInstructorQueue
+    uploadLayerQueue: uploadLayerQueue
   }
   dependsOn: [
     uploadLayerFunction

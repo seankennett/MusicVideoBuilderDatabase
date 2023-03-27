@@ -22,6 +22,12 @@ param privateBlobStorageUrl string
 @description('Private queue storage url')
 param privateQueueStorageUrl string
 
+@description('Upload layer queue')
+param uploadLayerQueue string
+
+@description('Build Instructor Queue')
+param buildInstructorQueue string
+
 var appServicePlanName = resourceName
 var webSiteName = resourceName
 var keyvaultName = resourceName
@@ -109,6 +115,14 @@ resource appService 'Microsoft.Web/sites@2021-03-01' = {
         {
           name: 'ManagedIdentityClientId'
           value: '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=ManagedIdentityClientId)'
+        }
+        {
+          name: 'UploadLayerQueueName'
+          value: uploadLayerQueue
+        }
+        {
+          name: 'BuildInstructorQueueName'
+          value: buildInstructorQueue
         }
       ]
       cors: {
