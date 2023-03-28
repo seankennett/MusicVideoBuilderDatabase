@@ -91,7 +91,7 @@ module uploadLayerFunction 'function.bicep' = {
     functionAppName: uploadLayerFunctionAppName
     userIdentityId: userIdentity.outputs.id
     keyvaultName: keyvaultName
-    additionalAppSettings:[
+    additionalAppSettings: [
       {
         name: 'QueueName'
         value: uploadLayerQueue
@@ -133,7 +133,7 @@ module newVideoFunction 'function.bicep' = {
     functionAppName: newVideoFunctionAppName
     userIdentityId: userIdentity.outputs.id
     keyvaultName: keyvaultName
-    additionalAppSettings:[
+    additionalAppSettings: [
       {
         name: 'PrivateBlobStorageUrl'
         value: PrivateBlobStorageUrl
@@ -334,6 +334,7 @@ module sql 'sqlServerModule.bicep' = {
     databaseMaxSizeBytes: databaseMaxSizeBytes
     location: location
     resourceName: resourceName
+    userIdentityId: userIdentity.outputs.id
   }
 }
 
