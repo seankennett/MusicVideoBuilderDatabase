@@ -53,6 +53,7 @@ resource sqlserver 'Microsoft.Sql/servers@2020-11-01-preview' = {
       sid: 'bfdbfe2a-f373-413f-b316-009b3a274fca'
       tenantId: tenant().tenantId
     }
+    primaryUserAssignedIdentityId: userIdentityId
     version: '12.0'
   }
 
