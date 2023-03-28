@@ -18,13 +18,6 @@ pool:
 
 
 steps:
-- task: AzureKeyVault@2
-  inputs:
-    azureSubscription: $(azureServiceConnection)
-    KeyVaultName: musicvideobuilder
-    SecretsFilter: 'SqlAdministratorLogin,SqlAdministratorPassword,SqlLoginMusicVideoBuilderApplicationPassword'
-    RunAsPreJob: false
-
 - task: VSBuild@1
   displayName: Build solution
   inputs:
@@ -34,11 +27,12 @@ steps:
     clean: true
 
 - task: AzureCLI@2
+  displayName: Get access token
   inputs:
     azureSubscription: $(azureServiceConnection) 
     scriptType: 'ps'
     scriptLocation: 'inlineScript'
-    inlineScript: '$sqlToken= & az account get-access-token --resource=musicvideobuilder.database.windows.net --query accessToken;Write-Host("##vso[task.setvariable variable=sqlToken]$token")'
+    inlineScript: '$sqlToken= & az account get-access-token --resource=musicvideobuilder.database.windows.net --query accessToken;Write-Host("##vso[task.setvariable variable=sqlToken]$sqlToken")'
 
 - task: SqlAzureDacpacDeployment@1
   displayName: Execute Azure SQL Dacpac
