@@ -46,11 +46,11 @@ BEGIN
     INSERT INTO [dbo].[License] ([LicenseId], [LicenseName]) VALUES (3, 'Enhanced')
 END
 
---IF NOT EXISTS (SELECT [name] FROM sys.database_principals WHERE [name] = 'MusicVideoBuilderApplication')
---BEGIN
---CREATE USER [MusicVideoBuilderApplication] WITH PASSWORD = N'$(sqlLoginMusicVideoBuilderApplicationPassword)'
+IF NOT EXISTS (SELECT [name] FROM sys.database_principals WHERE [name] = 'musicvideobuilder')
+BEGIN
+CREATE USER [musicvideobuilder] FROM EXTERNAL PROVIDER
 
---GRANT CONNECT TO [MusicVideoBuilderApplication]
+GRANT CONNECT TO [musicvideobuilder]
 
---GRANT EXECUTE TO [MusicVideoBuilderApplication]
---END
+GRANT EXECUTE TO [musicvideobuilder]
+END
