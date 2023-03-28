@@ -37,11 +37,7 @@ steps:
   displayName: Execute Azure SQL Dacpac
   inputs:
     azureSubscription: $(azureServiceConnection)
+    AuthenticationType: 'aadAuthenticationIntegrated'
     ServerName: musicvideobuilder.database.windows.net
     DatabaseName: musicvideobuilder
-    SqlUsername: $(SqlAdministratorLogin)
-    SqlPassword: $(SqlAdministratorPassword)
-    DacpacFile: '$(Build.SourcesDirectory)/VideoDatabase/bin/$(configuration)/VideoDatabase.dacpac'
-    AdditionalArguments: >-
-      /v:sqlLoginMusicVideoBuilderApplicationPassword=$(SqlLoginMusicVideoBuilderApplicationPassword)
-      
+    DacpacFile: '$(Build.SourcesDirectory)/VideoDatabase/bin/$(configuration)/VideoDatabase.dacpac'      

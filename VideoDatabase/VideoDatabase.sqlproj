@@ -106,11 +106,4 @@
     <Build Include="Tables\BuildStatus.sql" />
     <Build Include="Tables\Video.sql" />
   </ItemGroup>
-  <ItemGroup>
-    <SqlCmdVariable Include="sqlLoginMusicVideoBuilderApplicationPassword">
-      <DefaultValue>
-      </DefaultValue>
-      <Value>$(SqlCmdVar__1)</Value>
-    </SqlCmdVariable>
-  </ItemGroup>
 </Project>
