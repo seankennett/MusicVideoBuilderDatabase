@@ -55,9 +55,9 @@ GRANT CONNECT TO [musicvideobuilder]
 GRANT EXECUTE TO [musicvideobuilder]
 END
 
-IF NOT EXISTS (SELECT [name] FROM sys.database_principals WHERE [name] = 'seankennettwork_gmail.com#EXT#@musicvideobuilder.onmicrosoft.com')
+IF NOT EXISTS (SELECT [name] FROM sys.database_principals WHERE [name] = 'seankennettwork_gmail.com')
 BEGIN
 CREATE USER [seankennettwork_gmail.com#EXT#@musicvideobuilder.onmicrosoft.com] FROM EXTERNAL PROVIDER
 
-EXEC sp_addrolemember N'db_owner', N'seankennettwork_gmail.com#EXT#@musicvideobuilder.onmicrosoft.com'
+EXEC sp_addrolemember N'db_owner', N'seankennettwork_gmail.com'
 END
