@@ -32,7 +32,7 @@ steps:
     azureSubscription: $(azureServiceConnection) 
     scriptType: 'ps'
     scriptLocation: 'inlineScript'
-    inlineScript: '$sqlToken= & az account get-access-token --resource=musicvideobuilder.database.windows.net --query accessToken;Write-Host("##vso[task.setvariable variable=sqlToken]$sqlToken")'
+    inlineScript: '$sqlToken= & az account get-access-token --resource=https://database.windows.net --query accessToken;Write-Host("##vso[task.setvariable variable=sqlToken]$sqlToken")'
 
 - task: SqlAzureDacpacDeployment@1
   displayName: Execute Azure SQL Dacpac
