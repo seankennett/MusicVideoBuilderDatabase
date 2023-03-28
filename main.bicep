@@ -316,18 +316,9 @@ module webApi 'webApi.bicep' = {
   ]
 }
 
-// would be nice top move to identities
-resource keyvault 'Microsoft.KeyVault/vaults@2019-09-01' existing = {
-  name: keyvaultName
-  scope: resourceGroup()
-}
-
 module sql 'sqlServerModule.bicep' = {
   name: 'deploySQL'
   params: {
-    sqlAdministratorLogin: keyvault.getSecret('SqlAdministratorLogin')
-    sqlAdministratorPassword: keyvault.getSecret('SqlAdministratorPassword')
-    sqlLoginMusicVideoBuilderApplicationPassword: keyvault.getSecret('SqlLoginMusicVideoBuilderApplicationPassword')
     databaseCapacity: databaseCapacity
     databaseSku: databaseSku
     databaseTier: databaseTier
