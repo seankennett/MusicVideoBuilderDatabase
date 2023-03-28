@@ -28,6 +28,9 @@ param location string
 @description('Name that will be used to build associated artifacts')
 param resourceName string
 
+@description('User Identity Name')
+param userIdentityId string
+
 var sqlServerName = resourceName
 var databaseName = resourceName
 var keyvaultName = resourceName
@@ -35,9 +38,21 @@ var keyvaultName = resourceName
 resource sqlserver 'Microsoft.Sql/servers@2020-11-01-preview' = {
   name: sqlServerName
   location: location
+  identity: {
+    type: 'UserAssigned'
+    userAssignedIdentities: {
+      '${userIdentityId}': {}
+    }
+  }
   properties: {
-    administratorLogin: sqlAdministratorLogin
-    administratorLoginPassword: sqlAdministratorPassword
+    administrators: {
+      administratorType: 'ActiveDirectory'
+      azureADOnlyAuthentication: true
+      login: 'musicvideobuilder-Music Video Builder-285ec89b-c6b0-46a6-9758-a0bce37bd2da'
+      principalType: 'Application'
+      sid: 'bfdbfe2a-f373-413f-b316-009b3a274fca'
+      tenantId: tenant().tenantId
+    }
     version: '12.0'
   }
 
