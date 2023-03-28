@@ -26,20 +26,19 @@ steps:
     configuration: $(configuration)
     clean: true
 
-- task: AzureCLI@2
-  displayName: Get access token
-  inputs:
-    azureSubscription: $(azureServiceConnection) 
-    scriptType: 'ps'
-    scriptLocation: 'inlineScript'
-    inlineScript: '$sqlToken= & az account get-access-token --resource=https://database.windows.net --query accessToken;Write-Host("##vso[task.setvariable variable=sqlToken]$sqlToken")'
+# - task: AzureCLI@2
+  # displayName: Get access token
+  # inputs:
+    # azureSubscription: $(azureServiceConnection) 
+    # scriptType: 'ps'
+    # scriptLocation: 'inlineScript'
+    # inlineScript: '$sqlToken= & az account get-access-token --resource=https://database.windows.net --query accessToken;Write-Host("##vso[task.setvariable variable=sqlToken]$sqlToken")'
 
 - task: SqlAzureDacpacDeployment@1
   displayName: Execute Azure SQL Dacpac
   inputs:
     azureSubscription: $(azureServiceConnection)
-    AuthenticationType: 'connectionString'
+    AuthenticationType: 'servicePrincipal'
     ServerName: musicvideobuilder.database.windows.net
-    ConnectionString: 'Server=musicvideobuilder.database.windows.net,1433;Initial Catalog=musicvideobuilder;Persist Security Info=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
-    DacpacFile: '$(Build.SourcesDirectory)/VideoDatabase/bin/$(configuration)/VideoDatabase.dacpac'   
-    AdditionalArguments: -AccessToken $(sqlToken)
+    DatabaseName: 'musicvideobuilder'
+    DacpacFile: '$(Build.SourcesDirectory)/VideoDatabase/bin/$(configuration)/VideoDatabase.dacpac'
