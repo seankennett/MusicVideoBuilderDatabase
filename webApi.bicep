@@ -66,7 +66,6 @@ resource appService 'Microsoft.Web/sites@2021-03-01' = {
   }
   properties: {
     serverFarmId: appServicePlan.id
-    keyVaultReferenceIdentity: userIdentityId
     httpsOnly: true
     siteConfig: {
       appSettings: [
@@ -117,10 +116,6 @@ resource appService 'Microsoft.Web/sites@2021-03-01' = {
         {
           name: 'PrivateQueueStorageUrl'
           value: privateQueueStorageUrl
-        }
-        {
-          name: 'ManagedIdentityClientId'
-          value: '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=ManagedIdentityClientId)'
         }
         {
           name: 'UploadLayerQueueName'
