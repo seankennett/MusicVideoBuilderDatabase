@@ -74,7 +74,7 @@ module userIdentity 'userIdentity.bicep' = {
   }
 }
 
-var databaseConnectionString = 'Server=${sqlServerName}; Authentication=Active Directory Managed Identity; Database=${databaseName};User Id=${userIdentity.outputs.clientId}'
+var databaseConnectionString = 'Server=${sqlServerName}${environment().suffixes.sqlServerHostname}; Authentication=Active Directory Managed Identity; Database=${databaseName}; User Id=${userIdentity.outputs.clientId}'
 
 module appInsights 'appInsights.bicep' = {
   name: 'deployAppInsights'
