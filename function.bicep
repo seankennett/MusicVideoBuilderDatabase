@@ -45,7 +45,7 @@ resource functionPlan 'Microsoft.Web/serverfarms@2020-12-01' = {
   }
   properties: {}
 }
-var managedIdentityClientIdSecretReference = '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=ManagedIdentityClientId)'
+
 var baseAppsettings = union([
     {
       name: 'FUNCTIONS_WORKER_RUNTIME'
@@ -65,7 +65,7 @@ var baseAppsettings = union([
     }
     {
       name: 'ManagedIdentityClientId'
-      value: managedIdentityClientIdSecretReference
+      value: managedIdentityClientId
     }
     {
       name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
@@ -81,7 +81,7 @@ var baseAppsettings = union([
     }
     {
       name: 'AzureWebJobsStorage__clientId'
-      value: managedIdentityClientIdSecretReference
+      value: managedIdentityClientId
     }
     {
       name: 'WEBSITE_CONTENTAZUREFILECONNECTIONSTRING'
@@ -111,7 +111,7 @@ var triggerConnectionSetting = [
   }
   {
     name: 'ConnectionString__clientId'
-    value: managedIdentityClientIdSecretReference
+    value: managedIdentityClientId
   }
 ]
 
