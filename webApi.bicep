@@ -28,6 +28,12 @@ param uploadLayerQueue string
 @description('Build Instructor Queue')
 param buildInstructorQueue string
 
+@description('Database Connection String')
+param databaseConnectionString string
+
+@description('Managed Identity Client Id')
+param managedIdentityClientId string
+
 var appServicePlanName = resourceName
 var webSiteName = resourceName
 var keyvaultName = resourceName
@@ -123,6 +129,14 @@ resource appService 'Microsoft.Web/sites@2021-03-01' = {
         {
           name: 'BuildInstructorQueueName'
           value: buildInstructorQueue
+        }
+        {
+          name: 'DatabaseConnectionString'
+          value: databaseConnectionString
+        }
+        {
+          name: 'ManagedIdentityClientId'
+          value: managedIdentityClientId
         }
       ]
       cors: {

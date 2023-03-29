@@ -13,15 +13,14 @@ param databaseMaxSizeBytes int
 @description('Location for all resources.')
 param location string
 
-@description('Name that will be used to build associated artifacts')
-param resourceName string
+@description('Sql Server Name')
+param sqlServerName string
+
+@description('Database Name')
+param databaseName string
 
 @description('User Identity Name')
 param userIdentityId string
-
-var sqlServerName = resourceName
-var databaseName = resourceName
-var keyvaultName = resourceName
 
 resource sqlserver 'Microsoft.Sql/servers@2020-11-01-preview' = {
   name: sqlServerName

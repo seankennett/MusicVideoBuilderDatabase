@@ -28,6 +28,12 @@ param additionalAppSettings array = []
 @description('User Identity Name')
 param userIdentityId string
 
+@description('Database Connection String')
+param databaseConnectionString string = ''
+
+@description('Managed Identity Client Id')
+param managedIdentityClientId string
+
 var functionAppServicePlanName = functionAppName
 
 resource functionPlan 'Microsoft.Web/serverfarms@2020-12-01' = {
@@ -109,8 +115,16 @@ var triggerConnectionSetting = [
   }
 ]
 
+var databaseConnectionSetting = [
+  {
+    name: 'DatabaseConnectionString'
+    value: databaseConnectionString
+  }
+]
+
 var triggerAndBaseSettings = triggerStorageQueueUri == '' ? baseAppsettings : union(baseAppsettings, triggerConnectionSetting)
-var allAppSettings = runFromPackage ? union(triggerAndBaseSettings, runFromPackageSetting) : triggerAndBaseSettings
+var databaseTriggerAndBaseSettings = databaseConnectionSetting == '' ? triggerAndBaseSettings : union(triggerAndBaseSettings, databaseConnectionSetting)
+var allAppSettings = runFromPackage ? union(databaseTriggerAndBaseSettings, runFromPackageSetting) : databaseTriggerAndBaseSettings
 
 resource functionApp 'Microsoft.Web/sites@2021-03-01' = {
   name: functionAppName

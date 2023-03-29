@@ -38,6 +38,8 @@ param storageAccountType string = 'Standard_LRS'
 var keyvaultName = resourceName
 var staticSiteName = resourceName
 var batchServiceName = resourceName
+var sqlServerName = resourceName
+var databaseName = resourceName
 var storageAccountNamePublic = '${resourceName}public'
 var PublicBlobStorageUrl = 'https://${storageAccountNamePublic}.blob.${environment().suffixes.storage}'
 var storageAccountNamePrivate = '${resourceName}private'
@@ -72,6 +74,8 @@ module userIdentity 'userIdentity.bicep' = {
   }
 }
 
+var databaseConnectionString = 'Server=${sqlServerName}; Authentication=Active Directory Managed Identity; Database=${databaseName};User Id=${userIdentity.outputs.clientId}'
+
 module appInsights 'appInsights.bicep' = {
   name: 'deployAppInsights'
   params: {
@@ -91,6 +95,8 @@ module uploadLayerFunction 'function.bicep' = {
     functionAppName: uploadLayerFunctionAppName
     userIdentityId: userIdentity.outputs.id
     keyvaultName: keyvaultName
+    databaseConnectionString: databaseConnectionString
+    managedIdentityClientId: userIdentity.outputs.clientId
     additionalAppSettings: [
       {
         name: 'QueueName'
@@ -133,6 +139,8 @@ module newVideoFunction 'function.bicep' = {
     functionAppName: newVideoFunctionAppName
     userIdentityId: userIdentity.outputs.id
     keyvaultName: keyvaultName
+    databaseConnectionString: databaseConnectionString
+    managedIdentityClientId: userIdentity.outputs.clientId
     additionalAppSettings: [
       {
         name: 'PrivateBlobStorageUrl'
@@ -166,6 +174,7 @@ module freeBuilderFunction 'function.bicep' = {
     appInsightsConnectionString: appInsights.outputs.appInsightsConnectionString
     functionAppName: builderFunctionAppName
     runFromPackage: false
+    managedIdentityClientId: userIdentity.outputs.clientId
     additionalAppSettings: [
       {
         name: 'QueueName'
@@ -209,6 +218,7 @@ module hdBuilderFunction 'function.bicep' = {
     appInsightsConnectionString: appInsights.outputs.appInsightsConnectionString
     functionAppName: builderHdFunctionAppName
     runFromPackage: false
+    managedIdentityClientId: userIdentity.outputs.clientId
     additionalAppSettings: [
       {
         name: 'QueueName'
@@ -253,6 +263,8 @@ module buildInstructorFunction 'function.bicep' = {
     functionAppName: buildInstructorFunctionAppName
     userIdentityId: userIdentity.outputs.id
     keyvaultName: keyvaultName
+    databaseConnectionString: databaseConnectionString
+    managedIdentityClientId: userIdentity.outputs.clientId
     additionalAppSettings: [
       {
         name: 'QueueName'
@@ -310,6 +322,8 @@ module webApi 'webApi.bicep' = {
     privateQueueStorageUrl: PrivateQueueStorageUrl
     buildInstructorQueue: buildInstructorQueue
     uploadLayerQueue: uploadLayerQueue
+    databaseConnectionString: databaseConnectionString
+    managedIdentityClientId: userIdentity.outputs.clientId
   }
   dependsOn: [
     uploadLayerFunction
@@ -324,7 +338,8 @@ module sql 'sqlServerModule.bicep' = {
     databaseTier: databaseTier
     databaseMaxSizeBytes: databaseMaxSizeBytes
     location: location
-    resourceName: resourceName
+    sqlServerName: sqlServerName
+    databaseName: databaseName
     userIdentityId: userIdentity.outputs.id
   }
 }
