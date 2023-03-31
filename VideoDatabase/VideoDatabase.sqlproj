@@ -90,6 +90,7 @@
     <Build Include="StoredProcs\GetUserBuildByPaymentIntentId.sql" />
     <Build Include="StoredProcs\GetUserBuild.sql" />
     <Build Include="StoredProcs\InsertUserLayers.sql" />
+    <Build Include="StoredProcs\CleanUpBuilds.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="VideoDatabase.refactorlog" />
