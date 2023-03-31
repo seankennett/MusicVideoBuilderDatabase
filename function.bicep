@@ -83,6 +83,7 @@ var baseAppsettings = union([
       name: 'AzureWebJobsStorage__clientId'
       value: managedIdentityClientId
     }
+    // annoying bug on first deploy (edit portal template and put in proper connectionstring)
     {
       name: 'WEBSITE_CONTENTAZUREFILECONNECTIONSTRING'
       value: '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${storageSecretName})'
