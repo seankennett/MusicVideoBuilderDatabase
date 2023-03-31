@@ -57,6 +57,8 @@ var builderHdFunctionAppName = 'hdbuilderfunction'
 var builderHdConnectionSecretName = 'BuilderHdConnectionString'
 var buildInstructorFunctionAppName = 'buildinstructorfunction'
 var buildInstructorConnectionSecretName = 'BuildInstructorConnectionString'
+var buildCleanFunctionAppName = 'buildcleanfunction'
+var buildCleanConnectionSecretName = 'BuildCleanConnectionString'
 
 var freeBuilderQueue = 'free-builder'
 var hdBuilderQueue = 'hd-builder'
@@ -305,6 +307,35 @@ module storageBuildInstructor 'storageAccount.bicep' = {
     storageAccountName: buildInstructorFunctionAppName
     storageAccountType: storageAccountType
     secretName: buildInstructorConnectionSecretName
+    keyvaultName: keyvaultName
+  }
+}
+
+module buildCleanFunction 'function.bicep' = {
+  name: 'deployBuildCleanFunction'
+  params: {
+    location: location
+    appInsightsConnectionString: appInsights.outputs.appInsightsConnectionString
+    storageAccountName: buildCleanFunctionAppName
+    storageSecretName: buildCleanConnectionSecretName
+    functionAppName: buildCleanFunctionAppName
+    userIdentityId: userIdentity.outputs.id
+    keyvaultName: keyvaultName
+    databaseConnectionString: databaseConnectionString
+    managedIdentityClientId: userIdentity.outputs.clientId
+  }
+  dependsOn: [
+    storageBuildClean
+  ]
+}
+
+module storageBuildClean 'storageAccount.bicep' = {
+  name: 'deployStorageBuildClean'
+  params: {
+    location: location
+    storageAccountName: buildCleanFunctionAppName
+    storageAccountType: storageAccountType
+    secretName: buildCleanConnectionSecretName
     keyvaultName: keyvaultName
   }
 }
