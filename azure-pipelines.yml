@@ -34,3 +34,13 @@ steps:
     ServerName: musicvideobuilder.database.windows.net
     DatabaseName: 'musicvideobuilder'
     DacpacFile: '$(Build.SourcesDirectory)/VideoDatabase/bin/$(configuration)/VideoDatabase.dacpac'
+
+- task: SqlAzureDacpacDeployment@1
+  displayName: Add Users
+  inputs:
+    azureSubscription: $(azureServiceConnection)
+    AuthenticationType: 'servicePrincipal'
+    ServerName: musicvideobuilder.database.windows.net
+    DatabaseName: 'musicvideobuilder'
+    deployType: 'SqlTask'
+    SqlFile: '$(Build.SourcesDirectory)/AddUsers.sql'
