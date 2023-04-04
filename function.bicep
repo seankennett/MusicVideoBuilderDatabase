@@ -60,14 +60,6 @@ var baseAppsettings = union([
       value: 'true'
     }
     {
-      name: 'AzureKeyVaultEndpoint'
-      value: 'https://${keyvaultName}${environment().suffixes.keyvaultDns}/'
-    }
-    {
-      name: 'ManagedIdentityClientId'
-      value: managedIdentityClientId
-    }
-    {
       name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
       value: appInsightsConnectionString
     }

@@ -112,6 +112,10 @@ module uploadLayerFunction 'function.bicep' = {
         name: 'PublicBlobStorageUrl'
         value: PublicBlobStorageUrl
       }
+      {
+        name: 'ManagedIdentityClientId'
+        value: userIdentity.outputs.clientId
+      }
     ]
   }
   dependsOn: [
@@ -147,6 +151,14 @@ module newVideoFunction 'function.bicep' = {
       {
         name: 'PrivateBlobStorageUrl'
         value: PrivateBlobStorageUrl
+      }
+      {
+        name: 'AzureKeyVaultEndpoint'
+        value: 'https://${keyvaultName}${environment().suffixes.keyvaultDns}/'
+      }
+      {
+        name: 'ManagedIdentityClientId'
+        value: userIdentity.outputs.clientId
       }
     ]
   }
@@ -189,6 +201,10 @@ module freeBuilderFunction 'function.bicep' = {
       {
         name: 'AzureFunctionsJobHost__extensions__durableTask__maxConcurrentActivityFunctions'
         value: 4
+      }
+      {
+        name: 'ManagedIdentityClientId'
+        value: userIdentity.outputs.clientId
       }
     ]
     keyvaultName: keyvaultName
@@ -233,6 +249,10 @@ module hdBuilderFunction 'function.bicep' = {
       {
         name: 'AzureFunctionsJobHost__extensions__durableTask__maxConcurrentActivityFunctions'
         value: 1
+      }
+      {
+        name: 'ManagedIdentityClientId'
+        value: userIdentity.outputs.clientId
       }
     ]
     keyvaultName: keyvaultName
@@ -283,6 +303,14 @@ module buildInstructorFunction 'function.bicep' = {
       {
         name: 'ManagedIdentityIdReference'
         value: userIdentity.outputs.id
+      }
+      {
+        name: 'AzureKeyVaultEndpoint'
+        value: 'https://${keyvaultName}${environment().suffixes.keyvaultDns}/'
+      }
+      {
+        name: 'ManagedIdentityClientId'
+        value: userIdentity.outputs.clientId
       }
       {
         name: 'FreeBuilderQueueName'
