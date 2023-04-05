@@ -70,7 +70,7 @@
     <Build Include="Types\TagsType.sql" />
     <Build Include="StoredProcs\GetTags.sql" />
     <Build Include="StoredProcs\GetLayerFinders.sql" />
-    <Build Include="StoredProcs\GetUserLayers.sql" />
+    <Build Include="StoredProcs\GetPendingUserLayers.sql" />
     <Build Include="StoredProcs\UpsertClip.sql" />
     <Build Include="Types\IntOrderType.sql" />
     <Build Include="StoredProcs\GetClips.sql" />
@@ -89,8 +89,11 @@
     <Build Include="StoredProcs\UpsertBuild.sql" />
     <Build Include="StoredProcs\GetUserBuildByPaymentIntentId.sql" />
     <Build Include="StoredProcs\GetUserBuild.sql" />
-    <Build Include="StoredProcs\InsertUserLayers.sql" />
+    <Build Include="StoredProcs\InsertPendingUserLayers.sql" />
     <Build Include="StoredProcs\CleanUpBuilds.sql" />
+    <Build Include="Tables\UserLayer.sql" />
+    <Build Include="StoredProcs\GetUserLayers.sql" />
+    <Build Include="StoredProcs\ConfirmPendingUserLayers.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="VideoDatabase.refactorlog" />
@@ -102,7 +105,7 @@
     <None Include="VideoDatabase.publish.xml" />
   </ItemGroup>
   <ItemGroup>
-    <Build Include="Tables\UserLayer.sql" />
+    <Build Include="Tables\PendingUserLayer.sql" />
     <Build Include="Tables\ClipLayers.sql" />
     <Build Include="Tables\BuildStatus.sql" />
     <Build Include="Tables\Video.sql" />

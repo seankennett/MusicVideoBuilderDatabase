@@ -1,9 +1,11 @@
 ﻿CREATE PROCEDURE [dbo].[UpsertBuild]
 	@BuildId UNIQUEIDENTIFIER,
 	@VideoId INT,
+	@VideoName NVARCHAR(50),
 	@BuildStatusId TINYINT,
 	@ResolutionId TINYINT,
 	@LicenseId TINYINT,
+	@FormatId TINYINT,
 	@UserObjectId UNIQUEIDENTIFIER,
 	@PaymentIntentId VARCHAR(30) NULL,
 	@HasAudio BIT
@@ -14,11 +16,11 @@ BEGIN TRY
 	DECLARE @DateNow DATETIME2 = GETUTCDATE();
 	IF EXISTS (SELECT BuildId FROM [dbo].[Build] WHERE BuildId = @BuildId)
 	BEGIN
-		UPDATE [dbo].[Build] SET BuildStatusId = @BuildStatusId, HasAudio = @HasAudio, DateUpdated = @DateNow WHERE BuildId = @BuildId
+		UPDATE [dbo].[Build] SET BuildStatusId = @BuildStatusId, HasAudio = @HasAudio, DateUpdated = @DateNow, VideoName = @VideoName, FormatId = @FormatId WHERE BuildId = @BuildId
 	END
 	ELSE
 	BEGIN
-		INSERT INTO [dbo].[Build] (BuildId, VideoId, BuildStatusId, ResolutionId, LicenseId, UserObjectId, PaymentIntentId, HasAudio, DateCreated, DateUpdated) VALUES (@BuildId, @VideoId, @BuildStatusId, @ResolutionId, @LicenseId, @UserObjectId, @PaymentIntentId, @HasAudio, @DateNow, @DateNow)
+		INSERT INTO [dbo].[Build] (BuildId, VideoId, BuildStatusId, ResolutionId, LicenseId, UserObjectId, PaymentIntentId, HasAudio, DateCreated, DateUpdated, VideoName, FormatId) VALUES (@BuildId, @VideoId, @BuildStatusId, @ResolutionId, @LicenseId, @UserObjectId, @PaymentIntentId, @HasAudio, @DateNow, @DateNow, @VideoName, @FormatId)
 	END
 
 	COMMIT

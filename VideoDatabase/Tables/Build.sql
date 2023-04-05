@@ -2,9 +2,11 @@
 (
 	[BuildId] UNIQUEIDENTIFIER NOT NULL PRIMARY KEY,
 	[VideoId] INT NOT NULL,
+	[VideoName] NVARCHAR(50) NOT NULL,
 	[BuildStatusId] TINYINT NOT NULL,
 	[ResolutionId] TINYINT NOT NULL,
 	[LicenseId] TINYINT NOT NULL,
+	[FormatId] TINYINT NOT NULL,
 	[UserObjectId] UNIQUEIDENTIFIER NOT NULL,
 	[DateCreated] DATETIME2 NOT NULL,
 	[DateUpdated] DATETIME2 NOT NULL,
@@ -13,6 +15,6 @@
 	CONSTRAINT FK_Build_Resolution FOREIGN KEY ([ResolutionId]) REFERENCES [dbo].[Resolution]([ResolutionId]),    
     CONSTRAINT FK_Build_License FOREIGN KEY ([LicenseId]) REFERENCES [dbo].[License]([LicenseId]),
 	CONSTRAINT FK_Build_Video FOREIGN KEY ([VideoId]) REFERENCES [dbo].[Video]([VideoId]),
-	CONSTRAINT FK_Build_BuildStatus FOREIGN KEY ([BuildStatusId]) REFERENCES [dbo].[BuildStatus]([BuildStatusId])
-
+	CONSTRAINT FK_Build_BuildStatus FOREIGN KEY ([BuildStatusId]) REFERENCES [dbo].[BuildStatus]([BuildStatusId]),
+	CONSTRAINT FK_Build_Format FOREIGN KEY ([FormatId]) REFERENCES [dbo].[Format] ([FormatId])
 )

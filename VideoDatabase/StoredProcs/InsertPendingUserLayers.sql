@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [dbo].[InsertUserLayers]
+﻿CREATE PROCEDURE [dbo].[InsertPendingUserLayers]
 	@userObjectId UNIQUEIDENTIFIER,
 	@BuildId UNIQUEIDENTIFIER,
 	@Layers [GuidOrderType] READONLY	
@@ -6,10 +6,10 @@ AS
 BEGIN TRY
     BEGIN TRANSACTION
 
-	IF NOT EXISTS(SELECT 1 FROM [dbo].[UserLayer] WHERE BuildId = @BuildId)
+	IF NOT EXISTS(SELECT 1 FROM [dbo].[PendingUserLayer] WHERE BuildId = @BuildId)
 	BEGIN
 		DECLARE @DateNow DATETIME2 = GETUTCDATE();
-		INSERT INTO [dbo].[UserLayer] (BuildId, DateCreated, LayerId, UserObjectId) SELECT @BuildId, @DateNow, [ForeignId], @userObjectId FROM @Layers
+		INSERT INTO [dbo].[PendingUserLayer] (BuildId, DateCreated, LayerId, UserObjectId) SELECT @BuildId, @DateNow, [ForeignId], @userObjectId FROM @Layers
 	END
 
 	COMMIT
