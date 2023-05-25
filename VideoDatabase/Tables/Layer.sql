@@ -1,10 +1,9 @@
 ﻿CREATE TABLE [dbo].[Layer]
 (
 	[LayerId] UNIQUEIDENTIFIER NOT NULL PRIMARY KEY,
-	[LayerTypeId] TINYINT NOT NULL,
-	[LayerName] NVARCHAR(50) NOT NULL,
+	[DisplayLayerId] UNIQUEIDENTIFIER NOT NULL,
 	[DateCreated] DATETIME2 NOT NULL,
-	[DateUpdated] DATETIME2 NOT NULL,
-	[AuthorObjectId] UNIQUEIDENTIFIER NOT NULL, 
-    CONSTRAINT FK_Layer_LayerType FOREIGN KEY ([LayerTypeId]) REFERENCES [dbo].[LayerType]([LayerTypeId])
+	[DefaultColour] CHAR(6) NOT NULL,
+	CONSTRAINT FK_Layer_DisplayLayer FOREIGN KEY ([DisplayLayerId]) REFERENCES [dbo].[DisplayLayer] ([DisplayLayerId])
+
 )

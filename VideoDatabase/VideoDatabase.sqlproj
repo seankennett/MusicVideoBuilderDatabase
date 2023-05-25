@@ -63,14 +63,9 @@
     <Build Include="Tables\Clip.sql" />
     <Build Include="Tables\Format.sql" />
     <Build Include="Tables\Layer.sql" />
-    <Build Include="Tables\LayerType.sql" />
-    <Build Include="Tables\Tag.sql" />
-    <Build Include="Tables\LayerTags.sql" />
-    <Build Include="StoredProcs\InsertLayer.sql" />
-    <Build Include="Types\TagsType.sql" />
-    <Build Include="StoredProcs\GetTags.sql" />
-    <Build Include="StoredProcs\GetLayerFinders.sql" />
-    <Build Include="StoredProcs\GetPendingUserLayers.sql" />
+    <Build Include="Tables\CollectionType.sql" />
+    <Build Include="StoredProcs\GetCollections.sql" />
+    <Build Include="StoredProcs\GetPendingUserDisplayLayers.sql" />
     <Build Include="StoredProcs\UpsertClip.sql" />
     <Build Include="Types\IntOrderType.sql" />
     <Build Include="StoredProcs\GetClips.sql" />
@@ -80,7 +75,6 @@
     <Build Include="StoredProcs\UpsertVideo.sql" />
     <Build Include="StoredProcs\DeleteVideo.sql" />
     <Build Include="StoredProcs\DeleteClip.sql" />
-    <Build Include="StoredProcs\DeleteUserLayer.sql" />
     <Build Include="Tables\Resolution.sql" />
     <Build Include="Tables\License.sql" />
     <Build Include="Tables\Build.sql" />
@@ -89,11 +83,17 @@
     <Build Include="StoredProcs\UpsertBuild.sql" />
     <Build Include="StoredProcs\GetUserBuildByPaymentIntentId.sql" />
     <Build Include="StoredProcs\GetUserBuild.sql" />
-    <Build Include="StoredProcs\InsertPendingUserLayers.sql" />
+    <Build Include="StoredProcs\InsertPendingUserDisplayLayers.sql" />
     <Build Include="StoredProcs\CleanUpBuilds.sql" />
-    <Build Include="Tables\UserLayer.sql" />
-    <Build Include="StoredProcs\GetUserLayers.sql" />
-    <Build Include="StoredProcs\ConfirmPendingUserLayers.sql" />
+    <Build Include="Tables\UserDisplayLayer.sql" />
+    <Build Include="StoredProcs\GetUserDisplayLayers.sql" />
+    <Build Include="StoredProcs\ConfirmPendingUserDisplayLayers.sql" />
+    <Build Include="Tables\Collection.sql" />
+    <Build Include="Tables\DisplayLayer.sql" />
+    <Build Include="Tables\Direction.sql" />
+    <Build Include="Tables\LayerClipDisplayLayers.sql" />
+    <Build Include="Types\ClipDisplayLayerType.sql" />
+    <Build Include="Types\LayerClipDisplayLayerType.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="VideoDatabase.refactorlog" />
@@ -105,8 +105,8 @@
     <None Include="VideoDatabase.publish.xml" />
   </ItemGroup>
   <ItemGroup>
-    <Build Include="Tables\PendingUserLayer.sql" />
-    <Build Include="Tables\ClipLayers.sql" />
+    <Build Include="Tables\PendingUserDisplayLayer.sql" />
+    <Build Include="Tables\ClipDisplayLayers.sql" />
     <Build Include="Tables\BuildStatus.sql" />
     <Build Include="Tables\Video.sql" />
   </ItemGroup>

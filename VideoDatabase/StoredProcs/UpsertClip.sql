@@ -4,24 +4,55 @@
 	@BackgroundColour CHAR(6) NULL,
 	@BeatLength TINYINT,
 	@StartingBeat TINYINT,
-	@Layers [GuidOrderType] READONLY,
+	@ClipDisplayLayers [ClipDisplayLayerType] READONLY,
+	@LayerClipDisplayLayers [LayerClipDisplayLayerType] READONLY,
 	@userObjectId UNIQUEIDENTIFIER
 AS
+DECLARE @Map AS TABLE
+(
+	TempId int,
+	InsertedId int
+)
 BEGIN TRY
     BEGIN TRANSACTION
 
 	IF (@ClipId > 0)
 	BEGIN
-	UPDATE [Clip] SET ClipName = @ClipName, DateUpdated = GETUTCDATE(), BackgroundColour = @BackgroundColour, BeatLength = @BeatLength, StartingBeat = @StartingBeat WHERE ClipId = @ClipId;
-	DELETE FROM [ClipLayers] WHERE ClipId = @ClipId;
+		UPDATE [Clip] SET ClipName = @ClipName, DateUpdated = GETUTCDATE(), BackgroundColour = @BackgroundColour, BeatLength = @BeatLength, StartingBeat = @StartingBeat WHERE ClipId = @ClipId;
+		DELETE FROM [LayerClipDisplayLayers] WHERE ClipDisplayLayerId IN (SELECT ClipDisplayLayerId FROM [ClipDisplayLayers] WHERE ClipId = @ClipId)
+		DELETE FROM [ClipDisplayLayers] WHERE ClipId = @ClipId;
 	END
 	ELSE
 	BEGIN
-	INSERT INTO [Clip] (ClipName, DateCreated, DateUpdated, BackgroundColour, BeatLength, StartingBeat, UserObjectId) VALUES (@ClipName, GETUTCDATE(), GETUTCDATE(), @BackgroundColour, @BeatLength, @StartingBeat, @userObjectId)
-	SET @ClipId = SCOPE_IDENTITY();
+		INSERT INTO [Clip] (ClipName, DateCreated, DateUpdated, BackgroundColour, BeatLength, StartingBeat, UserObjectId) VALUES (@ClipName, GETUTCDATE(), GETUTCDATE(), @BackgroundColour, @BeatLength, @StartingBeat, @userObjectId)
+		SET @ClipId = SCOPE_IDENTITY();
 	END
 
-	INSERT INTO [ClipLayers] (ClipId, LayerId, [Order], DateCreated) SELECT @ClipId, [ForeignId], [Order], GETUTCDATE() FROM @Layers;
+	MERGE INTO dbo.ClipDisplayLayers USING @ClipDisplayLayers AS source 
+        ON 1 = 0 -- Always not matched
+    WHEN NOT MATCHED THEN
+        INSERT ([DisplayLayerId],
+		[Order],
+		[ClipId]
+        )
+        VALUES (source.[DisplayLayerId]
+              , source.[Order]
+              , @ClipId
+        )
+        OUTPUT source.TempId, Inserted.ClipDisplayLayerId 
+        INTO @Map (TempId, InsertedId);
+
+	INSERT INTO dbo.LayerClipDisplayLayers(
+         ClipDisplayLayerId
+       , ColourOverride
+       , LayerId
+    )
+    SELECT m.InsertedId
+         , lcd.ColourOverride
+         , lcd.LayerId
+    FROM @LayerClipDisplayLayers as lcd
+    INNER JOIN @Map as m 
+        ON(lcd.ClipDisplayLayerId = m.TempId);
 	
 	SELECT @ClipId
 

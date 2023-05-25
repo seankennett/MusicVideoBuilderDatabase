@@ -17,10 +17,10 @@ BEGIN
     INSERT INTO [dbo].[Format] ([FormatId], [FormatName]) VALUES (3, 'avi')
 END
 
-IF NOT EXISTS(SELECT 1 FROM [dbo].[LayerType])
+IF NOT EXISTS(SELECT 1 FROM [dbo].[CollectionType])
 BEGIN
-    INSERT INTO [dbo].[LayerType] ([LayerTypeId], [LayerTypeName]) VALUES (1, 'Background') 
-    INSERT INTO [dbo].[LayerType] ([LayerTypeId], [LayerTypeName]) VALUES (2, 'Foreground') 
+    INSERT INTO [dbo].[CollectionType] ([CollectionTypeId], [CollectionTypeName]) VALUES (1, 'Background') 
+    INSERT INTO [dbo].[CollectionType] ([CollectionTypeId], [CollectionTypeName]) VALUES (2, 'Foreground') 
 END
 
 IF NOT EXISTS(SELECT 1 FROM [dbo].[BuildStatus])
@@ -44,4 +44,15 @@ BEGIN
     INSERT INTO [dbo].[License] ([LicenseId], [LicenseName]) VALUES (1, 'Personal')
     INSERT INTO [dbo].[License] ([LicenseId], [LicenseName]) VALUES (2, 'Standard') 
     INSERT INTO [dbo].[License] ([LicenseId], [LicenseName]) VALUES (3, 'Enhanced')
+END
+
+IF NOT EXISTS(SELECT 1 FROM [dbo].[Direction])
+BEGIN
+    INSERT INTO [dbo].[Direction] ([DirectionId], [DirectionName], [IsTransition]) VALUES (1, 'Straight', 0)
+    INSERT INTO [dbo].[Direction] ([DirectionId], [DirectionName], [IsTransition]) VALUES (2, 'StraightRight', 1)
+    INSERT INTO [dbo].[Direction] ([DirectionId], [DirectionName], [IsTransition]) VALUES (3, 'Right', 0)
+    INSERT INTO [dbo].[Direction] ([DirectionId], [DirectionName], [IsTransition]) VALUES (4, 'RightStraight', 1)
+    INSERT INTO [dbo].[Direction] ([DirectionId], [DirectionName], [IsTransition]) VALUES (5, 'StraightUp', 1)
+    INSERT INTO [dbo].[Direction] ([DirectionId], [DirectionName], [IsTransition]) VALUES (6, 'Up', 0)
+    INSERT INTO [dbo].[Direction] ([DirectionId], [DirectionName], [IsTransition]) VALUES (7, 'UpStraight', 1)
 END

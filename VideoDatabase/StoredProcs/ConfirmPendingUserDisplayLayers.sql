@@ -1,15 +1,15 @@
-﻿CREATE PROCEDURE [dbo].[ConfirmPendingUserLayers]
+﻿CREATE PROCEDURE [dbo].[ConfirmPendingUserDisplayLayers]
 	@BuildId UNIQUEIDENTIFIER	
 AS
 BEGIN TRY
     BEGIN TRANSACTION
 		DECLARE @DateNow DATETIME2 = GETUTCDATE();
-		INSERT INTO [dbo].[UserLayer] (ResolutionId, LicenseId, DateCreated, LayerId, UserObjectId) 
-        (SELECT b.ResolutionId, b.LicenseId, @DateNow, ul.LayerId, ul.UserObjectId FROM [dbo].[PendingUserLayer] ul 
+		INSERT INTO [dbo].[UserDisplayLayer] (ResolutionId, LicenseId, DateCreated, DisplayLayerId, UserObjectId) 
+        (SELECT b.ResolutionId, b.LicenseId, @DateNow, ul.DisplayLayerId, ul.UserObjectId FROM [dbo].[PendingUserDisplayLayer] ul 
         JOIN [dbo].[Build] b ON ul.BuildId = b.BuildId
         WHERE b.BuildId = @BuildId)
 
-        DELETE FROM [dbo].[PendingUserLayer] WHERE BuildId = @BuildId
+        DELETE FROM [dbo].[PendingUserDisplayLayer] WHERE BuildId = @BuildId
 	COMMIT
 	END TRY
 BEGIN CATCH
