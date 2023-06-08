@@ -53,8 +53,12 @@ resource sqlserver 'Microsoft.Sql/servers@2020-11-01-preview' = {
       capacity: databaseCapacity
     }
     properties: {
+      autoPauseDelay: 60
+      minCapacity: json('0.5')
       collation: 'SQL_Latin1_General_CP1_CI_AS'
       maxSizeBytes: databaseMaxSizeBytes
+      zoneRedundant: false
+      storageAccountType: 'LRS'
     }
   }
 
