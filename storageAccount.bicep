@@ -43,6 +43,7 @@ var baseProperties = {
 var customDomainProperty = {
   customDomain:{
     name: customDomainName
+    useSubDomainName:true
   }
 }
 
