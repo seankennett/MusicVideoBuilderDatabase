@@ -28,7 +28,23 @@ param enableCors bool = false
 @description('enable lifecyle for deleting user assets')
 param enableUserDeleteLifeCycle bool = false
 
+@description('enable lifecyle for deleting user assets')
+param customDomainName string = ''
+
 var defaultServiceName = 'default'
+
+var baseProperties = {
+    accessTier: 'Hot'
+    allowBlobPublicAccess: true
+    publicNetworkAccess: 'Enabled'
+    supportsHttpsTrafficOnly: supportHttpsOnly
+}
+
+var customDomainProperty = {
+  customDomain:{
+    name: customDomainName
+  }
+}
 
 // nothing for setting up static website - manual
 resource storageAccount 'Microsoft.Storage/storageAccounts@2021-06-01' = {
@@ -38,12 +54,7 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2021-06-01' = {
     name: storageAccountType
   }
   kind: 'StorageV2'
-  properties: {
-    accessTier: 'Hot'
-    allowBlobPublicAccess: true
-    publicNetworkAccess: 'Enabled'
-    supportsHttpsTrafficOnly: supportHttpsOnly
-  }
+  properties: customDomainName != '' ? union(baseProperties, customDomainProperty) : baseProperties
 }
 
 resource queueServices 'Microsoft.Storage/storageAccounts/queueServices@2022-05-01' existing = {
