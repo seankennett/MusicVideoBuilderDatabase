@@ -411,6 +411,7 @@ module storagePublic 'storageAccount.bicep' = {
     storageAccountType: storageAccountType
     supportHttpsOnly: false // workaround for cert issue cdn will call http not great but you have to use azure cdn for this to work
     enableCors: true
+    customDomainName: 'cdn.musicvideobuilder.com'
   }
 }
 
