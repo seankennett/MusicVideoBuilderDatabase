@@ -16,15 +16,16 @@ DECLARE @Map AS TABLE
 BEGIN TRY
     BEGIN TRANSACTION
 
+	DECLARE @DateNow DATETIME2 = GETUTCDATE();
 	IF (@ClipId > 0)
 	BEGIN
-		UPDATE [Clip] SET ClipName = @ClipName, DateUpdated = GETUTCDATE(), BackgroundColour = @BackgroundColour, BeatLength = @BeatLength, StartingBeat = @StartingBeat WHERE ClipId = @ClipId;
+		UPDATE [Clip] SET ClipName = @ClipName, DateUpdated = @DateNow , BackgroundColour = @BackgroundColour, BeatLength = @BeatLength, StartingBeat = @StartingBeat WHERE ClipId = @ClipId;
 		DELETE FROM [LayerClipDisplayLayers] WHERE ClipDisplayLayerId IN (SELECT ClipDisplayLayerId FROM [ClipDisplayLayers] WHERE ClipId = @ClipId)
 		DELETE FROM [ClipDisplayLayers] WHERE ClipId = @ClipId;
 	END
 	ELSE
 	BEGIN
-		INSERT INTO [Clip] (ClipName, DateCreated, DateUpdated, BackgroundColour, BeatLength, StartingBeat, UserObjectId) VALUES (@ClipName, GETUTCDATE(), GETUTCDATE(), @BackgroundColour, @BeatLength, @StartingBeat, @userObjectId)
+		INSERT INTO [Clip] (ClipName, DateCreated, DateUpdated, BackgroundColour, BeatLength, StartingBeat, UserObjectId) VALUES (@ClipName, @DateNow , @DateNow , @BackgroundColour, @BeatLength, @StartingBeat, @userObjectId)
 		SET @ClipId = SCOPE_IDENTITY();
 	END
 
@@ -33,11 +34,13 @@ BEGIN TRY
     WHEN NOT MATCHED THEN
         INSERT ([DisplayLayerId],
 		[Order],
-		[ClipId]
+		[ClipId],
+		[DateCreated]
         )
         VALUES (source.[DisplayLayerId]
               , source.[Order]
               , @ClipId
+			  , @DateNow 
         )
         OUTPUT source.TempId, Inserted.ClipDisplayLayerId 
         INTO @Map (TempId, InsertedId);

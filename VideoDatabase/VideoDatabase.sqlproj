@@ -94,6 +94,7 @@
     <Build Include="Tables\LayerClipDisplayLayers.sql" />
     <Build Include="Types\ClipDisplayLayerType.sql" />
     <Build Include="Types\LayerClipDisplayLayerType.sql" />
+    <Build Include="StoredProcs\GetDirections.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="VideoDatabase.refactorlog" />

@@ -10,14 +10,11 @@ SELECT vc.VideoId, vc.ClipId, vc.[Order], c.ClipName, c.BackgroundColour, c.Beat
 JOIN [dbo].[Clip] c ON vc.ClipId = c.[ClipId]
 WHERE c.UserObjectId = @userObjectId
 
-SELECT cu.ClipId, cu.[Order], cu.DisplayLayerId, co.CollectionName FROM [dbo].[ClipDisplayLayers] cu
-JOIN [dbo].[DisplayLayer] d ON cu.DisplayLayerId = d.DisplayLayerId
-JOIN [dbo].[Collection] co ON d.CollectionId = co.CollectionId
-JOIN [dbo].[Clip] c ON c.ClipId = cu.ClipId
+SELECT cd.ClipId, cd.DisplayLayerId, cd.[Order], cd.ClipDisplayLayerId FROM [dbo].[ClipDisplayLayers] cd
+JOIN [dbo].[Clip] c ON c.ClipId = cd.ClipId
 WHERE c.UserObjectId = @userObjectId
 
-SELECT l.LayerId, l.DefaultColour, l.DisplayLayerId, lc.ColourOverride FROM [dbo].[Layer] l
-JOIN [dbo].[ClipDisplayLayers] cd ON cd.DisplayLayerId = l.DisplayLayerId
-LEFT JOIN [dbo].[LayerClipDisplayLayers] lc ON lc.LayerId = l.LayerId
+SELECT l.LayerId, l.ColourOverride, l.ClipDisplayLayerId FROM [dbo].[LayerClipDisplayLayers] l
+JOIN [dbo].[ClipDisplayLayers] cd ON cd.ClipDisplayLayerId = l.ClipDisplayLayerId
 JOIN [dbo].[Clip] c ON c.ClipId = cd.ClipId
 WHERE c.UserObjectId = @userObjectId
