@@ -22,9 +22,6 @@ param privateBlobStorageUrl string
 @description('Private queue storage url')
 param privateQueueStorageUrl string
 
-@description('Upload layer queue')
-param uploadLayerQueue string
-
 @description('Build Instructor Queue')
 param buildInstructorQueue string
 
@@ -118,10 +115,6 @@ resource appService 'Microsoft.Web/sites@2021-03-01' = {
           value: privateQueueStorageUrl
         }
         {
-          name: 'UploadLayerQueueName'
-          value: uploadLayerQueue
-        }
-        {
           name: 'BuildInstructorQueueName'
           value: buildInstructorQueue
         }
@@ -130,7 +123,7 @@ resource appService 'Microsoft.Web/sites@2021-03-01' = {
           value: databaseConnectionString
         }
         {
-          name: 'ManagedIdentityClientId'
+          name: 'AZURE_CLIENT_ID'
           value: managedIdentityClientId
         }
       ]

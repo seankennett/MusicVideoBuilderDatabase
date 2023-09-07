@@ -47,8 +47,6 @@ var PrivateBlobStorageUrl = 'https://${storageAccountNamePrivate}.blob.${environ
 var PrivateQueueStorageUrl = 'https://${storageAccountNamePrivate}.queue.${environment().suffixes.storage}'
 
 var eventGridName = storageAccountNamePrivate
-var uploadLayerFunctionAppName = 'uploadlayerfunction'
-var uploadLayerConnectionSecretName = 'UploadLayerConnectionString'
 var newVideoFunctionAppName = 'newvideofunction'
 var newVideoConnectionSecretName = 'NewVideoConnectionString'
 var builderFunctionAppName = 'freebuilderfunction'
@@ -62,7 +60,6 @@ var buildCleanConnectionSecretName = 'BuildCleanConnectionString'
 
 var freeBuilderQueue = 'free-builder'
 var hdBuilderQueue = 'hd-builder'
-var uploadLayerQueue = 'upload-layer'
 var buildInstructorQueue = 'build-instructor'
 
 var userIdentityName = resourceName
@@ -83,55 +80,6 @@ module appInsights 'appInsights.bicep' = {
   params: {
     location: location
     resourceName: resourceName
-  }
-}
-
-module uploadLayerFunction 'function.bicep' = {
-  name: 'deployUploadLayerFunction'
-  params: {
-    location: location
-    appInsightsConnectionString: appInsights.outputs.appInsightsConnectionString
-    storageAccountName: uploadLayerFunctionAppName
-    triggerStorageQueueUri: PrivateQueueStorageUrl
-    storageSecretName: uploadLayerConnectionSecretName
-    functionAppName: uploadLayerFunctionAppName
-    userIdentityId: userIdentity.outputs.id
-    keyvaultName: keyvaultName
-    databaseConnectionString: databaseConnectionString
-    managedIdentityClientId: userIdentity.outputs.clientId
-    additionalAppSettings: [
-      {
-        name: 'QueueName'
-        value: uploadLayerQueue
-      }
-      {
-        name: 'PrivateBlobStorageUrl'
-        value: PrivateBlobStorageUrl
-      }
-      {
-        name: 'PublicBlobStorageUrl'
-        value: PublicBlobStorageUrl
-      }
-      {
-        name: 'ManagedIdentityClientId'
-        value: userIdentity.outputs.clientId
-      }
-    ]
-  }
-  dependsOn: [
-    storagePrivate
-    storageUploadLayer
-  ]
-}
-
-module storageUploadLayer 'storageAccount.bicep' = {
-  name: 'deployStorageUploadLayer'
-  params: {
-    location: location
-    storageAccountName: uploadLayerFunctionAppName
-    storageAccountType: storageAccountType
-    secretName: uploadLayerConnectionSecretName
-    keyvaultName: keyvaultName
   }
 }
 
@@ -157,7 +105,7 @@ module newVideoFunction 'function.bicep' = {
         value: 'https://${keyvaultName}${environment().suffixes.keyvaultDns}/'
       }
       {
-        name: 'ManagedIdentityClientId'
+        name: 'AZURE_CLIENT_ID'
         value: userIdentity.outputs.clientId
       }
     ]
@@ -203,7 +151,7 @@ module freeBuilderFunction 'function.bicep' = {
         value: 4
       }
       {
-        name: 'ManagedIdentityClientId'
+        name: 'AZURE_CLIENT_ID'
         value: userIdentity.outputs.clientId
       }
     ]
@@ -251,7 +199,7 @@ module hdBuilderFunction 'function.bicep' = {
         value: 1
       }
       {
-        name: 'ManagedIdentityClientId'
+        name: 'AZURE_CLIENT_ID'
         value: userIdentity.outputs.clientId
       }
     ]
@@ -301,7 +249,7 @@ module buildInstructorFunction 'function.bicep' = {
         value: PrivateQueueStorageUrl
       }
       {
-        name: 'ManagedIdentityIdReference'
+        name: 'AZURE_CLIENT_ID'
         value: userIdentity.outputs.id
       }
       {
@@ -380,12 +328,10 @@ module webApi 'webApi.bicep' = {
     privateBlobStorageUrl: PrivateBlobStorageUrl
     privateQueueStorageUrl: PrivateQueueStorageUrl
     buildInstructorQueue: buildInstructorQueue
-    uploadLayerQueue: uploadLayerQueue
     databaseConnectionString: databaseConnectionString
     managedIdentityClientId: userIdentity.outputs.clientId
   }
   dependsOn: [
-    uploadLayerFunction
   ]
 }
 
@@ -422,7 +368,6 @@ module storagePrivate 'storageAccount.bicep' = {
     storageAccountName: storageAccountNamePrivate
     storageAccountType: storageAccountType
     queues: [
-      uploadLayerQueue
       freeBuilderQueue
       hdBuilderQueue
       buildInstructorQueue
