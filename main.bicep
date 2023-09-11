@@ -56,7 +56,7 @@ var buildInstructorFunctionAppName = 'buildinstructorfunction'
 var buildInstructorConnectionSecretName = 'BuildInstructorConnectionString'
 var buildCleanFunctionAppName = 'buildcleanfunction'
 var buildCleanConnectionSecretName = 'BuildCleanConnectionString'
-var publicApiFunctionAppName = 'musicvideobuilderpublic'
+var publicApiFunctionAppName = '${resourceName}publicapi'
 var publicApiConnectionSecretName = 'PublicApiConnectionSecretName'
 
 var freeBuilderQueue = 'free-builder'
