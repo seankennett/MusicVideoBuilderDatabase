@@ -57,7 +57,7 @@ var buildInstructorConnectionSecretName = 'BuildInstructorConnectionString'
 var buildCleanFunctionAppName = 'buildcleanfunction'
 var buildCleanConnectionSecretName = 'BuildCleanConnectionString'
 var publicApiFunctionAppName = 'mvbpublicapi'
-var publicApiConnectionSecretName = 'PublicApiConnectionSecretName'
+var publicApiConnectionSecretName = 'PublicApiConnectionString'
 
 var freeBuilderQueue = 'free-builder'
 var hdBuilderQueue = 'hd-builder'
