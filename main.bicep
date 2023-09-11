@@ -41,7 +41,6 @@ var batchServiceName = resourceName
 var sqlServerName = resourceName
 var databaseName = resourceName
 var storageAccountNamePublic = '${resourceName}public'
-var PublicBlobStorageUrl = 'https://${storageAccountNamePublic}.blob.${environment().suffixes.storage}'
 var storageAccountNamePrivate = '${resourceName}private'
 var PrivateBlobStorageUrl = 'https://${storageAccountNamePrivate}.blob.${environment().suffixes.storage}'
 var PrivateQueueStorageUrl = 'https://${storageAccountNamePrivate}.queue.${environment().suffixes.storage}'
@@ -57,6 +56,8 @@ var buildInstructorFunctionAppName = 'buildinstructorfunction'
 var buildInstructorConnectionSecretName = 'BuildInstructorConnectionString'
 var buildCleanFunctionAppName = 'buildcleanfunction'
 var buildCleanConnectionSecretName = 'BuildCleanConnectionString'
+var publicApiFunctionAppName = 'musicvideobuilderpublic'
+var publicApiConnectionSecretName = 'PublicApiConnectionSecretName'
 
 var freeBuilderQueue = 'free-builder'
 var hdBuilderQueue = 'hd-builder'
@@ -312,6 +313,35 @@ module storageBuildClean 'storageAccount.bicep' = {
     storageAccountName: buildCleanFunctionAppName
     storageAccountType: storageAccountType
     secretName: buildCleanConnectionSecretName
+    keyvaultName: keyvaultName
+  }
+}
+
+module publicApiFunction 'function.bicep' = {
+  name: 'deployPublicApiFunction'
+  params: {
+    location: location
+    appInsightsConnectionString: appInsights.outputs.appInsightsConnectionString
+    storageAccountName: publicApiFunctionAppName
+    storageSecretName: publicApiConnectionSecretName
+    functionAppName: publicApiFunctionAppName
+    userIdentityId: userIdentity.outputs.id
+    keyvaultName: keyvaultName
+    databaseConnectionString: databaseConnectionString
+    managedIdentityClientId: userIdentity.outputs.clientId
+  }
+  dependsOn: [
+    storagePublicApi
+  ]
+}
+
+module storagePublicApi 'storageAccount.bicep' = {
+  name: 'deployStoragePublicApi'
+  params: {
+    location: location
+    storageAccountName: publicApiFunctionAppName
+    storageAccountType: storageAccountType
+    secretName: publicApiConnectionSecretName
     keyvaultName: keyvaultName
   }
 }
