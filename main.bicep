@@ -5,16 +5,16 @@ param webAppSkuName string = 'F1'
 param webAppSkuCapacity int = 1
 
 @description('Database sku')
-param databaseSku string = 'GP_S_Gen5'
+param databaseSku string = 'Basic'
 
 @description('Database Tier')
-param databaseTier string = 'GeneralPurpose'
+param databaseTier string = 'Basic'
 
 @description('Database DTU capacity')
-param databaseCapacity int = 1
+param databaseCapacity int = 5
 
 @description('Database DTU capacity')
-param databaseMaxSizeBytes int = 1073741824
+param databaseMaxSizeBytes int = 2147483648
 
 @description('Location for all resources.')
 param location string = 'West Europe'
