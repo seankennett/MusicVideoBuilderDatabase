@@ -31,6 +31,9 @@ param databaseConnectionString string
 @description('Managed Identity Client Id')
 param managedIdentityClientId string
 
+@description('Public Api Url')
+param publicApiUrl string
+
 var appServicePlanName = resourceName
 var webSiteName = resourceName
 var keyvaultName = resourceName
@@ -125,6 +128,10 @@ resource appService 'Microsoft.Web/sites@2021-03-01' = {
         {
           name: 'AZURE_CLIENT_ID'
           value: managedIdentityClientId
+        }
+        {
+          name: 'PublicApi'
+          value: publicApiUrl
         }
       ]
       cors: {

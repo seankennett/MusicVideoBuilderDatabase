@@ -58,6 +58,7 @@ var buildCleanFunctionAppName = 'buildcleanfunction'
 var buildCleanConnectionSecretName = 'BuildCleanConnectionString'
 var publicApiFunctionAppName = 'mvbpublicapi'
 var publicApiConnectionSecretName = 'PublicApiConnectionString'
+var publicApiUrl = 'https://public.musicvideobuilder.com'
 
 var freeBuilderQueue = 'free-builder'
 var hdBuilderQueue = 'hd-builder'
@@ -269,6 +270,10 @@ module buildInstructorFunction 'function.bicep' = {
         name: 'HdBuilderQueueName'
         value: hdBuilderQueue
       }
+      {
+        name: 'PublicApi'
+        value: publicApiUrl
+      }
     ]
   }
   dependsOn: [
@@ -360,6 +365,7 @@ module webApi 'webApi.bicep' = {
     buildInstructorQueue: buildInstructorQueue
     databaseConnectionString: databaseConnectionString
     managedIdentityClientId: userIdentity.outputs.clientId
+    publicApiUrl: publicApiUrl
   }
   dependsOn: [
   ]
