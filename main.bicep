@@ -252,15 +252,11 @@ module buildInstructorFunction 'function.bicep' = {
       }
       {
         name: 'AZURE_CLIENT_ID'
-        value: userIdentity.outputs.id
+        value: userIdentity.outputs.clientId
       }
       {
         name: 'AzureKeyVaultEndpoint'
         value: 'https://${keyvaultName}${environment().suffixes.keyvaultDns}/'
-      }
-      {
-        name: 'ManagedIdentityClientId'
-        value: userIdentity.outputs.clientId
       }
       {
         name: 'FreeBuilderQueueName'
