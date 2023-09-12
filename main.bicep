@@ -58,7 +58,7 @@ var buildCleanFunctionAppName = 'buildcleanfunction'
 var buildCleanConnectionSecretName = 'BuildCleanConnectionString'
 var publicApiFunctionAppName = 'mvbpublicapi'
 var publicApiConnectionSecretName = 'PublicApiConnectionString'
-var publicApiUrl = 'https://public.musicvideobuilder.com/api'
+var publicApiUrl = 'https://public.musicvideobuilder.com'
 
 var freeBuilderQueue = 'free-builder'
 var hdBuilderQueue = 'hd-builder'
