@@ -318,6 +318,7 @@ module storageBuildClean 'storageAccount.bicep' = {
   }
 }
 
+// manually added custom domain -> turn off dns and follow portal
 module publicApiFunction 'function.bicep' = {
   name: 'deployPublicApiFunction'
   params: {
@@ -381,6 +382,7 @@ module sql 'sqlServerModule.bicep' = {
   }
 }
 
+// domain crap may need tweaking on fresh deploy
 module storagePublic 'storageAccount.bicep' = {
   name: 'deployStoragePublic'
   params: {
@@ -409,6 +411,7 @@ module storagePrivate 'storageAccount.bicep' = {
   }
 }
 
+// manually added custom domain -> turn off dns and follow portal
 module staticWebsite 'staticSite.bicep' = {
   name: 'deployStaticWebsite'
   params: {
