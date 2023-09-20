@@ -14,8 +14,9 @@ param actionGroupId string
 param userIdentityId string
 
 var keyvaultName = resourceName
-var poolName = 'builderPoolD2ADSV5'
-var vmSize = 'STANDARD_D2ADS_V5'
+var poolName = 'builderPoolD4ADSV5'
+// need > 11GB memory this is cheapest not on ARM64 (may want to look at ffmpeg versions for support here)
+var vmSize = 'STANDARD_D4ADS_V5'
 
 resource batchService 'Microsoft.Batch/batchAccounts@2022-10-01' = {
   name: resourceName

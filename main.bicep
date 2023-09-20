@@ -50,8 +50,6 @@ var newVideoFunctionAppName = 'newvideofunction'
 var newVideoConnectionSecretName = 'NewVideoConnectionString'
 var builderFunctionAppName = 'freebuilderfunction'
 var builderConnectionSecretName = 'BuilderConnectionString'
-var builderHdFunctionAppName = 'hdbuilderfunction'
-var builderHdConnectionSecretName = 'BuilderHdConnectionString'
 var buildInstructorFunctionAppName = 'buildinstructorfunction'
 var buildInstructorConnectionSecretName = 'BuildInstructorConnectionString'
 var buildCleanFunctionAppName = 'buildcleanfunction'
@@ -61,7 +59,6 @@ var publicApiConnectionSecretName = 'PublicApiConnectionString'
 var publicApiUrl = 'https://public.musicvideobuilder.com'
 
 var freeBuilderQueue = 'free-builder'
-var hdBuilderQueue = 'hd-builder'
 var buildInstructorQueue = 'build-instructor'
 
 var userIdentityName = resourceName
@@ -176,54 +173,6 @@ module storageFreeBuilder 'storageAccount.bicep' = {
   }
 }
 
-module hdBuilderFunction 'function.bicep' = {
-  name: 'deployHdBuilderFunction'
-  params: {
-    location: location
-    triggerStorageQueueUri: PrivateQueueStorageUrl
-    storageAccountName: builderHdFunctionAppName
-    storageSecretName: builderHdConnectionSecretName
-    appInsightsConnectionString: appInsights.outputs.appInsightsConnectionString
-    functionAppName: builderHdFunctionAppName
-    runFromPackage: false
-    managedIdentityClientId: userIdentity.outputs.clientId
-    additionalAppSettings: [
-      {
-        name: 'QueueName'
-        value: hdBuilderQueue
-      }
-      {
-        name: 'PrivateBlobStorageUrl'
-        value: PrivateBlobStorageUrl
-      }
-      {
-        name: 'AzureFunctionsJobHost__extensions__durableTask__maxConcurrentActivityFunctions'
-        value: 1
-      }
-      {
-        name: 'AZURE_CLIENT_ID'
-        value: userIdentity.outputs.clientId
-      }
-    ]
-    keyvaultName: keyvaultName
-    userIdentityId: userIdentity.outputs.id
-  }
-  dependsOn: [
-    storageHdBuilder
-  ]
-}
-
-module storageHdBuilder 'storageAccount.bicep' = {
-  name: 'deployStorageHdBuilder'
-  params: {
-    location: location
-    storageAccountName: builderHdFunctionAppName
-    storageAccountType: storageAccountType
-    secretName: builderHdConnectionSecretName
-    keyvaultName: keyvaultName
-  }
-}
-
 module buildInstructorFunction 'function.bicep' = {
   name: 'deployBuildInstructorFunction'
   params: {
@@ -261,10 +210,6 @@ module buildInstructorFunction 'function.bicep' = {
       {
         name: 'FreeBuilderQueueName'
         value: freeBuilderQueue
-      }
-      {
-        name: 'HdBuilderQueueName'
-        value: hdBuilderQueue
       }
       {
         name: 'PublicApi'
@@ -403,7 +348,6 @@ module storagePrivate 'storageAccount.bicep' = {
     storageAccountType: storageAccountType
     queues: [
       freeBuilderQueue
-      hdBuilderQueue
       buildInstructorQueue
     ]
     enableCors: true
