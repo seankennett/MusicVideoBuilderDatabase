@@ -204,6 +204,10 @@ module buildInstructorFunction 'function.bicep' = {
         value: userIdentity.outputs.clientId
       }
       {
+        name: 'ManagedIdentityIdReference'
+        value: userIdentity.outputs.id
+      }
+      {
         name: 'AzureKeyVaultEndpoint'
         value: 'https://${keyvaultName}${environment().suffixes.keyvaultDns}/'
       }
