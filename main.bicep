@@ -45,7 +45,6 @@ var storageAccountNamePrivate = '${resourceName}private'
 var PrivateBlobStorageUrl = 'https://${storageAccountNamePrivate}.blob.${environment().suffixes.storage}'
 var PrivateQueueStorageUrl = 'https://${storageAccountNamePrivate}.queue.${environment().suffixes.storage}'
 
-var eventGridName = storageAccountNamePrivate
 var newVideoFunctionAppName = 'newvideofunction'
 var newVideoConnectionSecretName = 'NewVideoConnectionString'
 var builderFunctionAppName = 'freebuilderfunction'
@@ -206,6 +205,10 @@ module buildInstructorFunction 'function.bicep' = {
         value: PrivateQueueStorageUrl
       }
       {
+        name: 'PrivateAccountName'
+        value: storageAccountNamePrivate
+      }
+      {
         name: 'AZURE_CLIENT_ID'
         value: userIdentity.outputs.clientId
       }
@@ -220,6 +223,10 @@ module buildInstructorFunction 'function.bicep' = {
       {
         name: 'FreeBuilderQueueName'
         value: freeBuilderQueue
+      }
+      {
+        name: 'NewVideoQueueName'
+        value: newVideoQueue
       }
       {
         name: 'PublicApi'
