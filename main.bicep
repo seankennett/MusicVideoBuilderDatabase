@@ -366,6 +366,7 @@ module storagePrivate 'storageAccount.bicep' = {
     queues: [
       freeBuilderQueue
       buildInstructorQueue
+      newVideoQueue
     ]
     enableCors: true
     enableUserDeleteLifeCycle: true
