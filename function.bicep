@@ -138,5 +138,3 @@ resource functionApp 'Microsoft.Web/sites@2021-03-01' = {
     keyVaultReferenceIdentity: userIdentityId
   }
 }
-
-output id string = functionApp.id

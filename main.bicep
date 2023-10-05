@@ -60,6 +60,7 @@ var publicApiUrl = 'https://public.musicvideobuilder.com'
 
 var freeBuilderQueue = 'free-builder'
 var buildInstructorQueue = 'build-instructor'
+var newVideoQueue = 'new-video'
 
 var userIdentityName = resourceName
 
@@ -86,6 +87,7 @@ module newVideoFunction 'function.bicep' = {
   name: 'deployNewVideoFunction'
   params: {
     location: location
+    triggerStorageQueueUri: PrivateQueueStorageUrl
     storageAccountName: newVideoFunctionAppName
     storageSecretName: newVideoConnectionSecretName
     appInsightsConnectionString: appInsights.outputs.appInsightsConnectionString
@@ -95,6 +97,10 @@ module newVideoFunction 'function.bicep' = {
     databaseConnectionString: databaseConnectionString
     managedIdentityClientId: userIdentity.outputs.clientId
     additionalAppSettings: [
+      {
+        name: 'QueueName'
+        value: newVideoQueue
+      }
       {
         name: 'PrivateBlobStorageUrl'
         value: PrivateBlobStorageUrl
@@ -376,16 +382,5 @@ module batchService 'batchService.bicep' = {
     storageAccountId: storagePrivate.outputs.id
     actionGroupId: appInsights.outputs.actionGroupId
     userIdentityId: userIdentity.outputs.id
-  }
-}
-
-var functionInsideNamespace = '${newVideoFunction.outputs.id}/functions/NewVideoFunction'
-module eventGrid 'eventGrid.bicep' = {
-  name: 'deployEventGrid'
-  params: {
-    resourceName: eventGridName
-    location: location
-    storageAccountId: storagePrivate.outputs.id
-    functionId: functionInsideNamespace
   }
 }
