@@ -101,7 +101,7 @@ resource batchPool 'Microsoft.Batch/batchAccounts/pools@2022-10-01' = {
       }
     }
     startTask: {
-      commandLine: '/bin/bash -c \'apt-get update;apt-get install -y ffmpeg\''
+      commandLine: '/bin/bash -c \'apt-get update;apt-get install -y ffmpeg;curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash\''
       userIdentity: {
         autoUser: {
           scope: 'Pool'
