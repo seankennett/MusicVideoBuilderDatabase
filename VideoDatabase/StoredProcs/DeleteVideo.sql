@@ -4,6 +4,8 @@ AS
 BEGIN TRY
     BEGIN TRANSACTION
 
+    UPDATE Build SET VideoId = NULL WHERE VideoId = @VideoId
+
 	DELETE FROM VideoClips WHERE VideoId = @VideoId
 
     DELETE FROM Video WHERE VideoId = @VideoId

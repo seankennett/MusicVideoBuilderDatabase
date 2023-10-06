@@ -1,7 +1,7 @@
 ﻿CREATE TABLE [dbo].[Build]
 (
 	[BuildId] UNIQUEIDENTIFIER NOT NULL PRIMARY KEY,
-	[VideoId] INT NOT NULL,
+	[VideoId] INT NULL,
 	[VideoName] NVARCHAR(50) NOT NULL,
 	[BuildStatusId] TINYINT NOT NULL,
 	[ResolutionId] TINYINT NOT NULL,
