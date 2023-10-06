@@ -5,7 +5,7 @@ param webAppSkuName string = 'F1'
 param webAppSkuCapacity int = 1
 
 @description('Database sku')
-param databaseSku string = 'GP_S_Gen5_2'
+param databaseSku string = 'GP_S_Gen5_1'
 
 @description('Database Tier')
 param databaseTier string = 'GeneralPurpose'
