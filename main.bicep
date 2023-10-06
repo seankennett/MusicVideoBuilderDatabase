@@ -10,8 +10,8 @@ param databaseSku string = 'GP_S_Gen5_2'
 @description('Database Tier')
 param databaseTier string = 'GeneralPurpose'
 
-@description('Database DTU capacity')
-param databaseCapacity int = 5
+@description('Database capacity')
+param databaseCapacity int = 1
 
 @description('Database DTU capacity')
 param databaseMaxSizeBytes int = 34359738368
