@@ -158,6 +158,14 @@ module freeBuilderFunction 'function.bicep' = {
         name: 'AZURE_CLIENT_ID'
         value: userIdentity.outputs.clientId
       }
+      {
+        name: 'PrivateQueueStorageUrl'
+        value: PrivateQueueStorageUrl
+      }
+      {
+        name: 'NewVideoQueueName'
+        value: newVideoQueue
+      }
     ]
     keyvaultName: keyvaultName
     userIdentityId: userIdentity.outputs.id
