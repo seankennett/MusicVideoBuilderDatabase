@@ -65,7 +65,7 @@
     <Build Include="Tables\Layer.sql" />
     <Build Include="Tables\CollectionType.sql" />
     <Build Include="StoredProcs\GetCollections.sql" />
-    <Build Include="StoredProcs\GetPendingUserDisplayLayers.sql" />
+    <Build Include="StoredProcs\GetPendingUserCollections.sql" />
     <Build Include="StoredProcs\UpsertClip.sql" />
     <Build Include="Types\IntOrderType.sql" />
     <Build Include="StoredProcs\GetClips.sql" />
@@ -83,11 +83,11 @@
     <Build Include="StoredProcs\UpsertBuild.sql" />
     <Build Include="StoredProcs\GetUserBuildByPaymentIntentId.sql" />
     <Build Include="StoredProcs\GetUserBuild.sql" />
-    <Build Include="StoredProcs\InsertPendingUserDisplayLayers.sql" />
+    <Build Include="StoredProcs\InsertPendingUserCollections.sql" />
     <Build Include="StoredProcs\CleanUpBuilds.sql" />
-    <Build Include="Tables\UserDisplayLayer.sql" />
-    <Build Include="StoredProcs\GetUserDisplayLayers.sql" />
-    <Build Include="StoredProcs\ConfirmPendingUserDisplayLayers.sql" />
+    <Build Include="Tables\UserCollection.sql" />
+    <Build Include="StoredProcs\GetUserCollections.sql" />
+    <Build Include="StoredProcs\ConfirmPendingUserCollections.sql" />
     <Build Include="Tables\Collection.sql" />
     <Build Include="Tables\DisplayLayer.sql" />
     <Build Include="Tables\Direction.sql" />
@@ -106,7 +106,7 @@
     <None Include="VideoDatabase.publish.xml" />
   </ItemGroup>
   <ItemGroup>
-    <Build Include="Tables\PendingUserDisplayLayer.sql" />
+    <Build Include="Tables\PendingUserCollection.sql" />
     <Build Include="Tables\ClipDisplayLayers.sql" />
     <Build Include="Tables\BuildStatus.sql" />
     <Build Include="Tables\Video.sql" />

@@ -1,15 +1,15 @@
-﻿CREATE PROCEDURE [dbo].[InsertPendingUserDisplayLayers]
+﻿CREATE PROCEDURE [dbo].[InsertPendingUserCollections]
 	@userObjectId UNIQUEIDENTIFIER,
 	@BuildId UNIQUEIDENTIFIER,
-	@Layers [GuidOrderType] READONLY	
+	@Collections [GuidOrderType] READONLY	
 AS
 BEGIN TRY
     BEGIN TRANSACTION
 
-	IF NOT EXISTS(SELECT 1 FROM [dbo].[PendingUserDisplayLayer] WHERE BuildId = @BuildId)
+	IF NOT EXISTS(SELECT 1 FROM [dbo].[PendingUserCollection] WHERE BuildId = @BuildId)
 	BEGIN
 		DECLARE @DateNow DATETIME2 = GETUTCDATE();
-		INSERT INTO [dbo].[PendingUserDisplayLayer] (BuildId, DateCreated, DisplayLayerId, UserObjectId) SELECT @BuildId, @DateNow, [ForeignId], @userObjectId FROM @Layers
+		INSERT INTO [dbo].[PendingUserCollection] (BuildId, DateCreated, CollectionId, UserObjectId) SELECT @BuildId, @DateNow, [ForeignId], @userObjectId FROM @Collections
 	END
 
 	COMMIT
