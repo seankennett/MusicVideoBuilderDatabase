@@ -34,6 +34,9 @@ param databaseConnectionString string = ''
 @description('Managed Identity Client Id')
 param managedIdentityClientId string
 
+@description('Enable CORS')
+param enableCors bool = false
+
 var functionAppServicePlanName = functionAppName
 
 resource functionPlan 'Microsoft.Web/serverfarms@2020-12-01' = {
@@ -119,6 +122,20 @@ var triggerAndBaseSettings = triggerStorageQueueUri == '' ? baseAppsettings : un
 var databaseTriggerAndBaseSettings = databaseConnectionSetting == '' ? triggerAndBaseSettings : union(triggerAndBaseSettings, databaseConnectionSetting)
 var allAppSettings = runFromPackage ? union(databaseTriggerAndBaseSettings, runFromPackageSetting) : databaseTriggerAndBaseSettings
 
+var baseSiteConfig = {
+  appSettings: allAppSettings
+}
+
+var corsConfig = {
+  cors: {
+    allowedOrigins: [
+      'https://musicvideobuilder.com'
+    ]
+  }
+}
+
+var siteConfig = enableCors ? union(baseSiteConfig, corsConfig) : baseSiteConfig
+
 resource functionApp 'Microsoft.Web/sites@2021-03-01' = {
   name: functionAppName
   location: location
@@ -131,9 +148,7 @@ resource functionApp 'Microsoft.Web/sites@2021-03-01' = {
   }
   properties: {
     serverFarmId: functionPlan.id
-    siteConfig: {
-      appSettings: allAppSettings
-    }
+    siteConfig: siteConfig
     httpsOnly: true
     keyVaultReferenceIdentity: userIdentityId
   }

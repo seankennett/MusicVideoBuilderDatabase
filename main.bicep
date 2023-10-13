@@ -301,6 +301,7 @@ module publicApiFunction 'function.bicep' = {
     keyvaultName: keyvaultName
     databaseConnectionString: databaseConnectionString
     managedIdentityClientId: userIdentity.outputs.clientId
+    enableCors: true
   }
   dependsOn: [
     storagePublicApi
