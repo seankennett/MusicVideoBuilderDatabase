@@ -34,11 +34,13 @@ BEGIN TRY
     WHEN NOT MATCHED THEN
         INSERT ([DisplayLayerId],
 		[Order],
+		[Reverse],
 		[ClipId],
 		[DateCreated]
         )
         VALUES (source.[DisplayLayerId]
               , source.[Order]
+			  , source.[Reverse]
               , @ClipId
 			  , @DateNow 
         )

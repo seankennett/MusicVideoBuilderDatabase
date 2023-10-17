@@ -10,7 +10,7 @@ SELECT vc.VideoId, vc.ClipId, vc.[Order], c.ClipName, c.BackgroundColour, c.Beat
 JOIN [dbo].[Clip] c ON vc.ClipId = c.[ClipId]
 WHERE c.UserObjectId = @userObjectId
 
-SELECT cd.ClipId, cd.DisplayLayerId, cd.[Order], cd.ClipDisplayLayerId FROM [dbo].[ClipDisplayLayers] cd
+SELECT cd.ClipId, cd.DisplayLayerId, cd.[Reverse], cd.[Order], cd.ClipDisplayLayerId FROM [dbo].[ClipDisplayLayers] cd
 JOIN [dbo].[Clip] c ON c.ClipId = cd.ClipId
 WHERE c.UserObjectId = @userObjectId
 

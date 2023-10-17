@@ -3,6 +3,7 @@
 	[ClipDisplayLayerId] INT IDENTITY NOT NULL PRIMARY KEY,
 	[ClipId] INT NOT NULL,
 	[DisplayLayerId] UNIQUEIDENTIFIER NOT NULL,
+	[Reverse] BIT NOT NULL DEFAULT 0,
 	[Order] TINYINT NOT NULL,
 	[DateCreated] DATETIME2 NOT NULL,
 	CONSTRAINT FK_ClipDisplayLayers_Clip FOREIGN KEY ([ClipId]) REFERENCES [dbo].[Clip] ([ClipId]),
