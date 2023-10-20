@@ -5,6 +5,6 @@
 	[DateCreated] DATETIME2 NOT NULL,
 	[DefaultColour] CHAR(6) NOT NULL,
 	[IsOverlay] BIT NOT NULL,
-	[Order] TINYINT NOT NULL DEFAULT 0,
+	[Order] TINYINT NOT NULL,
 	CONSTRAINT FK_Layer_DisplayLayer FOREIGN KEY ([DisplayLayerId]) REFERENCES [dbo].[DisplayLayer] ([DisplayLayerId])
 )
