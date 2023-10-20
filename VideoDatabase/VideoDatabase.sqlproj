@@ -97,6 +97,8 @@
     <Build Include="StoredProcs\GetDirections.sql" />
     <Build Include="StoredProcs\GetClipsByVideoId.sql" />
     <Build Include="StoredProcs\GetBuildsByVideoId.sql" />
+    <Build Include="Tables\CollectionDisplayLayer.sql" />
+    <Build Include="Tables\LayerCollectionDisplayLayers.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="VideoDatabase.refactorlog" />

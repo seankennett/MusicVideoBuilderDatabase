@@ -49,11 +49,11 @@ BEGIN TRY
 
 	INSERT INTO dbo.LayerClipDisplayLayers(
          ClipDisplayLayerId
-       , ColourOverride
+       , Colour
        , LayerId
     )
     SELECT m.InsertedId
-         , lcd.ColourOverride
+         , lcd.Colour
          , lcd.LayerId
     FROM @LayerClipDisplayLayers as lcd
     INNER JOIN @Map as m 

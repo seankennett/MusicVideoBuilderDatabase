@@ -2,5 +2,5 @@
 (
 	[ClipDisplayLayerId] INT NOT NULL,
 	[LayerId] UNIQUEIDENTIFIER NOT NULL,
-	[ColourOverride] CHAR(6) NOT NULL
+	[Colour] CHAR(6) NOT NULL
 )

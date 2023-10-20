@@ -11,7 +11,7 @@ SELECT cd.ClipId, cd.DisplayLayerId, cd.[Reverse], cd.[Order], cd.ClipDisplayLay
 JOIN [dbo].[DisplayLayer] d ON cd.DisplayLayerId = d.DisplayLayerId
 WHERE [cd].[ClipId] = @ClipId
 
-SELECT l.LayerId, l.ColourOverride, l.ClipDisplayLayerId  FROM [dbo].[LayerClipDisplayLayers] l
+SELECT l.LayerId, l.Colour, l.ClipDisplayLayerId  FROM [dbo].[LayerClipDisplayLayers] l
 JOIN [dbo].[ClipDisplayLayers] cd ON cd.ClipDisplayLayerId = l.ClipDisplayLayerId
 WHERE [cd].[ClipId] = @ClipId
 

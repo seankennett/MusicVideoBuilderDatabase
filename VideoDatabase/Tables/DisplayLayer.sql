@@ -2,7 +2,6 @@
 (
 	[DisplayLayerId] UNIQUEIDENTIFIER NOT NULL PRIMARY KEY,
 	[CollectionId] UNIQUEIDENTIFIER NOT NULL,
-	[IsCollectionDefault] BIT NOT NULL,
 	[DirectionId] TINYINT NULL,
 	[NumberOfSides] TINYINT NULL,
 	[LinkedPreviousDisplayLayerId] UNIQUEIDENTIFIER NULL,
