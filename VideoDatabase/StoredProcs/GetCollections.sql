@@ -5,4 +5,4 @@ SELECT CollectionId, CollectionName, CollectionTypeId FROM [dbo].[Collection]
 
 SELECT [DisplayLayerId], [CollectionId], [IsCollectionDefault],	[DirectionId], [NumberOfSides],	[LinkedPreviousDisplayLayerId],	[DateCreated] FROM [dbo].[DisplayLayer]
 
-SELECT [LayerId], [DisplayLayerId],	[DefaultColour], [IsOverlay], [DateCreated] FROM [dbo].[Layer]
+SELECT [LayerId], [DisplayLayerId],	[DefaultColour], [IsOverlay], [DateCreated], [Order] FROM [dbo].[Layer]
