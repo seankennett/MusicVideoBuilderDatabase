@@ -7,7 +7,7 @@ AS
 SELECT ClipId, ClipName, BackgroundColour, BeatLength, StartingBeat FROM [Clip]
 WHERE ClipId = @ClipId AND UserObjectId = @userObjectId
 
-SELECT cd.ClipId, cd.DisplayLayerId, cd.[Reverse], cd.[Order], cd.ClipDisplayLayerId  FROM [dbo].[ClipDisplayLayers] cd
+SELECT cd.ClipId, cd.DisplayLayerId, cd.[Reverse], cd.[FlipHorizontal], cd.[FlipVertical], cd.[Order], cd.ClipDisplayLayerId  FROM [dbo].[ClipDisplayLayers] cd
 JOIN [dbo].[DisplayLayer] d ON cd.DisplayLayerId = d.DisplayLayerId
 WHERE [cd].[ClipId] = @ClipId
 

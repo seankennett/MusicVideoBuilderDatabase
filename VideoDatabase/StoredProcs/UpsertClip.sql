@@ -35,12 +35,16 @@ BEGIN TRY
         INSERT ([DisplayLayerId],
 		[Order],
 		[Reverse],
+		[FlipHorizontal],
+		[FlipVertical],
 		[ClipId],
 		[DateCreated]
         )
         VALUES (source.[DisplayLayerId]
               , source.[Order]
 			  , source.[Reverse]
+			  , source.[FlipHorizontal]
+			  , source.[FlipVertical]
               , @ClipId
 			  , @DateNow 
         )
