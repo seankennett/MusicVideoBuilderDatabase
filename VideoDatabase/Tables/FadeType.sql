@@ -1,0 +1,5 @@
+﻿CREATE TABLE [dbo].[FadeType]
+(
+	[FadeTypeId] TINYINT NOT NULL PRIMARY KEY,
+	[FadeTypeName] VARCHAR(20) NOT NULL
+)

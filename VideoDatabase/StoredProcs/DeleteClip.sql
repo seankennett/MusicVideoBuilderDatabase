@@ -4,7 +4,16 @@ AS
 BEGIN TRY
     BEGIN TRANSACTION
 
-    DELETE FROM LayerClipDisplayLayers WHERE ClipDisplayLayerId IN (SELECT ClipDisplayLayerId FROM ClipDisplayLayers WHERE ClipId = @ClipId)
+    SELECT ClipDisplayLayerId 
+    INTO #ClipDisplayLayerIds
+    FROM ClipDisplayLayers 
+    WHERE ClipId = @ClipId
+
+    DELETE FROM LayerClipDisplayLayers WHERE ClipDisplayLayerId IN (SELECT ClipDisplayLayerId FROM #ClipDisplayLayerIds)
+
+    DELETE FROM FadeColour WHERE ClipDisplayLayerId IN (SELECT ClipDisplayLayerId FROM #ClipDisplayLayerIds)
+
+    DELETE FROM Fade WHERE ClipDisplayLayerId IN (SELECT ClipDisplayLayerId FROM #ClipDisplayLayerIds)
 
 	DELETE FROM ClipDisplayLayers WHERE ClipId = @ClipId
 

@@ -20,7 +20,14 @@ BEGIN TRY
 	IF (@ClipId > 0)
 	BEGIN
 		UPDATE [Clip] SET ClipName = @ClipName, DateUpdated = @DateNow , BackgroundColour = @BackgroundColour, BeatLength = @BeatLength, StartingBeat = @StartingBeat WHERE ClipId = @ClipId;
-		DELETE FROM [LayerClipDisplayLayers] WHERE ClipDisplayLayerId IN (SELECT ClipDisplayLayerId FROM [ClipDisplayLayers] WHERE ClipId = @ClipId)
+		SELECT ClipDisplayLayerId 
+		INTO #ClipDisplayLayerIds
+		FROM ClipDisplayLayers
+		WHERE ClipId = @ClipId
+		
+		DELETE FROM [LayerClipDisplayLayers] WHERE ClipDisplayLayerId IN (SELECT ClipDisplayLayerId FROM #ClipDisplayLayerIds)
+		DELETE FROM [FadeColour] WHERE ClipDisplayLayerId IN (SELECT ClipDisplayLayerId FROM #ClipDisplayLayerIds)
+		DELETE FROM [Fade] WHERE ClipDisplayLayerId IN (SELECT ClipDisplayLayerId FROM #ClipDisplayLayerIds)
 		DELETE FROM [ClipDisplayLayers] WHERE ClipId = @ClipId;
 	END
 	ELSE
@@ -51,14 +58,26 @@ BEGIN TRY
         OUTPUT source.TempId, Inserted.ClipDisplayLayerId 
         INTO @Map (TempId, InsertedId);
 
+	INSERT INTO dbo.Fade (ClipDisplayLayerId, FadeTypeId)
+	(SELECT m.InsertedId, cdl.FadeTypeId FROM @ClipDisplayLayers as cdl
+	JOIN @Map as m ON cdl.TempId = m.TempId
+	WHERE cdl.FadeTypeId IS NOT NULL)
+
+	INSERT INTO dbo.FadeColour (ClipDisplayLayerId, Colour)
+	(SELECT m.InsertedId, cdl.Colour FROM @ClipDisplayLayers as cdl
+	JOIN @Map as m ON cdl.TempId = m.TempId
+	WHERE cdl.Colour IS NOT NULL AND cdl.FadeTypeId IS NOT NULL)
+
 	INSERT INTO dbo.LayerClipDisplayLayers(
          ClipDisplayLayerId
        , Colour
        , LayerId
+	   , EndColour
     )
     SELECT m.InsertedId
          , lcd.Colour
          , lcd.LayerId
+		 , lcd.EndColour
     FROM @LayerClipDisplayLayers as lcd
     INNER JOIN @Map as m 
         ON(lcd.ClipDisplayLayerId = m.TempId);

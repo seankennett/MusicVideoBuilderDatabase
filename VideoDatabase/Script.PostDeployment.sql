@@ -56,3 +56,9 @@ BEGIN
     INSERT INTO [dbo].[Direction] ([DirectionId], [DirectionName], [IsTransition]) VALUES (6, 'Up', 0)
     INSERT INTO [dbo].[Direction] ([DirectionId], [DirectionName], [IsTransition]) VALUES (7, 'UpStraight', 1)
 END
+
+IF NOT EXISTS(SELECT 1 FROM [dbo].[FadeType])
+BEGIN
+    INSERT INTO [dbo].[FadeType] ([FadeTypeId], [FadeTypeName]) VALUES (1, 'In') 
+    INSERT INTO [dbo].[FadeType] ([FadeTypeId], [FadeTypeName]) VALUES (2, 'Out') 
+END
