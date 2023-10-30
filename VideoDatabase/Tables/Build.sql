@@ -2,7 +2,7 @@
 (
 	[BuildId] UNIQUEIDENTIFIER NOT NULL PRIMARY KEY,
 	[VideoId] INT NULL,
-	[VideoName] NVARCHAR(50) NOT NULL,
+	[VideoName] VARCHAR(50) NOT NULL,
 	[BuildStatusId] TINYINT NOT NULL,
 	[ResolutionId] TINYINT NOT NULL,
 	[LicenseId] TINYINT NOT NULL,

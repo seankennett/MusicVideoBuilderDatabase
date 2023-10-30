@@ -1,7 +1,7 @@
 ﻿CREATE TABLE [dbo].[Video]
 (
 	[VideoId] INT IDENTITY NOT NULL PRIMARY KEY,
-	[VideoName] NVARCHAR(50) NOT NULL,
+	[VideoName] VARCHAR(50) NOT NULL,
 	[BPM] TINYINT NOT NULL,
 	[FormatId] TINYINT NOT NULL,
 	[VideoDelayMilliseconds] INT NULL,

@@ -1,7 +1,7 @@
 ﻿CREATE PROCEDURE [dbo].[UpsertBuild]
 	@BuildId UNIQUEIDENTIFIER,
 	@VideoId INT,
-	@VideoName NVARCHAR(50),
+	@VideoName VARCHAR(50),
 	@BuildStatusId TINYINT,
 	@ResolutionId TINYINT,
 	@LicenseId TINYINT,

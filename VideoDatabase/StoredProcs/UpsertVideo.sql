@@ -1,6 +1,6 @@
 ﻿CREATE PROCEDURE [dbo].[UpsertVideo]
 	@VideoId INT,
-	@VideoName NVARCHAR(50),
+	@VideoName VARCHAR(50),
 	@BPM TINYINT,
 	@FormatId TINYINT,
 	@VideoDelayMilliseconds INT = NULL,

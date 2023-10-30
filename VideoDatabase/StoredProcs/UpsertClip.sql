@@ -1,6 +1,6 @@
 ﻿CREATE PROCEDURE [dbo].[UpsertClip]
 	@ClipId INT,
-	@ClipName NVARCHAR(50),
+	@ClipName VARCHAR(50),
 	@BackgroundColour CHAR(6) NULL,
 	@BeatLength TINYINT,
 	@StartingBeat TINYINT,
