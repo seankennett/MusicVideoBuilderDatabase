@@ -2,6 +2,7 @@
 	@ClipId INT,
 	@ClipName VARCHAR(50),
 	@BackgroundColour CHAR(6) NULL,
+	@EndBackgroundColour CHAR(6) NULL,
 	@BeatLength TINYINT,
 	@StartingBeat TINYINT,
 	@ClipDisplayLayers [ClipDisplayLayerType] READONLY,
@@ -19,7 +20,7 @@ BEGIN TRY
 	DECLARE @DateNow DATETIME2 = GETUTCDATE();
 	IF (@ClipId > 0)
 	BEGIN
-		UPDATE [Clip] SET ClipName = @ClipName, DateUpdated = @DateNow , BackgroundColour = @BackgroundColour, BeatLength = @BeatLength, StartingBeat = @StartingBeat WHERE ClipId = @ClipId;
+		UPDATE [Clip] SET ClipName = @ClipName, DateUpdated = @DateNow , BackgroundColour = @BackgroundColour, EndBackgroundColour = @EndBackgroundColour, BeatLength = @BeatLength, StartingBeat = @StartingBeat WHERE ClipId = @ClipId;
 		SELECT ClipDisplayLayerId 
 		INTO #ClipDisplayLayerIds
 		FROM ClipDisplayLayers
@@ -32,7 +33,7 @@ BEGIN TRY
 	END
 	ELSE
 	BEGIN
-		INSERT INTO [Clip] (ClipName, DateCreated, DateUpdated, BackgroundColour, BeatLength, StartingBeat, UserObjectId) VALUES (@ClipName, @DateNow , @DateNow , @BackgroundColour, @BeatLength, @StartingBeat, @userObjectId)
+		INSERT INTO [Clip] (ClipName, DateCreated, DateUpdated, BackgroundColour, EndBackgroundColour, BeatLength, StartingBeat, UserObjectId) VALUES (@ClipName, @DateNow , @DateNow , @BackgroundColour, @EndBackgroundColour, @BeatLength, @StartingBeat, @userObjectId)
 		SET @ClipId = SCOPE_IDENTITY();
 	END
 

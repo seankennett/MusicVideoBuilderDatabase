@@ -3,7 +3,7 @@
 )
 AS
 
-SELECT ClipId, ClipName, BackgroundColour, BeatLength, StartingBeat  FROM [Clip] 
+SELECT ClipId, ClipName, BackgroundColour, EndBackgroundColour, BeatLength, StartingBeat  FROM [Clip] 
 WHERE UserObjectId = @userObjectId
 
 SELECT cd.ClipId, cd.DisplayLayerId, cd.[Reverse], cd.[FlipHorizontal], cd.[FlipVertical], cd.[Order], cd.ClipDisplayLayerId, f.[FadeTypeId], fc.[Colour] FROM [dbo].[ClipDisplayLayers] cd
