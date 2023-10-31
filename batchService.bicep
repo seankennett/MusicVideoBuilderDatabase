@@ -87,11 +87,11 @@ resource batchPool 'Microsoft.Batch/batchAccounts/pools@2022-10-01' = {
       virtualMachineConfiguration: {
         imageReference: {
           publisher: 'Canonical'
-          offer: '0001-com-ubuntu-server-focal'
-          sku: '20_04-lts-gen2'
+          offer: '0001-com-ubuntu-server-jammy'
+          sku: '22_04-lts'
           version: 'latest'
         }
-        nodeAgentSkuId: 'batch.node.ubuntu 20.04'
+        nodeAgentSkuId: 'batch.node.ubuntu 22.04'
       }
     }
     scaleSettings: {
