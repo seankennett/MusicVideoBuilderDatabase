@@ -5,16 +5,16 @@ param webAppSkuName string = 'F1'
 param webAppSkuCapacity int = 1
 
 @description('Database sku')
-param databaseSku string = 'GP_S_Gen5_1'
+param databaseSku string = 'Basic'
 
 @description('Database Tier')
-param databaseTier string = 'GeneralPurpose'
+param databaseTier string = 'Basic'
 
 @description('Database capacity')
-param databaseCapacity int = 1
+param databaseCapacity int = 5
 
 @description('Database DTU capacity')
-param databaseMaxSizeBytes int = 34359738368
+param databaseMaxSizeBytes int = 2147483648
 
 @description('Location for all resources.')
 param location string = 'West Europe'
@@ -302,6 +302,16 @@ module publicApiFunction 'function.bicep' = {
     databaseConnectionString: databaseConnectionString
     managedIdentityClientId: userIdentity.outputs.clientId
     enableCors: true
+    additionalAppSettings:[
+      {
+        name: 'AzureKeyVaultEndpoint'
+        value: 'https://${keyvaultName}${environment().suffixes.keyvaultDns}/'
+      }
+      {
+        name: 'AZURE_CLIENT_ID'
+        value: userIdentity.outputs.clientId
+      }
+    ]
   }
   dependsOn: [
     storagePublicApi
