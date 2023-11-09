@@ -37,6 +37,7 @@ param publicApiUrl string
 var appServicePlanName = resourceName
 var webSiteName = resourceName
 var keyvaultName = resourceName
+var clientUrl = 'https://musicvideobuilder.com'
 
 resource appServicePlan 'Microsoft.Web/serverfarms@2020-06-01' = {
   name: appServicePlanName
@@ -133,10 +134,14 @@ resource appService 'Microsoft.Web/sites@2021-03-01' = {
           name: 'PublicApi'
           value: publicApiUrl
         }
+        {
+          name: 'ClientUrl'
+          value: clientUrl
+        }
       ]
       cors: {
         allowedOrigins: [
-          'https://musicvideobuilder.com'
+          clientUrl
         ]
       }
       netFrameworkVersion: 'v6.0'
