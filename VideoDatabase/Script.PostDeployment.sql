@@ -61,3 +61,10 @@ BEGIN
     INSERT INTO [dbo].[FadeType] ([FadeTypeId], [FadeTypeName]) VALUES (1, 'In') 
     INSERT INTO [dbo].[FadeType] ([FadeTypeId], [FadeTypeName]) VALUES (2, 'Out') 
 END
+
+IF NOT EXISTS(SELECT 1 FROM [dbo].[SubscriptionProduct])
+BEGIN
+    INSERT INTO [dbo].[SubscriptionProduct] ([SubscriptionProductId], [SubscriptionProductName]) VALUES ('prod_OxncLuSWcjwk5u', 'Builder')
+    INSERT INTO [dbo].[SubscriptionProduct] ([SubscriptionProductId], [SubscriptionProductName]) VALUES ('prod_Oxsokg4TM8w8nf', 'License')
+    INSERT INTO [dbo].[SubscriptionProduct] ([SubscriptionProductId], [SubscriptionProductName]) VALUES ('prod_OxtMkAWxPmfLK8', 'LicenseBuilder')
+END

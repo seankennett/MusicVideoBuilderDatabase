@@ -102,6 +102,11 @@
     <Build Include="Tables\Fade.sql" />
     <Build Include="Tables\FadeType.sql" />
     <Build Include="Tables\FadeColour.sql" />
+    <Build Include="Tables\UserSubscription.sql" />
+    <Build Include="StoredProcs\GetUserSubscription.sql" />
+    <Build Include="StoredProcs\UpsertUserSubscription.sql" />
+    <Build Include="StoredProcs\DeleteUserSubscriptionByCustomerId.sql" />
+    <Build Include="Tables\SubscriptionProduct.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="VideoDatabase.refactorlog" />
