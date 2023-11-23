@@ -54,6 +54,9 @@ BEGIN
     INSERT INTO [dbo].[Direction] ([DirectionId], [DirectionName], [IsTransition]) VALUES (5, 'StraightUp', 1)
     INSERT INTO [dbo].[Direction] ([DirectionId], [DirectionName], [IsTransition]) VALUES (6, 'Up', 0)
     INSERT INTO [dbo].[Direction] ([DirectionId], [DirectionName], [IsTransition]) VALUES (7, 'UpStraight', 1)
+    INSERT INTO [dbo].[Direction] ([DirectionId], [DirectionName], [IsTransition]) VALUES (8, 'RotatedStraight', 1)
+    INSERT INTO [dbo].[Direction] ([DirectionId], [DirectionName], [IsTransition]) VALUES (9, 'Rotated', 0)
+    INSERT INTO [dbo].[Direction] ([DirectionId], [DirectionName], [IsTransition]) VALUES (10, 'StraightRotated', 1)
 END
 
 IF NOT EXISTS(SELECT 1 FROM [dbo].[FadeType])
